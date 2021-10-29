@@ -1,0 +1,21 @@
+<div class="mb-3">
+  <label for="userName" class="form-label">Username</label>
+  <input type="text"
+         class="form-control"
+         id="userName"
+         aria-describedby="usernameHelp"
+          [(ngModel)]="userName"
+          (focus)="onFocusInput()"
+          (input)="onChangeInput()">
+  <div id="userNameHelp" class="form-text">We'll never share your username with anyone else.</div>
+</div>
+<p>{{userName}}</p>
+<button type="button"
+        class="btn btn-success me-2"
+        [disabled]="!inputHasChanged"
+        (click)="sendMessage()">Success</button>
+<button type="button"
+        class="btn btn-warning"
+        [disabled]="!inputHasChanged"
+        (click)="reset()">Reset</button>
+<p>{{successMessage}}</p>
