@@ -1,0 +1,15 @@
+<button
+  type="button"
+  class="btn btn-info"
+  (click)="onShowPassword()"
+>Show secret password</button>
+<div class="min-height">
+  <p *ngIf="show" class="pt-2 ps-4">{{content}}</p>
+</div>
+
+<ul>
+  <li
+    *ngFor="let click of buttonClicked; let i = index"
+  [ngStyle]="{backgroundColor: i >= 4 ? '#FC427B' : 'transparent'}"
+    [ngClass]="{list: i >= 4 ? 'white' : ''}">{{click}}</li>
+</ul>
