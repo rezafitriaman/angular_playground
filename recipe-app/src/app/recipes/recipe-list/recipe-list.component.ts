@@ -9,8 +9,6 @@ import {Recipe} from "../recipe.model";
 export class RecipeListComponent implements OnInit {
   recipes: Array<Recipe> = [
     new Recipe('A test recipe','This is a simply a test','https://www.foodiesfeed.com/wp-content/uploads/2021/01/fried-egg-and-guacamole-sandwiches.jpg'),
-    new Recipe('A test recipe','This is a simply a test','https://www.foodiesfeed.com/wp-content/uploads/2021/01/fried-egg-and-guacamole-sandwiches.jpg')
-
   ];
 
   constructor() { }
