@@ -1,0 +1,7 @@
+<div class="card text-dark bg-light mb-3">
+  <div class="card-header">{{element.name}} - {{element.type}}</div>
+  <div class="card-body">
+    <strong *ngIf="element.type === 'server'" style="color: hotpink">{{element.content}}</strong>
+    <em *ngIf="element.type === 'blueprint'">{{element.content}}</em>
+  </div>
+</div>
