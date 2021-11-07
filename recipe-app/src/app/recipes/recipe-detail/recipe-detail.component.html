@@ -1,4 +1,4 @@
-<div style="background-color: burlywood">
+<div>
   <div class="row">
     <div class="col-12">
       <img src="" alt="" class="img-fluid">
@@ -11,11 +11,19 @@
   </div>
   <div class="row">
     <div class="col-12">
-      <div class="dropdown">
-        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+      <div class="dropdown"
+      [class.show]="show">
+        <button class="btn btn-secondary dropdown-toggle"
+                type="button"
+                id="dropdownMenuButton1"
+                data-bs-toggle="dropdown"
+                [attr.aria-expanded]="show"
+        (click)="show = !show">
           Dropdown button
         </button>
-        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+        <ul class="dropdown-menu"
+            [class.show]="show"
+            aria-labelledby="dropdownMenuButton1">
           <li><a class="dropdown-item" href="#">To Shopping list</a></li>
           <li><a class="dropdown-item" href="#">Edit Recipe</a></li>
           <li><a class="dropdown-item" href="#">Delete Recipe</a></li>
