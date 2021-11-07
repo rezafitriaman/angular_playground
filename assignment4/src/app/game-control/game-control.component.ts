@@ -7,6 +7,7 @@ import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 })
 export class GameControlComponent implements OnInit {
   @Output() newItemEvent = new EventEmitter<number>();
+  @Output() stopEvent = new EventEmitter<boolean>();
   incrementNumber: number;
   interval: number;
 
@@ -28,9 +29,9 @@ export class GameControlComponent implements OnInit {
   }
 
   onStopBtn() {
-    console.log('stop')
     clearInterval(this.interval);
     this.incrementNumber = 0;
+    this.stopEvent.emit(true)
   }
 
 }
