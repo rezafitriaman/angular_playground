@@ -17,26 +17,34 @@
           (window:resize)="collapsed = true">
       <ul class="navbar-nav mb-2 me-auto mb-lg-0">
         <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="#">Recipes</a>
+          <a class="nav-link"
+             aria-current="page"
+             href="#"
+             [class.active]="recipes"
+          (click)="onSelect('recipes')">Recipes</a>
         </li>
         <li class="nav-item me-auto">
-          <a class="nav-link" href="#">Shopping List</a>
+          <a class="nav-link"
+             href="#"
+             (click)="onSelect('shoppingList')"
+             [class.active]="shoppingList"
+          >Shopping List</a>
         </li>
         <li class="nav-item">
           <ul class="navbar-nav mb-2 mb-lg-0">
             <li class="nav-item dropdown">
               <a class="nav-link dropdown-toggle"
-                 [class.show]="!show"
+                 [class.show]="show"
                  href="#"
                  id="navbarDropdown"
                  role="button"
                  data-bs-toggle="dropdown"
                  [attr.aria-expanded]="show"
-                 (click)="show = !show">
+                 (click)="onSelect('manage')">
                 Manage
               </a>
               <ul class="dropdown-menu"
-                  [class.show]="!show"
+                  [class.show]="show"
                   aria-labelledby="navbarDropdown">
                 <li><a class="dropdown-item" href="#">Action</a></li>
                 <li><a class="dropdown-item" href="#">Another action</a></li>

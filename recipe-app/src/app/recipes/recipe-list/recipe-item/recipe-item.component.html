@@ -1,1 +1,8 @@
-<p>recipe-item works!</p>
+<div class="card mb-4" >
+  <img [src]="recipe.imagePath" class="card-img-top img-fluid" alt="{{recipe.name}}">
+  <div class="card-body">
+    <h5 class="card-title">{{recipe.name}}</h5>
+    <p class="card-text">{{recipe.description}}</p>
+    <a href="#" class="btn btn-primary">Go somewhere</a>
+  </div>
+</div>
