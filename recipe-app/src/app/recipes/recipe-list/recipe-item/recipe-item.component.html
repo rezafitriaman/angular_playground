@@ -3,6 +3,9 @@
   <div class="card-body">
     <h5 class="card-title">{{recipe.name}}</h5>
     <p class="card-text">{{recipe.description}}</p>
-    <a href="#" class="btn btn-primary">Go somewhere</a>
+    <a href="#"
+       class="btn btn-primary"
+       (click)="onSelected(recipe.name, recipe.description, recipe.imagePath)"
+    >Go to Recipe</a>
   </div>
 </div>

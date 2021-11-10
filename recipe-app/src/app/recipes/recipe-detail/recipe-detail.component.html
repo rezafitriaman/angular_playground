@@ -1,12 +1,12 @@
 <div>
   <div class="row">
     <div class="col-12">
-      <img src="" alt="" class="img-fluid">
+      <img [src]="recipe.imagePath" alt="" class="img-fluid">
     </div>
   </div>
   <div class="row">
     <div class="col-12">
-      <h1>Recipe Name</h1>
+      <h1>{{recipe.name}}</h1>
     </div>
   </div>
   <div class="row">
@@ -33,7 +33,7 @@
   </div>
   <div class="row">
     <div class="col-12">
-      Description
+      {{recipe.description}}
     </div>
   </div>
   <div class="row">
