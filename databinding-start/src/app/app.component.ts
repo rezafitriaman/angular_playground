@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component} from '@angular/core';
 import {ElementData, Elements} from "./types";
 
 
@@ -7,7 +7,7 @@ import {ElementData, Elements} from "./types";
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent {
+export class AppComponent{
   serverElements: Array<Elements> = [{type: 'server', name: 'Test server', content: 'Just a test'}];
 
   onServerAdded(serverData: ElementData) {
@@ -31,6 +31,17 @@ export class AppComponent {
     }else {
       console.log('please add blueprint name and server content');
     }
+  }
+  ngOnInit(): void {
+    console.log('ngOnInit');
+  }
+
+  onChangeFirst() {
+    this.serverElements[0].name = 'changed!';
+  }
+
+  onDestroy() {
+    this.serverElements.splice(0, 1);
   }
 }
 
