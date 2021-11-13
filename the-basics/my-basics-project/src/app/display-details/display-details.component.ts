@@ -18,5 +18,4 @@ export class DisplayDetailsComponent implements OnInit {
     this.show = !this.show;
     this.buttonClicked.push( new Date().toLocaleTimeString())
   }
-
 }
