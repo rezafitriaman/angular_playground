@@ -11,7 +11,6 @@ export class ShoppingEditComponent implements OnInit {
   @ViewChild('amountInput', {static: false}) amountInputRef: ElementRef | undefined;
   @Output() ingredientAdded = new EventEmitter<Ingredient>();
   constructor() {
-
   }
 
   ngOnInit(): void {

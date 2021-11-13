@@ -12,13 +12,12 @@
   <div class="row">
     <div class="col-12">
       <div class="dropdown"
-      [class.show]="show">
+           appDropdown>
         <button class="btn btn-secondary dropdown-toggle"
                 type="button"
                 id="dropdownMenuButton1"
                 data-bs-toggle="dropdown"
-                [attr.aria-expanded]="show"
-        (click)="show = !show">
+                [attr.aria-expanded]="show">
           Dropdown button
         </button>
         <ul class="dropdown-menu"

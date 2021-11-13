@@ -32,19 +32,15 @@
         </li>
         <li class="nav-item">
           <ul class="navbar-nav mb-2 mb-lg-0">
-            <li class="nav-item dropdown">
+            <li appDropdown
+                class="nav-item dropdown">
               <a class="nav-link dropdown-toggle"
-                 [class.show]="show"
                  href="#"
                  id="navbarDropdown"
                  role="button"
                  data-bs-toggle="dropdown"
-                 [attr.aria-expanded]="show"
-                 (click)="onSelect('manage')">
-                Manage
-              </a>
+                 [attr.aria-expanded]="show">Manage</a>
               <ul class="dropdown-menu"
-                  [class.show]="show"
                   aria-labelledby="navbarDropdown">
                 <li><a class="dropdown-item" href="#">Action</a></li>
                 <li><a class="dropdown-item" href="#">Another action</a></li>
