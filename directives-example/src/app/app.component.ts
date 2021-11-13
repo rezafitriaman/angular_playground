@@ -10,4 +10,6 @@ export class AppComponent {
   evenNumbers = [2, 4, 6];
   numbers = this.oddNumbers.concat(this.evenNumbers);
   onlyOdd = false;
+  prop: any;
+  value = 590;
 }

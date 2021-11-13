@@ -14,7 +14,7 @@
         <p>Only odd</p>
       </ng-template>
 
-      <ul class="list-group" *ngIf="!onlyOdd">
+   <!--   <ul class="list-group" *ngIf="!onlyOdd">
         <li class="list-group-item"
             [ngClass]="{even: even % 2 === 0 }"
             [ngStyle]="{backgroundColor: even % 2 === 0 ? 'yellow' : 'transparent'}"
@@ -26,8 +26,23 @@
             [ngClass]="{odd: odd % 2 !== 0 }"
             [ngStyle]="{backgroundColor: odd % 2 !== 0 ? 'blue' : 'transparent'}"
             *ngFor="let odd of oddNumbers">{{odd}}</li>
+      </ul>-->
+      <p [appPickColor]="'red'" [defaultColor]="'yellow'">Style me with basic directive!</p>
+      <input [(ngModel)]="prop">
+      <p appPickColor [defaultColor]="'yellow'" >{{prop}}</p>
+
+      <ul class="list-group" *appUnless="onlyOdd">
+        <li class="list-group-item"
+            [ngClass]="{even: even % 2 === 0 }"
+            [ngStyle]="{backgroundColor: even % 2 === 0 ? 'yellow' : 'transparent'}"
+            *ngFor="let even of evenNumbers">{{even}}</li>
       </ul>
-      <p appBetterHighlight>Style me with basic directive!</p>
+      <div [ngSwitch]="value">
+        <p *ngSwitchCase="5">value is 5</p>
+        <p *ngSwitchCase="10">value is 10</p>
+        <p *ngSwitchCase="100">value is 100</p>
+        <p *ngSwitchDefault>value is 1000</p>
+      </div>
     </div>
   </div>
 </div>
