@@ -9,8 +9,6 @@ export  class DropdownDirective{
   constructor(private targetEl: ElementRef) {
   }
   @HostListener('document:click', ['$event']) onMouseClick(event: Event) {
-    console.log('targetEl', this.targetEl.nativeElement);
-    console.log('event', event.target);
     this.isOpen = this.targetEl.nativeElement.contains(event.target) ? !this.isOpen : false;
     this.addClass();
   }
