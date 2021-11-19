@@ -11,11 +11,12 @@ export class InactiveUsersComponent implements OnInit {
   counterToActive: number;
   //@Output() userToActive = new EventEmitter<number>();
   constructor(private usersService: UsersService) {
-    this.users = this.usersService.inactiveUsers;
     this.counterToActive = 1;
+    this.users = []
   }
 
   ngOnInit(): void {
+    this.users = this.usersService.inactiveUsers;
   }
 
   onSetToActive(id: number) {
