@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import {UsersService} from "./users.service";
 
 @Component({
   selector: 'app-root',
@@ -6,16 +7,14 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  activeUsers:Array<string> = ['Max', 'Anna'];
-  inactiveUsers:Array<string> = ['Chris', 'Menu'];
 
-  onSetToInactive(id: number) {
-    this.inactiveUsers.push(this.activeUsers[id]);
-    this.activeUsers.splice(id, 1);
-  }
+  constructor(private usersService: UsersService) {
+    this.usersService.actionInactiveUsers.subscribe((counter)=> {
+      console.log('actionInactiveUsers', counter);
+    });
 
-  onSetToActive(id: number) {
-    this.activeUsers.push(this.inactiveUsers[id]);
-    this.inactiveUsers.splice(id, 1);
+    this.usersService.actionActiveUsers.subscribe((counter)=> {
+      console.log('actionActiveUsers', counter);
+    });
   }
 }

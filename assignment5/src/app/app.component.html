@@ -1,13 +1,9 @@
 <div class="container mt-4">
   <div class="row">
     <div class="col-12">
-      <app-active-users
-      [users]="activeUsers"
-      (userSetToInactive)="onSetToInactive($event)"></app-active-users>
+      <app-active-users></app-active-users>
 
-      <app-inactive-users
-      [users]="inactiveUsers"
-      (userToActive)="onSetToActive($event)"></app-inactive-users>
+      <app-inactive-users></app-inactive-users>
     </div>
   </div>
 </div>
