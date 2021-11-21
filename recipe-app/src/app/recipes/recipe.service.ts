@@ -32,7 +32,5 @@ export class RecipeService {
   getIngredientForShoppingList(ingredient: Ingredient[]) {
 
     this.shoppingListService.ingredientFromRecipe(ingredient);
-    //this.shoppingListService.ingredientFromRecipe(ingredient);
-    //this.sendRecipeToShoppingList.emit(ingredient);
   }
 }
