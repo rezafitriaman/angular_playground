@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {Ingredient} from "../shared/ingredient.model";
 import {ShoppingListService} from "./shopiping-list.service";
+
 
 @Component({
   selector: 'app-shopping-list',
@@ -15,15 +16,9 @@ export class ShoppingListComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.shoppingListService.ingredientAdded.subscribe((newRecipe)=> {
-      console.log('test');
-      this.ingredients.push(newRecipe);
+    this.shoppingListService.ingredientAdd.subscribe((ingredients)=> {
+      this.ingredients = ingredients;
     })
-
   }
-
-  /*onIngredientAdded(ingredient: Ingredient) {
-    this.ingredients.push(ingredient);
-  }*/
 
 }

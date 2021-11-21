@@ -3,6 +3,7 @@ import {Recipe} from "../../recipe.model";
 import {RecipeService} from "../../recipe.service";
 import {Ingredient} from "../../../shared/ingredient.model";
 
+
 @Component({
   selector: 'app-recipe-item',
   templateUrl: './recipe-item.component.html',

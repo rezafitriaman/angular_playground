@@ -1,6 +1,8 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {Recipe} from "../recipe.model";
 import {Ingredient} from "../../shared/ingredient.model";
+import {RecipeService} from "../recipe.service";
+
 
 @Component({
   selector: 'app-recipe-detail',
@@ -10,7 +12,7 @@ import {Ingredient} from "../../shared/ingredient.model";
 export class RecipeDetailComponent implements OnInit {
   show: boolean;
   @Input() recipe: Recipe;
-  constructor() {
+  constructor(private recipeService: RecipeService) {
     this.show = false;
     this.recipe = {
       name: '',
@@ -25,6 +27,7 @@ export class RecipeDetailComponent implements OnInit {
   }
 
   sendToShoppingList(ingredient: Ingredient[]) {
+    this.recipeService.getIngredientForShoppingList(ingredient);
 
   }
 
