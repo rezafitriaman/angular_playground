@@ -1,44 +1,38 @@
 <div>
   <div class="row">
     <div class="col-12">
-      <img [src]="recipe.imagePath" alt="" class="img-fluid">
-    </div>
-  </div>
-  <div class="row">
-    <div class="col-12">
-      <h1>{{recipe.name}}</h1>
-    </div>
-  </div>
-  <div class="row">
-    <div class="col-12">
-      <div class="dropdown"
-           appDropdown>
-        <button class="btn btn-secondary dropdown-toggle"
-                type="button"
-                id="dropdownMenuButton1"
-                data-bs-toggle="dropdown"
-                [attr.aria-expanded]="show">
-          Dropdown button
-        </button>
-        <ul class="dropdown-menu"
-            [class.show]="show"
-            aria-labelledby="dropdownMenuButton1">
-          <li><a class="dropdown-item" href="#">To Shopping list</a></li>
-          <li><a class="dropdown-item" href="#">Edit Recipe</a></li>
-          <li><a class="dropdown-item" href="#">Delete Recipe</a></li>
+      <div class="card">
+  <span class="image-wrapper">
+      <img [src]="recipe.imagePath" [alt]="recipe.name" class="img-fluid">
+  </span>
+        <div class="card-body">
+          <h5 class="card-title">{{recipe.name}}</h5>
+          <p class="card-text">{{recipe.description}}</p>
+        </div>
+        <ul class="list-group list-group-flush">
+          <li *ngFor="let ingredient of recipe.ingredient" class="list-group-item">({{ingredient.amount}}) - {{ingredient.name}}</li>
         </ul>
+        <div class="card-body">
+          <div class="dropdown"
+               appDropdown>
+            <button class="btn btn-secondary dropdown-toggle"
+                    type="button"
+                    id="dropdownMenuButton1"
+                    data-bs-toggle="dropdown"
+                    [attr.aria-expanded]="show">
+              Dropdown button
+            </button>
+            <ul class="dropdown-menu"
+                [class.show]="show"
+                aria-labelledby="dropdownMenuButton1">
+              <li>
+                <a class="dropdown-item"
+                   href="#"
+                (click)="sendToShoppingList(recipe.ingredient)">To Shopping list</a></li>
+            </ul>
+          </div>
+        </div>
       </div>
     </div>
   </div>
-  <div class="row">
-    <div class="col-12">
-      {{recipe.description}}
-    </div>
-  </div>
-  <div class="row">
-    <div class="col-12">
-      Ingredient
-    </div>
-  </div>
-
 </div>
