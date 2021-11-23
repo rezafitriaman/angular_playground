@@ -2,13 +2,18 @@
   <div class="row">
     <div class="col-12">
       <nav class="nav">
-        <a class="nav-link active" aria-current="page" href="#">Home</a>
-        <a class="nav-link" href="#">Servers</a>
-        <a class="nav-link" href="#">Users</a>
+        <a class="nav-link" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" routerLink="/">Home</a>
+        <a class="nav-link" routerLinkActive="active" routerLink="/servers">Servers</a>
+        <a class="nav-link" routerLinkActive="active" [routerLink]="['/users']">Users</a>
       </nav>
     </div>
   </div>
   <div class="row">
+    <div class="col-12">
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+<!--  <div class="row">
     <div class="col-12">
       <app-home></app-home>
     </div>
@@ -22,5 +27,5 @@
     <div class="col-12">
       <app-servers></app-servers>
     </div>
-  </div>
+  </div>-->
 </div>

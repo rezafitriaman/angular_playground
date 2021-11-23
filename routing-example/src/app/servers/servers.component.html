@@ -2,10 +2,16 @@
   <div class="col-6">
     <ul class="list-group">
       <li class="list-group-item"
-          *ngFor="let server of servers">{{server.name}}</li>
+          *ngFor="let server of servers">
+        <a [routerLink]="['/servers', 5, 'edit']"
+        [queryParams]="{allowEdit: '1'}"
+        fragment="loading">{{server.name}}</a>
+      </li>
     </ul>
   </div>
   <div class="col-6">
+    <button class="btn btn-primary" (click)="onReload()">Reload</button>
+
     <app-edit-server></app-edit-server>
     <hr>
     <app-server></app-server>
