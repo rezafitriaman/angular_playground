@@ -26,10 +26,11 @@ export class EditServerComponent implements OnInit {
     //to retrieve data from the url
     console.log(this.route.snapshot.queryParams);
     console.log(this.route.snapshot.fragment);
+    console.log(this.route.snapshot.params.id);
     //this.route.queryParams.subscribe()
     //this.route.fragment.subscribe()
 
-    this.server = this.serversService.getServer(2);
+    this.server = this.serversService.getServer(+this.route.snapshot.params.id || 1);
     this.serverName = this.server.name;
     this.serverStatus = this.server.status;
   }

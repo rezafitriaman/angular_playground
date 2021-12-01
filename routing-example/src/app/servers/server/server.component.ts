@@ -18,7 +18,7 @@ export class ServerComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.server = this.serversService.getServer(2);
+    this.server = this.serversService.getServer(1);
   }
 
 }

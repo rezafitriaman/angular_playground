@@ -2,7 +2,9 @@
   <div class="col-6">
     <ul class="list-group">
       <li class="list-group-item"
-      *ngFor="let user of users">{{user.name}}</li>
+          *ngFor="let user of users; let i = index">
+        <a [routerLink]="['/users', i + 1, user.name]">{{user.name}}</a>
+      </li>
     </ul>
   </div>
   <div class="col-6">
@@ -10,7 +12,6 @@
     [userTarget]="user"></app-user>-->
     <app-user></app-user>
   </div>
-  <hr>
 </div>
 
 

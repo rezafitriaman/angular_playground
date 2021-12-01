@@ -2,8 +2,8 @@
   <div class="col-6">
     <ul class="list-group">
       <li class="list-group-item"
-          *ngFor="let server of servers">
-        <a [routerLink]="['/servers', 5, 'edit']"
+          *ngFor="let server of servers; let i = index">
+        <a [routerLink]="['/servers', i + 1, 'edit']"
         [queryParams]="{allowEdit: '1'}"
         fragment="loading">{{server.name}}</a>
       </li>
