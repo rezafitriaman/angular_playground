@@ -2,15 +2,16 @@
   <div class="col-6">
     <ul class="list-group">
       <li class="list-group-item"
-          *ngFor="let user of users; let i = index">
-        <a [routerLink]="['/users', i + 1, user.name]">{{user.name}}</a>
+          *ngFor="let user of users;">
+        <a [routerLink]="['/users', user.id , user.name]">{{user.name}}</a>
       </li>
     </ul>
   </div>
   <div class="col-6">
     <!--<app-user *ngFor="let user of users"
     [userTarget]="user"></app-user>-->
-    <app-user></app-user>
+    <!--<app-user></app-user>-->
+    <router-outlet></router-outlet>
   </div>
 </div>
 
