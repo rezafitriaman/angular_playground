@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {Server} from "../../shared/interface";
 import {ServersService} from "../servers.service";
-import {ActivatedRoute, Params, Router} from "@angular/router";
+import {ActivatedRoute, Data, Params, Router} from "@angular/router";
 import {query} from "@angular/animations";
 
 @Component({
@@ -20,10 +20,14 @@ export class ServerComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.server = this.serversService.getServer(+this.route.snapshot.params.id || 1);
+    this.route.data.subscribe((data: Data)=> {
+      this.server = data['server'];
+    });
+    /*old*/
+    /*this.server = this.serversService.getServer(+this.route.snapshot.params.id || 1);
     this.route.params.subscribe((params: Params)=> {
       this.server = this.serversService.getServer(+params.id || 1)
-    })
+    })*/
   }
 
   onEdit() {
