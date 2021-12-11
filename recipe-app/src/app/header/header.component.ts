@@ -8,11 +8,11 @@ import {Component, EventEmitter, Output} from "@angular/core";
 export class HeaderComponent {
   collapsed = true;
   show = false;
-  recipes = true;
-  shoppingList = false;
-  @Output() featureSelected = new EventEmitter<string>()
+  /*recipes = true;
+  shoppingList = false;*/
+  //@Output() featureSelected = new EventEmitter<string>()
 
-  onSelect(feature: string) {
+/*  onSelect(feature: string) {
     this.featureSelected.emit(feature);
-  }
+  }*/
 }

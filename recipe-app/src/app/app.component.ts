@@ -8,7 +8,7 @@ import {Ingredient} from "./shared/ingredient.model";
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit{
-  loadedFeature = 'recipes';
+  //loadedFeature = 'recipes';
 
   constructor() {
   }
@@ -16,9 +16,9 @@ export class AppComponent implements OnInit{
   ngOnInit() {
   }
 
-  onNavigate(feature: string) {
+/*  onNavigate(feature: string) {
 
     this.loadedFeature = feature;
-  }
+  }*/
 }
 

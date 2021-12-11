@@ -12,6 +12,7 @@ export  class DropdownDirective{
     this.isOpen = this.targetEl.nativeElement.contains(event.target) ? !this.isOpen : false;
     this.addClass();
   }
+
   private addClass() {
     const targetChildren: HTMLCollection = this.targetEl.nativeElement.children;
     for (let i = 0; i < targetChildren.length; i++) {

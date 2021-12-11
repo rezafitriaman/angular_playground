@@ -1,12 +1,16 @@
-<app-header (featureSelected)="onNavigate($event)"></app-header>
+<!--<app-header (featureSelected)="onNavigate($event)"></app-header>-->
+<app-header></app-header>
+
+<!-- The routed views render in the <router-outlet>-->
 
 <div class="container mt-4">
   <div class="row">
       <div class="col-12">
         <!--recipes-->
-        <app-recipes *ngIf="loadedFeature === 'recipes'"></app-recipes>
+        <!--<app-recipes *ngIf="loadedFeature === 'recipes'"></app-recipes>-->
         <!--shopping-list-->
-        <app-shopping-list *ngIf="loadedFeature == 'shoppingList'"></app-shopping-list>
+        <!--<app-shopping-list *ngIf="loadedFeature == 'shoppingList'"></app-shopping-list>-->
+        <router-outlet></router-outlet>
       </div>
   </div>
 </div>

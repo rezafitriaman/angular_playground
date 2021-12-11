@@ -10,6 +10,7 @@ import { ShoppingEditComponent } from './shopping-list/shopping-edit/shopping-ed
 import {RecipesComponent} from "./recipes/recipes.component";
 import {RecipeListComponent} from "./recipes/recipe-list/recipe-list.component";
 import {DropdownDirective} from "./shared/dropdown.directive";
+import {AppRoutingModule} from "./app-routing.module";
 
 
 
@@ -26,7 +27,8 @@ import {DropdownDirective} from "./shared/dropdown.directive";
     DropdownDirective
   ],
   imports: [
-    BrowserModule
+    BrowserModule,
+    AppRoutingModule
   ],
   providers: [],
   bootstrap: [AppComponent]
