@@ -1,0 +1,10 @@
+<h3 class="font-bold text-xl mt-4 ">Deleted Todo</h3>
+<ul class="items">
+  <li *ngIf="todos.length < 1" class="my-3 font-light text-medium">You have nothing done yet!</li>
+  <li class="item" *ngFor="let todo of todos; let i = index">
+    <span>{{ i + 1 }} - </span>
+    <span class="capitalize"> {{ todo.content }}</span>
+    <button class="h-8 px-3 m-2 text-green-100 transition-colors duration-150 bg-green-700 rounded-lg focus:shadow-outline hover:bg-green-800"
+            (click)="onSetToActive(i)">Make active</button>
+  </li>
+</ul>
