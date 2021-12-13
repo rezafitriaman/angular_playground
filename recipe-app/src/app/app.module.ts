@@ -12,8 +12,6 @@ import {RecipeListComponent} from "./recipes/recipe-list/recipe-list.component";
 import {DropdownDirective} from "./shared/dropdown.directive";
 import {AppRoutingModule} from "./app-routing.module";
 
-
-
 @NgModule({
   declarations: [
     AppComponent,
