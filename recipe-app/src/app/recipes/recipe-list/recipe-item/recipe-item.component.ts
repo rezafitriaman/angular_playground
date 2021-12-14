@@ -24,17 +24,17 @@ export class RecipeItemComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  onSelected(name: string, description: string, imagePath: string, ingredient: Array<Ingredient>) {
+/*  onSelected(name: string, description: string, imagePath: string, ingredient: Array<Ingredient>) {
     this.recipeService.recipeWasSelected.emit({
       name: name,
       description: description,
       imagePath: imagePath,
       ingredient: ingredient
     });
-/*    this.recipeSelected.emit({
+    this.recipeSelected.emit({
       name: name,
       description: description,
       imagePath: imagePath
-    });*/
-  }
+    });
+  }*/
 }
