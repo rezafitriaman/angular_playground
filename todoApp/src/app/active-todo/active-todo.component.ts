@@ -16,8 +16,13 @@ export class ActiveTodoComponent implements OnInit {
 
   ngOnInit(): void {
     this.todos = [{
-      id: '33333',
+      id: '1639321192946',
       content: 'Tandenborstel',
+      completed: false
+    },
+    {
+      id: '33333',
+      content: 'apple',
       completed: false
     }];
   }
@@ -27,6 +32,7 @@ export class ActiveTodoComponent implements OnInit {
   }
 
   onSetToComplete(index: number) {
+    console.log('onSetToComplete');
     //this.todoService.onSetToComplete(index);
   }
 }
