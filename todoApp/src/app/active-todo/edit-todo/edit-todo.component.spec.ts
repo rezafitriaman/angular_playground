@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { HeaderItemComponent } from './header-item.component';
+import { EditTodoComponent } from './edit-todo.component';
 
-describe('HeaderItemComponent', () => {
-  let component: HeaderItemComponent;
-  let fixture: ComponentFixture<HeaderItemComponent>;
+describe('EditTodoComponent', () => {
+  let component: EditTodoComponent;
+  let fixture: ComponentFixture<EditTodoComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ HeaderItemComponent ]
+      declarations: [ EditTodoComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(HeaderItemComponent);
+    fixture = TestBed.createComponent(EditTodoComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

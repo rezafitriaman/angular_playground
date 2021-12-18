@@ -31,7 +31,7 @@ export class NewTodoComponent implements OnInit {
       content: this.newItem,
       completed: false
     };
-    this.todoService.addTodo(this.newTodo);
+    //this.todoService.addTodo(this.newTodo);
     this.newItem = '';
   }
 

@@ -15,4 +15,8 @@ export class HeaderComponent implements OnInit {
 
   ngOnInit(): void {
   }
+
+  onAddNewCategory() {
+    console.log('onAddNewCategory')
+  }
 }

@@ -8,9 +8,11 @@ import { InActiveTodoComponent } from './in-active-todo/in-active-todo.component
 import { NewTodoComponent } from './new-todo/new-todo.component';
 import { FormsModule } from '@angular/forms';
 import { HeaderComponent } from './header/header.component';
-import { HeaderItemComponent } from './header/header-item/header-item.component';
+
 import { TodoItemComponent } from './active-todo/todo-item/todo-item.component';
 import { ErrorPageComponent } from './error-page/error-page.component';
+import { EditTodoComponent } from './active-todo/edit-todo/edit-todo.component';
+import { ListTodoComponent } from './active-todo/list-todo/list-todo.component';
 
 
 @NgModule({
@@ -20,9 +22,11 @@ import { ErrorPageComponent } from './error-page/error-page.component';
     InActiveTodoComponent,
     NewTodoComponent,
     HeaderComponent,
-    HeaderItemComponent,
+
     TodoItemComponent,
     ErrorPageComponent,
+    EditTodoComponent,
+    ListTodoComponent,
   ],
   imports: [
     BrowserModule,

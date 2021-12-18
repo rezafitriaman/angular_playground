@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import {EventEmitter, Injectable} from '@angular/core';
 import {Todo} from "./models/Todo";
 
 @Injectable({
@@ -8,7 +8,7 @@ import {Todo} from "./models/Todo";
 export class TodoService {
   activeTodos: Array<{page: string, items: Array<Todo>}>;
   inActiveTodos: Array<{page: string, items: Array<Todo>}>;
-
+  activeTodosAdd: EventEmitter<Array<{page: string, items: Array<Todo>}>>;
   constructor() {
     this.activeTodos = [{
       page: 'cadeau',
@@ -36,6 +36,10 @@ export class TodoService {
         completed: false
       }],
     },
+      {
+        page: 'game',
+        items: [],
+      },
     {
       page: 'vliegen',
       items: [{
@@ -50,6 +54,7 @@ export class TodoService {
       }],
     }];
     this.inActiveTodos = [];
+    this.activeTodosAdd = new EventEmitter<Array<{page: string; items: Array<Todo>}>>();
   }
 
   getActiveTodo(id: number) {
@@ -75,8 +80,9 @@ export class TodoService {
     /*this.activeTodos[index].completed = !this.activeTodos[index].completed;*/
   }
 
-  addTodo(newTodo: Todo) {
-    /*console.log(newTodo)
-    this.activeTodos.push(newTodo);*/
+  addTodo(newTodo: {page: string, items: Array<Todo>}) {
+    this.activeTodos.push(newTodo);
+    console.log(this.activeTodos);
+    this.activeTodosAdd.emit(this.activeTodos.slice());
   }
 }
