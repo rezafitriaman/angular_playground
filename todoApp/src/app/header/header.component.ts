@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, DoCheck, OnDestroy, OnInit} from '@angular/core';
+import {ActivatedRoute, Params, Router} from "@angular/router";
+import {TodoService} from "../todo.service";
 
 @Component({
   selector: 'app-header',
@@ -6,8 +8,10 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./header.component.css']
 })
 export class HeaderComponent implements OnInit {
-
-  constructor() { }
+  constructor(private route: ActivatedRoute,
+              private todoService: TodoService,
+              private router: Router) {
+  }
 
   ngOnInit(): void {
   }

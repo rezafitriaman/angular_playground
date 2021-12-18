@@ -1,5 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import {AfterViewInit, Component, Input, OnChanges, OnDestroy, OnInit} from '@angular/core';
 import {Todo} from "../../models/Todo";
+import {TodoService} from "../../todo.service";
+import {ActivatedRoute, NavigationEnd, Params, Route, Router} from "@angular/router";
 
 @Component({
   selector: 'app-header-item',
@@ -9,49 +11,17 @@ import {Todo} from "../../models/Todo";
 export class HeaderItemComponent implements OnInit {
   todos: Array<{page: string, items: Array<Todo>}>;
 
-  constructor() {
-    this.todos = [{
-      page: 'cadeau',
-      items: [{
-        id: '1639321192946',
-        content: 'Tandenborstel',
-        completed: false
-      },
-        {
-          id: '33333',
-          content: 'Tandenborstel',
-          completed: false
-        }],
-    },
-      {
-        page: 'tv',
-        items: [{
-          id: '1639321192946',
-          content: 'Tandenborstel',
-          completed: false
-        },
-          {
-            id: '33333',
-            content: 'Tandenborstel',
-            completed: false
-          }],
-      },
-      {
-        page: 'vliegen',
-        items: [{
-          id: '1639321192946',
-          content: 'Tandenborstel',
-          completed: false
-        },
-          {
-            id: '33333',
-            content: 'Tandenborstel',
-            completed: false
-          }],
-      }];
+  constructor(private todoService: TodoService,
+              private router: Router,
+              private route: ActivatedRoute) {
+    this.todos = [];
   }
 
   ngOnInit(): void {
+    this.todos = this.todoService.getActiveTodos();
   }
 
+  onAddNewCategory() {
+    console.log('onAddNewCategory')
+  }
 }

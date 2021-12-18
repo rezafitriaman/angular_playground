@@ -20,19 +20,11 @@ export class ActiveTodoComponent implements OnInit {
       content: 'Tandenborstel',
       completed: false
     },
-    {
-      id: '33333',
-      content: 'apple',
-      completed: false
-    }];
+      {
+        id: '33333',
+        content: 'Tandenborsteww',
+        completed: false
+      }];
   }
 
-  onSetToInactive(index: number) {
-    //this.todoService.onSetToInactive(index);
-  }
-
-  onSetToComplete(index: number) {
-    console.log('onSetToComplete');
-    //this.todoService.onSetToComplete(index);
-  }
 }

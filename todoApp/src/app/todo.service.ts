@@ -14,12 +14,12 @@ export class TodoService {
       page: 'cadeau',
       items: [{
         id: '1639321192946',
-        content: 'Tandenborstel',
+        content: 'apple',
         completed: false
       },
       {
         id: '33333',
-        content: 'Tandenborstel',
+        content: 'Orange',
         completed: false
       }],
     },
@@ -27,12 +27,12 @@ export class TodoService {
       page: 'tv',
       items: [{
         id: '1639321192946',
-        content: 'Tandenborstel',
+        content: 'koffie',
         completed: false
       },
       {
         id: '33333',
-        content: 'Tandenborstel',
+        content: 'laptop',
         completed: false
       }],
     },
@@ -50,6 +50,14 @@ export class TodoService {
       }],
     }];
     this.inActiveTodos = [];
+  }
+
+  getActiveTodo(id: number) {
+    return this.activeTodos[id].items
+  }
+
+  getActiveTodos() {
+    return this.activeTodos.slice();
   }
 
   onSetToInactive(index: number) {
