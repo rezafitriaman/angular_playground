@@ -13,6 +13,12 @@ export class TodoService {
     this.activeTodos = [{
       page: 'cadeau',
       items: [{
+        id: '13434639321192946',
+        content: 'Dragon fruit',
+        completed: false,
+        editable: false
+      },
+        {
         id: '1639321192946',
         content: 'apple',
         completed: false,

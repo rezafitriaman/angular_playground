@@ -14,6 +14,7 @@ import { ErrorPageComponent } from './error-page/error-page.component';
 import { EditTodoComponent } from './active-todo/edit-todo/edit-todo.component';
 import { ListTodoComponent } from './active-todo/list-todo/list-todo.component';
 import { AddNewTodoItemComponent } from './active-todo/todo-item/add-new-todo-item/add-new-todo-item.component';
+import { HighlightDirective } from './shared/highlight.directive';
 
 
 @NgModule({
@@ -27,6 +28,7 @@ import { AddNewTodoItemComponent } from './active-todo/todo-item/add-new-todo-it
     EditTodoComponent,
     ListTodoComponent,
     AddNewTodoItemComponent,
+    HighlightDirective,
   ],
   imports: [
     BrowserModule,

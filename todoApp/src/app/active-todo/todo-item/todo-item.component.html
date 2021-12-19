@@ -9,7 +9,8 @@
   <li class="item my-3 px-3 py-3 odd:bg-blue-50 even:bg-white flex rounded-lg"
       *ngFor="let todo of todos; let i = index">
     <span class="mr-1 text-gray-700">{{ i + 1 }} -</span>
-    <span class="cursor-pointer capitalize ml-1 text-gray-700"
+    <span
+      class="todo-text cursor-pointer capitalize ml-1 text-gray-700"
           [contentEditable]="todo.editable"
           (click)="onSetToComplete(i)"
           [ngClass]="{'italic line-through text-red-400': todo.completed}">
@@ -39,3 +40,9 @@
   </li>
 </ul>
 
+<!--
+<div id="editable" contenteditable="true">
+  text text text text text text text text text
+</div>
+<button id="button" (click)="setCaret()">focus</button>
+-->

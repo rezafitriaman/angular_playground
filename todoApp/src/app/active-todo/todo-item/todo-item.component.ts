@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {AfterViewInit, Component, ElementRef, OnInit, Renderer2, ViewChild, ViewChildren} from '@angular/core';
 import {ActivatedRoute, Params} from "@angular/router";
 import {Todo} from "../../models/Todo";
 import {TodoService} from "../../todo.service";
@@ -8,13 +8,16 @@ import {TodoService} from "../../todo.service";
   templateUrl: './todo-item.component.html',
   styleUrls: ['./todo-item.component.css']
 })
-export class TodoItemComponent implements OnInit {
+export class TodoItemComponent implements OnInit, AfterViewInit {
+  //@ViewChildren('editable') editableText: ElementRef;
   id: number;
-  //editableText: boolean;
   todos: Todo[];
-  constructor(private route: ActivatedRoute, private todoService: TodoService) {
+  constructor(private route: ActivatedRoute,
+              private todoService: TodoService,
+              private renderer: Renderer2) {
     this.id = 0;
-    this.todos = []
+    this.todos = [];
+    //this.editableText = {nativeElement: ElementRef}
   }
 
   ngOnInit(): void {
@@ -22,6 +25,13 @@ export class TodoItemComponent implements OnInit {
       this.id = +params['id'];
       this.todos = this.todoService.getActiveTodoItem(this.id);
     })
+  }
+
+  ngAfterViewInit() {
+    //console.log(this.editableText)
+    //console.log()
+    //this.renderer.selectRootElement('.todo-items')
+    //this.setCaret();
   }
 
   addNewTodoItem(todoItem: Todo) {
@@ -34,8 +44,24 @@ export class TodoItemComponent implements OnInit {
   }
 
   onSetToEditable(indexItem: number) {
-    //TODO place the cursor on the text pls
+    //TODO place the cursor on the text pls http://jsfiddle.net/timdown/vXnCM/
     this.todoService.onSetToEditable(indexItem, this.id);
+
+    setTimeout(()=> {
+      //this.setCaret();
+    },2000)
+  }
+
+  setCaret() {
+    /*const el = this.editableText.nativeElement;
+    const range = document.createRange();
+    const sel = window.getSelection()!;
+    console.log(el)
+    range.setStart(el, 0);
+    range.collapse(true);
+    sel.removeAllRanges();
+    sel.addRange(range);*/
+    //el.focus();
   }
 
   onSetToInactive(index: number) {
