@@ -15,12 +15,14 @@ export class TodoService {
       items: [{
         id: '1639321192946',
         content: 'apple',
-        completed: false
+        completed: false,
+        editable: false
       },
       {
         id: '33333',
         content: 'Orange',
-        completed: false
+        completed: false,
+        editable: false
       }],
     },
     {
@@ -28,12 +30,14 @@ export class TodoService {
       items: [{
         id: '1639321192946',
         content: 'koffie',
-        completed: false
+        completed: false,
+        editable: false
       },
       {
         id: '33333',
         content: 'laptop',
-        completed: false
+        completed: false,
+        editable: false
       }],
     },
       {
@@ -45,19 +49,21 @@ export class TodoService {
       items: [{
         id: '1639321192946',
         content: 'Tandenborstel',
-        completed: false
+        completed: false,
+        editable: false
       },
       {
         id: '33333',
         content: 'Tandenborstel',
-        completed: false
+        completed: false,
+        editable: false
       }],
     }];
     this.inActiveTodos = [];
     this.activeTodosAdd = new EventEmitter<Array<{page: string; items: Array<Todo>}>>();
   }
 
-  getActiveTodo(id: number) {
+  getActiveTodoItem(id: number) {
     return this.activeTodos[id].items
   }
 
@@ -76,13 +82,20 @@ export class TodoService {
     this.inActiveTodos.splice(index, 1);*/
   }
 
-  onSetToComplete(index: number) {
-    /*this.activeTodos[index].completed = !this.activeTodos[index].completed;*/
+  onSetToComplete(indexItem: number, todoId: number) {
+    this.activeTodos[todoId].items[indexItem].completed = !this.activeTodos[todoId].items[indexItem].completed;
+  }
+
+  onSetToEditable(indexItem: number, todoId: number) {
+    this.activeTodos[todoId].items[indexItem].editable = !this.activeTodos[todoId].items[indexItem].editable;
   }
 
   addTodo(newTodo: {page: string, items: Array<Todo>}) {
     this.activeTodos.push(newTodo);
-    console.log(this.activeTodos);
     this.activeTodosAdd.emit(this.activeTodos.slice());
+  }
+
+  addTodoItem(todoItem: Todo, todoId: number) {
+    console.log(this.activeTodos[todoId].items.push(todoItem));
   }
 }

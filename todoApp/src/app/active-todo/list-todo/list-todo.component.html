@@ -4,27 +4,31 @@
       <span class="px-4 first:pl-0 flex items-center" *ngFor="let todo of todos; let i = index">
           <a class="cursor-pointer capitalize h-6 flex items-center border-b-2 border-white"
              [routerLink]="['/activeTodo', i]"
-             routerLinkActive="border-stone-300">
-            <span class="block text-stone-600 flex relative">
-                <span class=" text-emerald-500 flex items-center mr-0.5"
+             routerLinkActive="border-gray-300">
+            <span class="block flex relative">
+                <span class="text-green-500 flex items-center mr-0.5"
                       *ngIf="newItem && todos.length === i + 1">
-                   <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="plus"
+                   <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" data-prefix="fas"
+                        data-icon="plus"
                         class="svg-inline--fa fa-plus w-3 h-3 block fill-current" role="img" viewBox="0 0 448 512">
-                <path fill="currentColor" d="M432 256c0 17.69-14.33 32.01-32 32.01H256v144c0 17.69-14.33 31.99-32 31.99s-32-14.3-32-31.99v-144H48c-17.67 0-32-14.32-32-32.01s14.33-31.99 32-31.99H192v-144c0-17.69 14.33-32.01 32-32.01s32 14.32 32 32.01v144h144C417.7 224 432 238.3 432 256z"/></svg>
+                <path fill="currentColor"
+                      d="M432 256c0 17.69-14.33 32.01-32 32.01H256v144c0 17.69-14.33 31.99-32 31.99s-32-14.3-32-31.99v-144H48c-17.67 0-32-14.32-32-32.01s14.33-31.99 32-31.99H192v-144c0-17.69 14.33-32.01 32-32.01s32 14.32 32 32.01v144h144C417.7 224 432 238.3 432 256z"/></svg>
               </span>
-              <span>{{todo.page}}</span>
+              <span class="text-gray-600 hover:text-gray-400">{{todo.page}}</span>
             </span>
           </a>
       </span>
-    <span class="px-4 border-l border-slate-300 flex items-center">
+    <span class="px-4 border-l border-gray-300 flex items-center">
       <a class="cursor-pointer flex relative border-b-2 border-white h-6"
          [routerLink]="['/activeTodo', 'new']"
-         routerLinkActive="border-stone-300">
-        <span class="capitalize text-stone-600 flex items-center block">new</span>
-        <span class="absolute -right-3 -top-0.5 text-emerald-500">
-              <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="plus"
+         routerLinkActive="border-gray-300">
+        <span class="capitalize text-gray-600 hover:text-gray-400 flex items-center block">new</span>
+        <span class="absolute -right-3 -top-0.5 text-green-500">
+              <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" data-prefix="fas"
+                   data-icon="plus"
                    class="svg-inline--fa fa-plus w-3 h-3 block fill-current" role="img" viewBox="0 0 448 512">
-                <path fill="currentColor" d="M432 256c0 17.69-14.33 32.01-32 32.01H256v144c0 17.69-14.33 31.99-32 31.99s-32-14.3-32-31.99v-144H48c-17.67 0-32-14.32-32-32.01s14.33-31.99 32-31.99H192v-144c0-17.69 14.33-32.01 32-32.01s32 14.32 32 32.01v144h144C417.7 224 432 238.3 432 256z"/></svg>
+                <path fill="currentColor"
+                      d="M432 256c0 17.69-14.33 32.01-32 32.01H256v144c0 17.69-14.33 31.99-32 31.99s-32-14.3-32-31.99v-144H48c-17.67 0-32-14.32-32-32.01s14.33-31.99 32-31.99H192v-144c0-17.69 14.33-32.01 32-32.01s32 14.32 32 32.01v144h144C417.7 224 432 238.3 432 256z"/></svg>
         </span>
       </a>
   </span>

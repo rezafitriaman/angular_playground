@@ -1,6 +1,6 @@
-<h3 class="font-bold text-xl">Deleted Todo</h3>
-<ul class="items">
-  <li *ngIf="todos.length < 1" class="my-3 font-light text-medium">You have nothing done yet!</li>
+<h3 class="font-bold text-xl text-gray-600">Deleted Todo</h3>
+<ul class="todo-items">
+  <li *ngIf="todos.length < 1" class="my-3 font-light text-medium text-gray-600">You have nothing done yet!</li>
   <li class="item" *ngFor="let todo of todos; let i = index">
     <span>{{ i + 1 }} - </span>
     <span class="capitalize"> {{ todo.content }}</span>

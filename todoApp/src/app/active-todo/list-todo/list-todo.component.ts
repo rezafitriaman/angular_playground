@@ -27,7 +27,9 @@ export class ListTodoComponent implements OnInit {
       setTimeout(()=>{
         this.newItem = false;
       },4000)
-    })
+    });
+
+
   }
 
 }

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {Todo} from "../../models/Todo";
 import {TodoService} from "../../todo.service";
+import {ActivatedRoute, Router} from "@angular/router";
 
 @Component({
   selector: 'app-edit-todo',
@@ -10,7 +11,7 @@ import {TodoService} from "../../todo.service";
 export class EditTodoComponent implements OnInit {
   newTodo: string;
   newActiveTodo: {page: string, items: Array<Todo>};
-  constructor(private todoService: TodoService) {
+  constructor(private todoService: TodoService, private route: ActivatedRoute, private router: Router) {
     this.newTodo = '';
     this.newActiveTodo = {
       page: '',
@@ -19,6 +20,7 @@ export class EditTodoComponent implements OnInit {
   }
 
   ngOnInit(): void {
+
   }
 
   addTodo(newTodo: string) {
@@ -30,6 +32,9 @@ export class EditTodoComponent implements OnInit {
     }
     this.todoService.addTodo(this.newActiveTodo)
     this.newTodo = '';
+    const lastAdded = this.todoService.getActiveTodos().length - 1;
+
+    this.router.navigate(['/activeTodo', lastAdded])
   }
 
   onEnterDown(event: KeyboardEvent, newItem: string) {

@@ -15,16 +15,7 @@ export class ActiveTodoComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.todos = [{
-      id: '1639321192946',
-      content: 'Tandenborstel',
-      completed: false
-    },
-      {
-        id: '33333',
-        content: 'Tandenborsteww',
-        completed: false
-      }];
+
   }
 
 }
