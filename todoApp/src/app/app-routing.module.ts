@@ -5,15 +5,19 @@ import {InActiveTodoComponent} from "./in-active-todo/in-active-todo.component";
 import {TodoItemComponent} from "./active-todo/todo-item/todo-item.component";
 import {ErrorPageComponent} from "./error-page/error-page.component";
 import {EditTodoComponent} from "./active-todo/edit-todo/edit-todo.component";
+import {LoginFormComponent} from "./login-form/login-form.component";
+import {AuthGuardService} from "./auth-guard.service";
+import {CanDeactivateGuardService} from "./active-todo/can-deactivate-guard.service";
 
 const routes: Routes = [
-  {path: '', redirectTo: 'activeTodo', pathMatch: 'full'},
-  {path: 'activeTodo', component: ActiveTodoComponent, children: [
-      {path: 'new', component: EditTodoComponent},
+  {path: '', redirectTo: 'login', pathMatch: 'full'},
+  {path: 'login', component: LoginFormComponent},
+  {path: 'activeTodo', canActivate: [AuthGuardService], component: ActiveTodoComponent, children: [
+      {path: 'new', component: EditTodoComponent, canDeactivate: [CanDeactivateGuardService]},
       {path: ':id', component: TodoItemComponent}
   ]},
-  {path: 'deletedTodo', component: InActiveTodoComponent},
-  {path: 'not-found', component: ErrorPageComponent},
+  {path: 'deletedTodo', canActivate: [AuthGuardService], component: InActiveTodoComponent},
+  {path: 'not-found', component: ErrorPageComponent, data: {message: 'Page not found'}},
   {path: '**', redirectTo: '/not-found', pathMatch: 'full'}
 ];
 

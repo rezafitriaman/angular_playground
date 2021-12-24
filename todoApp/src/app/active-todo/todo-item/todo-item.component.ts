@@ -1,14 +1,16 @@
 import {AfterViewInit, Component, ElementRef, OnInit, Renderer2, ViewChild, ViewChildren} from '@angular/core';
-import {ActivatedRoute, Params} from "@angular/router";
+import {ActivatedRoute, Params, UrlTree} from "@angular/router";
 import {Todo} from "../../models/Todo";
 import {TodoService} from "../../todo.service";
+import {CanComponentDeactivate} from "../can-deactivate-guard.service";
+import {Observable} from "rxjs";
 
 @Component({
   selector: 'app-todo-item',
   templateUrl: './todo-item.component.html',
   styleUrls: ['./todo-item.component.css']
 })
-export class TodoItemComponent implements OnInit, AfterViewInit {
+export class TodoItemComponent implements OnInit, AfterViewInit, CanComponentDeactivate {
   //@ViewChildren('editable') editableText: ElementRef;
   id: number;
   todos: Todo[];
@@ -35,6 +37,7 @@ export class TodoItemComponent implements OnInit, AfterViewInit {
   }
 
   addNewTodoItem(todoItem: Todo) {
+    console.log(todoItem);
     this.todoService.addTodoItem(todoItem, this.id)
   }
 
@@ -66,5 +69,15 @@ export class TodoItemComponent implements OnInit, AfterViewInit {
 
   onSetToInactive(index: number) {
     //this.todoService.onSetToInactive(index);
+  }
+
+  canDeactivate(): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
+    return true;
+    /*console.log(this.newTodoItem)
+    if(this.newItem !== '' && !this.changeSaved) {
+      return confirm('Do you want to discard the changes?')
+    }else {
+      return true;
+    }*/
   }
 }

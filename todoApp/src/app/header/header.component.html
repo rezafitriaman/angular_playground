@@ -13,39 +13,38 @@
     </div>
     <div class="lg:flex flex-grow items-center" id="example-navbar-warning">
       <ul class="flex flex-col lg:flex-row list-none ml-auto">
-        <li class="nav-item">
+        <li class="nav-item" *ngIf="loggedIn">
           <a class="px-3 py-2 flex items-center text-base uppercase font-bold leading-snug text-white hover:opacity-75">
             <span class="ml-2 border-white cursor-pointer"
                   routerLinkActive="border-b-2"
                   routerLink="/activeTodo">Active Todo</span>
           </a>
         </li>
-        <li class="nav-item">
+        <li class="nav-item" *ngIf="loggedIn">
           <a class="px-3 py-2 flex items-center text-base uppercase font-bold leading-snug text-white hover:opacity-75">
             <span class="ml-2 cursor-pointer"
                   routerLinkActive="border-b-2 border-white"
                   routerLink="/deletedTodo">Deleted todo</span>
           </a>
         </li>
+        <li class="nav-item" *ngIf="!loggedIn; else loggedOut">
+          <a class="flex items-center text-base uppercase font-bold leading-snug text-white hover:opacity-75">
+            <span class="ml-2 cursor-pointer border border-white px-4 py-2"
+                  routerLinkActive="border-b-2 border-white"
+                  routerLink="/login">Login</span>
+          </a>
+        </li>
+        <ng-template #loggedOut>
+          <li class="nav-item">
+            <a class="flex items-center text-base uppercase font-bold leading-snug text-white hover:opacity-75">
+            <span class="ml-2 cursor-pointer border border-white px-4 py-2"
+                  (click)="onLogout()">Logout</span>
+            </a>
+          </li>
+        </ng-template>
       </ul>
     </div>
   </div>
 </nav>
 <div class="mt-8 container mx-auto px-4 flex content-between">
-
-<!--
-  <app-header-item class="flex leading-none text-stone-600 divide-x divide-slate-300"></app-header-item>
--->
-
-<!--  <span class="px-4 border-l border-slate-300 flex items-center">
-    <a class="cursor-pointer flex"
-       (click)="onAddNewCategory()">
-      <span class="capitalize text-stone-600">new</span>
-      <span class="relative bottom-0.5 text-emerald-500">
-            <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="plus"
-                 class="svg-inline&#45;&#45;fa fa-plus w-3 h-3 block fill-current" role="img" viewBox="0 0 448 512"><path fill="currentColor" d="M432 256c0 17.69-14.33 32.01-32 32.01H256v144c0 17.69-14.33 31.99-32 31.99s-32-14.3-32-31.99v-144H48c-17.67 0-32-14.32-32-32.01s14.33-31.99 32-31.99H192v-144c0-17.69 14.33-32.01 32-32.01s32 14.32 32 32.01v144h144C417.7 224 432 238.3 432 256z"/></svg>
-      </span>
-    </a>
-</span>-->
-
 </div>
