@@ -9,6 +9,8 @@ export class TodoService {
   activeTodos: Array<{page: string, items: Array<Todo>}>;
   inActiveTodos: Array<{page: string, items: Array<Todo>}>;
   activeTodosAdd: EventEmitter<Array<{page: string, items: Array<Todo>}>>;
+  resetPlaceHolder: EventEmitter<string>;
+
   constructor() {
     this.activeTodos = [{
       page: 'cadeau',
@@ -67,6 +69,7 @@ export class TodoService {
     }];
     this.inActiveTodos = [];
     this.activeTodosAdd = new EventEmitter<Array<{page: string; items: Array<Todo>}>>();
+    this.resetPlaceHolder = new EventEmitter<string>()
   }
 
   getActiveTodoItem(id: number) {

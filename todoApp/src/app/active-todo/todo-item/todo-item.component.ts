@@ -11,15 +11,20 @@ import {Observable} from "rxjs";
   styleUrls: ['./todo-item.component.css']
 })
 export class TodoItemComponent implements OnInit, AfterViewInit, CanComponentDeactivate {
-  //@ViewChildren('editable') editableText: ElementRef;
+  inputFillUp: boolean;
   id: number;
   todos: Todo[];
+  newItem: string;
+  placeHolder: string;
+
   constructor(private route: ActivatedRoute,
               private todoService: TodoService,
               private renderer: Renderer2) {
     this.id = 0;
     this.todos = [];
-    //this.editableText = {nativeElement: ElementRef}
+    this.inputFillUp = false;
+    this.newItem = '';
+    this.placeHolder = '';
   }
 
   ngOnInit(): void {
@@ -36,10 +41,27 @@ export class TodoItemComponent implements OnInit, AfterViewInit, CanComponentDea
     //this.setCaret();
   }
 
-  addNewTodoItem(todoItem: Todo) {
-    console.log(todoItem);
-    this.todoService.addTodoItem(todoItem, this.id)
+  onInputFillUp(inputFillUp: boolean) {
+    this.inputFillUp = inputFillUp;
   }
+
+  onAddNewTodoItem(newItem: string) {
+    if(newItem === '') return;
+    this.newItem = newItem;
+
+    this.todoService.addTodoItem({
+      id: Date.now().toString(),
+      content: newItem,
+      completed: false,
+      editable: false
+    }, this.id)
+
+    this.inputFillUp = false;
+  }
+
+/*  onChangeSaved(change: boolean) {
+    this.changeSaved = change;
+  }*/
 
   onSetToComplete(indexItem: number) {
     if(this.todos[indexItem].editable) return;
@@ -72,12 +94,14 @@ export class TodoItemComponent implements OnInit, AfterViewInit, CanComponentDea
   }
 
   canDeactivate(): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
-    return true;
-    /*console.log(this.newTodoItem)
-    if(this.newItem !== '' && !this.changeSaved) {
-      return confirm('Do you want to discard the changes?')
+    if(this.inputFillUp) {
+      if (!confirm('Do you want to discard the changes?')) return false;
+
+      this.todoService.resetPlaceHolder.emit('');
+      this.inputFillUp = false;
+      return true;
     }else {
       return true;
-    }*/
+    }
   }
 }

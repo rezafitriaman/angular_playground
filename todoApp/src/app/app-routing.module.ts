@@ -14,7 +14,7 @@ const routes: Routes = [
   {path: 'login', component: LoginFormComponent},
   {path: 'activeTodo', canActivate: [AuthGuardService], component: ActiveTodoComponent, children: [
       {path: 'new', component: EditTodoComponent, canDeactivate: [CanDeactivateGuardService]},
-      {path: ':id', component: TodoItemComponent}
+      {path: ':id', component: TodoItemComponent, canDeactivate: [CanDeactivateGuardService]}
   ]},
   {path: 'deletedTodo', canActivate: [AuthGuardService], component: InActiveTodoComponent},
   {path: 'not-found', component: ErrorPageComponent, data: {message: 'Page not found'}},

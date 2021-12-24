@@ -1,5 +1,4 @@
-import {Component, EventEmitter, OnInit, Output} from '@angular/core';
-import {Todo} from "../../../models/Todo";
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {TodoService} from "../../../todo.service";
 import {ActivatedRoute, UrlTree} from "@angular/router";
 
@@ -9,38 +8,36 @@ import {ActivatedRoute, UrlTree} from "@angular/router";
   styleUrls: ['./add-new-todo-item.component.css']
 })
 export class AddNewTodoItemComponent implements OnInit {
-  newItem: string;
-  changeSaved: boolean;
-  @Output() newTodoItem: EventEmitter<Todo>;
+  @Output() newItem: EventEmitter<string>;
+  @Output() inputFillUp: EventEmitter<boolean>;
+  @Input() inputValue: string;
+
 
   constructor(private todoService: TodoService,
               private route: ActivatedRoute) {
-    this.newItem = '';
-    this.newTodoItem = new EventEmitter<Todo>();
-    this.changeSaved = false;
+    this.inputValue = '';
+    this.newItem = new EventEmitter<string>();
+    this.inputFillUp = new EventEmitter<boolean>();
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.todoService.resetPlaceHolder.subscribe((value: string)=> {
+      this.inputValue = value;
+    })
+  }
 
   addTodo(newItem: string) {
-    if(newItem === '') return;
-    this.newTodoItem.emit({
-      id: Date.now().toString(),
-      content: this.newItem,
-      completed: false,
-      editable: false
-    });
-    this.newItem = '';
-    this.changeSaved = true;
+    this.newItem.emit(newItem);
+    this.inputValue = '';
+    this.inputFillUp.emit(false);
   }
 
-  onEnterDown(event: KeyboardEvent, newItem: string) {
-    if(newItem === '') return;
-
+  onKeyDown(event: KeyboardEvent) {
     const enterKey = (event.key === 'Enter');
+    this.inputFillUp.emit(true);
 
     if(enterKey) {
-      this.addTodo(newItem);
+      this.addTodo(this.inputValue);
     }
   }
 }
