@@ -1,5 +1,5 @@
 import {AfterViewInit, Component, ElementRef, OnInit, Renderer2, ViewChild, ViewChildren} from '@angular/core';
-import {ActivatedRoute, Params, UrlTree} from "@angular/router";
+import {ActivatedRoute, Data, Params, UrlTree} from "@angular/router";
 import {Todo} from "../../models/Todo";
 import {TodoService} from "../../todo.service";
 import {CanComponentDeactivate} from "../can-deactivate-guard.service";
@@ -16,6 +16,7 @@ export class TodoItemComponent implements OnInit, AfterViewInit, CanComponentDea
   todos: Todo[];
   newItem: string;
   placeHolder: string;
+  loading: boolean;
 
   constructor(private route: ActivatedRoute,
               private todoService: TodoService,
@@ -25,13 +26,25 @@ export class TodoItemComponent implements OnInit, AfterViewInit, CanComponentDea
     this.inputFillUp = false;
     this.newItem = '';
     this.placeHolder = '';
+    this.loading = true;
   }
 
   ngOnInit(): void {
-    this.route.params.subscribe((params: Params) => {
+    console.log(this.loading);
+    // it load via a normal route
+    /*this.route.params.subscribe((params: Params) => {
       this.id = +params['id'];
       this.todos = this.todoService.getActiveTodoItem(this.id);
-    })
+    })*/
+
+    // it load via a resolver : example - 152
+    this.route.data.subscribe((data: Data)=> {
+      this.loading = false;
+      console.log(data);
+      this.todos = data['activeTodoItem'];
+    });
+
+    console.log(this.loading);
   }
 
   ngAfterViewInit() {

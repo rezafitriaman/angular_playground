@@ -28,8 +28,5 @@ export class ListTodoComponent implements OnInit {
         this.newItem = false;
       },4000)
     });
-
-
   }
-
 }
