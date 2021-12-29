@@ -14,6 +14,7 @@ export class EditTodoComponent implements OnInit, CanComponentDeactivate {
   newTodo: string;
   newActiveTodo: {page: string, items: Array<Todo>};
   changesSaved: boolean;
+  loading: boolean
   constructor(private todoService: TodoService, private route: ActivatedRoute, private router: Router) {
     this.newTodo = '';
     this.newActiveTodo = {
@@ -21,10 +22,13 @@ export class EditTodoComponent implements OnInit, CanComponentDeactivate {
       items: [],
     }
     this.changesSaved = false;
+    this.loading = false;
   }
 
   ngOnInit(): void {
-
+    this.todoService.loading.subscribe((loading: boolean)=> {
+      this.loading = loading;
+    })
   }
 
   addTodo(newTodo: string) {

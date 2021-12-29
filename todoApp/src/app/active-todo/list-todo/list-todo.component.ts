@@ -29,4 +29,9 @@ export class ListTodoComponent implements OnInit {
       },4000)
     });
   }
+
+  onSelectTodoCategory() {
+    console.log('onSelectTodoCategory');
+    this.todoService.loading.emit(true);
+  }
 }

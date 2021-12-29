@@ -15,6 +15,7 @@ export class TodoItemResolverService implements Resolve<Todo[]>{
     return new Promise((resolve, reject) => {
       setTimeout(() => {
         resolve(this.todoService.getActiveTodoItem(+route.params['id']));
+        this.todoService.loading.emit(false);
       }, 3000);
     });
   }

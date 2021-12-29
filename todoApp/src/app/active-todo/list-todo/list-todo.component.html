@@ -4,7 +4,8 @@
       <span class="px-4 first:pl-0 flex items-center" *ngFor="let todo of todos; let i = index">
           <a class="cursor-pointer capitalize h-6 flex items-center border-b-2 border-white"
              [routerLink]="['/activeTodo', i]"
-             routerLinkActive="border-gray-300">
+             routerLinkActive="border-gray-300"
+          (click)="onSelectTodoCategory()">
             <span class="block flex relative">
                 <span class="text-green-500 flex items-center mr-0.5"
                       *ngIf="newItem && todos.length === i + 1">

@@ -8,14 +8,15 @@ import {TodoService} from "../todo.service";
   styleUrls: ['./active-todo.component.css']
 })
 export class ActiveTodoComponent implements OnInit {
-  todos: Array<Todo>;
-
+  loading: boolean
   constructor(private todoService: TodoService) {
-    this.todos = []
+  this.loading = false;
   }
 
   ngOnInit(): void {
-
+    this.todoService.loading.subscribe((loading: boolean)=> {
+      this.loading = loading;
+    })
   }
 
 }

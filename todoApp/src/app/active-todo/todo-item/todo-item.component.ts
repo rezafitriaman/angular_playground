@@ -26,7 +26,7 @@ export class TodoItemComponent implements OnInit, AfterViewInit, CanComponentDea
     this.inputFillUp = false;
     this.newItem = '';
     this.placeHolder = '';
-    this.loading = true;
+    this.loading = false;
   }
 
   ngOnInit(): void {
@@ -39,12 +39,11 @@ export class TodoItemComponent implements OnInit, AfterViewInit, CanComponentDea
 
     // it load via a resolver : example - 152
     this.route.data.subscribe((data: Data)=> {
-      this.loading = false;
-      console.log(data);
       this.todos = data['activeTodoItem'];
     });
-
-    console.log(this.loading);
+    this.todoService.loading.subscribe((loading: boolean)=> {
+      this.loading = loading;
+    })
   }
 
   ngAfterViewInit() {

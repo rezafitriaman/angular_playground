@@ -9,7 +9,7 @@ export class LoginService {
   loggedInInfo: EventEmitter<boolean>;
 
   constructor() {
-    this.loggedIn = false;
+    this.loggedIn = false; // false
     this.loggedInInfo = new EventEmitter<boolean>();
   }
 
