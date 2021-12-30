@@ -1,14 +1,14 @@
 import {EventEmitter, Injectable} from '@angular/core';
-import {Todo} from "./models/Todo";
+import {Todo, TodoPackage} from "./models/Todo";
 
 @Injectable({
   providedIn: 'root'
 })
 
 export class TodoService {
-  activeTodos: Array<{page: string, items: Array<Todo>}>;
-  inActiveTodos: Array<{page: string, items: Array<Todo>}>;
-  activeTodosAdd: EventEmitter<Array<{page: string, items: Array<Todo>}>>;
+  activeTodos: Array<TodoPackage>;
+  inActiveTodos: Array<TodoPackage>;
+  activeTodosAdd: EventEmitter<Array<TodoPackage>>;
   resetPlaceHolder: EventEmitter<string>;
   loading: EventEmitter<boolean>;
 
@@ -69,7 +69,7 @@ export class TodoService {
       }],
     }];
     this.inActiveTodos = [];
-    this.activeTodosAdd = new EventEmitter<Array<{page: string; items: Array<Todo>}>>();
+    this.activeTodosAdd = new EventEmitter<Array<TodoPackage>>();
     this.resetPlaceHolder = new EventEmitter<string>();
     this.loading = new EventEmitter<boolean>();
   }
@@ -101,7 +101,7 @@ export class TodoService {
     this.activeTodos[todoId].items[indexItem].editable = !this.activeTodos[todoId].items[indexItem].editable;
   }
 
-  addTodo(newTodo: {page: string, items: Array<Todo>}) {
+  addTodo(newTodo: TodoPackage) {
     this.activeTodos.push(newTodo);
     this.activeTodosAdd.emit(this.activeTodos.slice());
   }

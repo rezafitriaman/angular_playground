@@ -9,6 +9,7 @@ import {TodoService} from "../todo.service";
 })
 export class ActiveTodoComponent implements OnInit {
   loading: boolean
+
   constructor(private todoService: TodoService) {
   this.loading = false;
   }
@@ -18,5 +19,4 @@ export class ActiveTodoComponent implements OnInit {
       this.loading = loading;
     })
   }
-
 }

@@ -11,12 +11,13 @@ export class TodoItemResolverService implements Resolve<Todo[]>{
 
   constructor(private todoService: TodoService) { }
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<Todo[]> | Promise<Todo[]> | Todo[] {
-    //return this.todoService.getActiveTodoItem(+route.params['id']);
+    this.todoService.loading.emit(true);
     return new Promise((resolve, reject) => {
       setTimeout(() => {
+        console.log('TodoItemResolverService')
         resolve(this.todoService.getActiveTodoItem(+route.params['id']));
         this.todoService.loading.emit(false);
-      }, 3000);
+      }, 1000);
     });
   }
 }

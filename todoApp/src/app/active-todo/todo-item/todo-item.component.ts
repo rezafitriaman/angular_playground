@@ -30,7 +30,6 @@ export class TodoItemComponent implements OnInit, AfterViewInit, CanComponentDea
   }
 
   ngOnInit(): void {
-    console.log(this.loading);
     // it load via a normal route
     /*this.route.params.subscribe((params: Params) => {
       this.id = +params['id'];
@@ -41,6 +40,7 @@ export class TodoItemComponent implements OnInit, AfterViewInit, CanComponentDea
     this.route.data.subscribe((data: Data)=> {
       this.todos = data['activeTodoItem'];
     });
+
     this.todoService.loading.subscribe((loading: boolean)=> {
       this.loading = loading;
     })

@@ -12,7 +12,6 @@ export class AddNewTodoItemComponent implements OnInit {
   @Output() inputFillUp: EventEmitter<boolean>;
   @Input() inputValue: string;
 
-
   constructor(private todoService: TodoService,
               private route: ActivatedRoute) {
     this.inputValue = '';

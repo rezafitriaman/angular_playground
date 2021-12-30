@@ -14,7 +14,8 @@ export class EditTodoComponent implements OnInit, CanComponentDeactivate {
   newTodo: string;
   newActiveTodo: {page: string, items: Array<Todo>};
   changesSaved: boolean;
-  loading: boolean
+  loading: boolean;
+
   constructor(private todoService: TodoService, private route: ActivatedRoute, private router: Router) {
     this.newTodo = '';
     this.newActiveTodo = {
@@ -44,6 +45,7 @@ export class EditTodoComponent implements OnInit, CanComponentDeactivate {
     this.changesSaved = true;
 
     this.router.navigate(['../', lastAdded], {relativeTo: this.route})
+    this.todoService.loading.emit(true);
   }
 
   onEnterDown(event: KeyboardEvent, newItem: string) {

@@ -12,6 +12,7 @@ import {ActivatedRoute, NavigationEnd, Params, Route, Router} from "@angular/rou
 export class ListTodoComponent implements OnInit {
   todos: Array<{page: string, items: Array<Todo>}>;
   newItem: boolean;
+
   constructor(private todoService: TodoService,
               private router: Router,
               private route: ActivatedRoute) {
@@ -28,10 +29,5 @@ export class ListTodoComponent implements OnInit {
         this.newItem = false;
       },4000)
     });
-  }
-
-  onSelectTodoCategory() {
-    console.log('onSelectTodoCategory');
-    this.todoService.loading.emit(true);
   }
 }

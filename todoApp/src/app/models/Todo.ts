@@ -1,3 +1,8 @@
+export interface TodoPackage {
+  page: string;
+  items: Array<Todo>
+}
+
 export class Todo {
   content: string;
   completed: boolean;
