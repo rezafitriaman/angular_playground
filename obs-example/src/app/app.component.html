@@ -1,0 +1,68 @@
+<div class="container mx-auto px-4">
+  <ul class="nav nav-tabs flex flex-col md:flex-row flex-wrap list-none border-b-0 pl-0 mb-4" id="tabs-tab"
+      role="tablist">
+    <li class="nav-item" role="presentation">
+      <a routerLink="/"
+         [routerLinkActive]="'bg-gray-200'"
+         [routerLinkActiveOptions]="{exact: true}"
+         class="
+      nav-link
+      block
+      font-medium
+      text-xs
+      leading-tight
+      uppercase
+      border-x-0 border-t-0 border-b-2 border-transparent
+      px-6
+      py-3
+      my-2
+      hover:border-transparent hover:bg-gray-100
+      focus:border-transparent
+    " id="tabs-home-tab" data-bs-toggle="pill" data-bs-target="#tabs-home" role="tab" aria-controls="tabs-home"
+         aria-selected="true">Home</a>
+    </li>
+    <li class="nav-item" role="presentation">
+      <a [routerLink]="['user', 1]"
+         [routerLinkActive]="'bg-gray-200'"class="
+      nav-link
+      block
+      font-medium
+      text-xs
+      leading-tight
+      uppercase
+      border-x-0 border-t-0 border-b-2 border-transparent
+      px-6
+      py-3
+      my-2
+      hover:border-transparent hover:bg-gray-100
+      focus:border-transparent
+    " id="tabs-user-1-tab" data-bs-toggle="pill" data-bs-target="#tabs-user-1" role="tab"
+         aria-controls="tabs-user-1" aria-selected="false">User 1</a>
+    </li>
+    <li class="nav-item" role="presentation">
+      <a [routerLink]="['user', 2]"
+         [routerLinkActive]="'bg-gray-200'" class="
+      nav-link
+      block
+      font-medium
+      text-xs
+      leading-tight
+      uppercase
+      border-x-0 border-t-0 border-b-2 border-transparent
+      px-6
+      py-3
+      my-2
+      hover:border-transparent hover:bg-gray-100
+      focus:border-transparent
+    " id="tabs-user-2-tab" data-bs-toggle="pill" data-bs-target="#tabs-user-2" role="tab"
+         aria-controls="tabs-user-2" aria-selected="false">User 2</a>
+    </li>
+  </ul>
+  <div class="tab-content" id="tabs-tabContent">
+    <div class="tab-pane fade show active" id="tabs" role="tabpanel" aria-labelledby="tabs">
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+
+
+</div>
