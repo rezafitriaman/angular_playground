@@ -1,6 +1,10 @@
 export interface TodoPackage {
-  page: string;
+  label: string;
   items: Array<Todo>
+}
+
+export type InactiveTodo = Todo & {
+  label: string
 }
 
 export class Todo {

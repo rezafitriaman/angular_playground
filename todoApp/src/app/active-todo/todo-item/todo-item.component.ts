@@ -1,22 +1,32 @@
-import {AfterViewInit, Component, ElementRef, OnInit, Renderer2, ViewChild, ViewChildren} from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  OnDestroy,
+  OnInit,
+  Renderer2,
+  ViewChild,
+  ViewChildren
+} from '@angular/core';
 import {ActivatedRoute, Data, Params, UrlTree} from "@angular/router";
 import {Todo} from "../../models/Todo";
 import {TodoService} from "../../todo.service";
 import {CanComponentDeactivate} from "../can-deactivate-guard.service";
-import {Observable} from "rxjs";
+import {Observable, Subscription} from "rxjs";
 
 @Component({
   selector: 'app-todo-item',
   templateUrl: './todo-item.component.html',
   styleUrls: ['./todo-item.component.css']
 })
-export class TodoItemComponent implements OnInit, AfterViewInit, CanComponentDeactivate {
+export class TodoItemComponent implements OnInit, AfterViewInit, CanComponentDeactivate, OnDestroy {
   inputFillUp: boolean;
   id: number;
   todos: Todo[];
   newItem: string;
   placeHolder: string;
   loading: boolean;
+  subscription: Subscription;
 
   constructor(private route: ActivatedRoute,
               private todoService: TodoService,
@@ -27,21 +37,22 @@ export class TodoItemComponent implements OnInit, AfterViewInit, CanComponentDea
     this.newItem = '';
     this.placeHolder = '';
     this.loading = false;
+    this.subscription = new Observable().subscribe();
   }
 
   ngOnInit(): void {
-    // it load via a normal route
-    /*this.route.params.subscribe((params: Params) => {
-      this.id = +params['id'];
-      this.todos = this.todoService.getActiveTodoItem(this.id);
-    })*/
-
     // it load via a resolver : example - 152
     this.route.data.subscribe((data: Data)=> {
       this.todos = data['activeTodoItem'];
     });
 
-    this.todoService.loading.subscribe((loading: boolean)=> {
+    // it load via a normal route
+    this.route.params.subscribe((params: Params) => {
+      this.id = +params['id'];
+      this.todos = this.todoService.getActiveTodoItem(this.id);
+    })
+
+    this.subscription = this.todoService.loading.subscribe((loading: boolean)=> {
       this.loading = loading;
     })
   }
@@ -71,13 +82,14 @@ export class TodoItemComponent implements OnInit, AfterViewInit, CanComponentDea
     this.inputFillUp = false;
   }
 
-/*  onChangeSaved(change: boolean) {
-    this.changeSaved = change;
-  }*/
-
   onSetToComplete(indexItem: number) {
+    console.log('onSetToComplete', indexItem);
     if(this.todos[indexItem].editable) return;
     this.todoService.onSetToComplete(indexItem, this.id);
+  }
+
+  onSetToInactive(indexItem: number) {
+    this.todoService.onSetToInactive(indexItem, this.id);
   }
 
   onSetToEditable(indexItem: number) {
@@ -101,10 +113,6 @@ export class TodoItemComponent implements OnInit, AfterViewInit, CanComponentDea
     //el.focus();
   }
 
-  onSetToInactive(index: number) {
-    //this.todoService.onSetToInactive(index);
-  }
-
   canDeactivate(): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
     if(this.inputFillUp) {
       if (!confirm('Do you want to discard the changes?')) return false;
@@ -115,5 +123,9 @@ export class TodoItemComponent implements OnInit, AfterViewInit, CanComponentDea
     }else {
       return true;
     }
+  }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
   }
 }

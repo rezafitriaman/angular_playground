@@ -1,5 +1,6 @@
 import {EventEmitter, Injectable} from '@angular/core';
-import {Todo, TodoPackage} from "./models/Todo";
+import {InactiveTodo, Todo, TodoPackage} from "./models/Todo";
+import {Subject} from "rxjs";
 
 @Injectable({
   providedIn: 'root'
@@ -7,14 +8,14 @@ import {Todo, TodoPackage} from "./models/Todo";
 
 export class TodoService {
   activeTodos: Array<TodoPackage>;
-  inActiveTodos: Array<TodoPackage>;
+  inActiveTodos: Array<InactiveTodo>;
   activeTodosAdd: EventEmitter<Array<TodoPackage>>;
   resetPlaceHolder: EventEmitter<string>;
-  loading: EventEmitter<boolean>;
+  loading: Subject<boolean>;
 
   constructor() {
     this.activeTodos = [{
-      page: 'cadeau',
+      label: 'cadeau',
       items: [{
         id: '13434639321192946',
         content: 'Dragon fruit',
@@ -35,7 +36,7 @@ export class TodoService {
       }],
     },
     {
-      page: 'tv',
+      label: 'tv',
       items: [{
         id: '1639321192946',
         content: 'koffie',
@@ -50,11 +51,11 @@ export class TodoService {
       }],
     },
       {
-        page: 'game',
+        label: 'game',
         items: [],
       },
     {
-      page: 'vliegen',
+      label: 'vliegen',
       items: [{
         id: '1639321192946',
         content: 'Tandenborstel',
@@ -71,7 +72,7 @@ export class TodoService {
     this.inActiveTodos = [];
     this.activeTodosAdd = new EventEmitter<Array<TodoPackage>>();
     this.resetPlaceHolder = new EventEmitter<string>();
-    this.loading = new EventEmitter<boolean>();
+    this.loading = new Subject<boolean>();
   }
 
   getActiveTodoItem(id: number) {
@@ -82,7 +83,16 @@ export class TodoService {
     return this.activeTodos.slice();
   }
 
-  onSetToInactive(index: number) {
+  onSetToInactive(indexItem: number, todoId: number) {
+    console.log('onSetToInactive', todoId)
+    console.log('onSetToInactive', indexItem)
+    console.log(this.activeTodos[todoId].items[indexItem])
+    console.log('inactive ', this.inActiveTodos)
+    this.inActiveTodos.push({...this.activeTodos[todoId].items[indexItem], label: this.activeTodos[todoId].label})
+    this.activeTodos[todoId].items.splice(indexItem, 1)
+
+    //TODO send it to inactive
+    console.log(this.inActiveTodos)
     /*this.inActiveTodos.push(this.activeTodos[index]);
     this.activeTodos.splice(index,1);*/
   }
@@ -95,6 +105,7 @@ export class TodoService {
 
   onSetToComplete(indexItem: number, todoId: number) {
     this.activeTodos[todoId].items[indexItem].completed = !this.activeTodos[todoId].items[indexItem].completed;
+    console.log(this.activeTodos[todoId].items[indexItem])
   }
 
   onSetToEditable(indexItem: number, todoId: number) {

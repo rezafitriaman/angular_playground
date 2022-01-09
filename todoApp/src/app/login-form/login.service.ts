@@ -1,16 +1,17 @@
 import {EventEmitter, Injectable} from '@angular/core';
 import {UrlTree} from "@angular/router";
+import {Subject} from "rxjs";
 
 @Injectable({
   providedIn: 'root'
 })
 export class LoginService {
   loggedIn: boolean;
-  loggedInInfo: EventEmitter<boolean>;
+  loggedInInfo: Subject<boolean>;
 
   constructor() {
     this.loggedIn = false; // false
-    this.loggedInInfo = new EventEmitter<boolean>();
+    this.loggedInInfo = new Subject<boolean>();
   }
 
   isAuthenticated(): Promise<boolean | UrlTree>  {
@@ -25,11 +26,11 @@ export class LoginService {
 
   onLogin() {
     this.loggedIn = true;
-    this.loggedInInfo.emit(this.loggedIn);
+    this.loggedInInfo.next(this.loggedIn);
   }
 
   onLogout() {
     this.loggedIn = false;
-    this.loggedInInfo.emit(this.loggedIn);
+    this.loggedInInfo.next(this.loggedIn);
   }
 }

@@ -1,5 +1,5 @@
 import {AfterViewInit, Component, Input, OnChanges, OnDestroy, OnInit} from '@angular/core';
-import {Todo} from "../../models/Todo";
+import {Todo, TodoPackage} from "../../models/Todo";
 import {TodoService} from "../../todo.service";
 import {ActivatedRoute, NavigationEnd, Params, Route, Router} from "@angular/router";
 
@@ -10,7 +10,7 @@ import {ActivatedRoute, NavigationEnd, Params, Route, Router} from "@angular/rou
   styleUrls: ['./list-todo.component.css']
 })
 export class ListTodoComponent implements OnInit {
-  todos: Array<{page: string, items: Array<Todo>}>;
+  todos: Array<TodoPackage>;
   newItem: boolean;
 
   constructor(private todoService: TodoService,
@@ -22,7 +22,7 @@ export class ListTodoComponent implements OnInit {
 
   ngOnInit(): void {
     this.todos = this.todoService.getActiveTodos();
-    this.todoService.activeTodosAdd.subscribe((todos: Array<{page: string, items: Array<Todo>}>)=> {
+    this.todoService.activeTodosAdd.subscribe((todos: Array<TodoPackage>)=> {
       this.todos = todos;
       this.newItem = true;
       setTimeout(()=>{

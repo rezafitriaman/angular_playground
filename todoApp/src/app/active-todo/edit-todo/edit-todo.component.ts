@@ -1,33 +1,35 @@
-import { Component, OnInit } from '@angular/core';
-import {Todo} from "../../models/Todo";
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Todo, TodoPackage} from "../../models/Todo";
 import {TodoService} from "../../todo.service";
 import {ActivatedRoute, Router, UrlTree} from "@angular/router";
 import {CanComponentDeactivate} from "../can-deactivate-guard.service";
-import {Observable} from "rxjs";
+import {Observable, Subscription} from "rxjs";
 
 @Component({
   selector: 'app-edit-todo',
   templateUrl: './edit-todo.component.html',
   styleUrls: ['./edit-todo.component.css']
 })
-export class EditTodoComponent implements OnInit, CanComponentDeactivate {
+export class EditTodoComponent implements OnInit, CanComponentDeactivate, OnDestroy {
   newTodo: string;
-  newActiveTodo: {page: string, items: Array<Todo>};
+  newActiveTodo: TodoPackage;
   changesSaved: boolean;
   loading: boolean;
+  subscription: Subscription;
 
   constructor(private todoService: TodoService, private route: ActivatedRoute, private router: Router) {
     this.newTodo = '';
     this.newActiveTodo = {
-      page: '',
+      label: '',
       items: [],
     }
     this.changesSaved = false;
     this.loading = false;
+    this.subscription = new Observable().subscribe();
   }
 
   ngOnInit(): void {
-    this.todoService.loading.subscribe((loading: boolean)=> {
+    this.subscription = this.todoService.loading.subscribe((loading: boolean)=> {
       this.loading = loading;
     })
   }
@@ -36,16 +38,16 @@ export class EditTodoComponent implements OnInit, CanComponentDeactivate {
     if (newTodo === '') return;
 
     this.newActiveTodo = {
-      page: newTodo,
+      label: newTodo,
       items: [],
     }
-    this.todoService.addTodo(this.newActiveTodo)
+    this.todoService.addTodo(this.newActiveTodo);
     this.newTodo = '';
     const lastAdded = this.todoService.getActiveTodos().length - 1;
     this.changesSaved = true;
 
     this.router.navigate(['../', lastAdded], {relativeTo: this.route})
-    this.todoService.loading.emit(true);
+    this.todoService.loading.next(true);
   }
 
   onEnterDown(event: KeyboardEvent, newItem: string) {
@@ -57,6 +59,7 @@ export class EditTodoComponent implements OnInit, CanComponentDeactivate {
       this.addTodo(newItem);
     }
   }
+
   canDeactivate(): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
     if(this.newTodo !== '' && !this.changesSaved) {
       return confirm('Do you want to discard the changes?')
@@ -64,4 +67,9 @@ export class EditTodoComponent implements OnInit, CanComponentDeactivate {
       return true;
     }
   }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
+  }
+
 }
