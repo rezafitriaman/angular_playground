@@ -3,7 +3,7 @@ import {
   Component,
   ElementRef,
   OnDestroy,
-  OnInit,
+  OnInit, QueryList,
   Renderer2,
   ViewChild,
   ViewChildren
@@ -27,6 +27,7 @@ export class TodoItemComponent implements OnInit, AfterViewInit, CanComponentDea
   placeHolder: string;
   loading: boolean;
   subscription: Subscription;
+  @ViewChildren('contentTodo') contentTodoRef: QueryList<ElementRef> | undefined;
 
   constructor(private route: ActivatedRoute,
               private todoService: TodoService,
@@ -58,6 +59,7 @@ export class TodoItemComponent implements OnInit, AfterViewInit, CanComponentDea
   }
 
   ngAfterViewInit() {
+    console.log(this.contentTodoRef);
     //console.log(this.editableText)
     //console.log()
     //this.renderer.selectRootElement('.todo-items')
@@ -93,9 +95,11 @@ export class TodoItemComponent implements OnInit, AfterViewInit, CanComponentDea
   }
 
   onSetToEditable(indexItem: number) {
-    //TODO place the cursor on the text pls http://jsfiddle.net/timdown/vXnCM/
     this.todoService.onSetToEditable(indexItem, this.id);
+    //TODO change todo content
+    console.log(this.contentTodoRef?.toArray()[indexItem].nativeElement.innerText.replace(/[^0-9]/g,''));
 
+    //TODO place the cursor on the text pls http://jsfiddle.net/timdown/vXnCM/
     setTimeout(()=> {
       //this.setCaret();
     },2000)
@@ -117,7 +121,7 @@ export class TodoItemComponent implements OnInit, AfterViewInit, CanComponentDea
     if(this.inputFillUp) {
       if (!confirm('Do you want to discard the changes?')) return false;
 
-      this.todoService.resetPlaceHolder.emit('');
+      this.todoService.resetPlaceHolder.next('');
       this.inputFillUp = false;
       return true;
     }else {

@@ -9,8 +9,9 @@ import {Subject} from "rxjs";
 export class TodoService {
   activeTodos: Array<TodoPackage>;
   inActiveTodos: Array<InactiveTodo>;
-  activeTodosAdd: EventEmitter<Array<TodoPackage>>;
-  resetPlaceHolder: EventEmitter<string>;
+  activeTodosAdd: Subject<Array<TodoPackage>>;
+  resetPlaceHolder: Subject<string>;
+  updateInActiveTodo: Subject<Array<InactiveTodo>>;
   loading: Subject<boolean>;
 
   constructor() {
@@ -69,9 +70,16 @@ export class TodoService {
         editable: false
       }],
     }];
-    this.inActiveTodos = [];
-    this.activeTodosAdd = new EventEmitter<Array<TodoPackage>>();
-    this.resetPlaceHolder = new EventEmitter<string>();
+    this.inActiveTodos = [{
+      id: '33333',
+      content: 'Tandenborstel',
+      completed: false,
+      editable: false,
+      label: 'cadeau'
+    }];
+    this.activeTodosAdd = new Subject<Array<TodoPackage>>();
+    this.updateInActiveTodo = new Subject<Array<InactiveTodo>>();
+    this.resetPlaceHolder = new Subject<string>();
     this.loading = new Subject<boolean>();
   }
 
@@ -79,28 +87,31 @@ export class TodoService {
     return this.activeTodos[id].items
   }
 
-  getActiveTodos() {
+  getActiveTodos():Array<TodoPackage> {
     return this.activeTodos.slice();
   }
 
-  onSetToInactive(indexItem: number, todoId: number) {
-    console.log('onSetToInactive', todoId)
-    console.log('onSetToInactive', indexItem)
-    console.log(this.activeTodos[todoId].items[indexItem])
-    console.log('inactive ', this.inActiveTodos)
-    this.inActiveTodos.push({...this.activeTodos[todoId].items[indexItem], label: this.activeTodos[todoId].label})
-    this.activeTodos[todoId].items.splice(indexItem, 1)
-
-    //TODO send it to inactive
-    console.log(this.inActiveTodos)
-    /*this.inActiveTodos.push(this.activeTodos[index]);
-    this.activeTodos.splice(index,1);*/
+  getInActiveTodos():Array<InactiveTodo> {
+    return this.inActiveTodos.slice();
   }
 
-  onSetToActive(index: number) {
-    /*this.inActiveTodos[index].completed = false;
-    this.activeTodos.push(this.inActiveTodos[index]);
-    this.inActiveTodos.splice(index, 1);*/
+  onSetToInactive(indexItem: number, todoId: number) {
+    this.inActiveTodos.push({...this.activeTodos[todoId].items[indexItem], label: this.activeTodos[todoId].label})
+    this.activeTodos[todoId].items.splice(indexItem, 1)
+  }
+
+  onSetToActive(todoId: number) {
+    let labelIndex = this.activeTodos.findIndex(target => target.label ===  this.inActiveTodos[todoId].label)
+
+    this.activeTodos[labelIndex].items.push({
+      id: this.inActiveTodos[todoId].id,
+      content: this.inActiveTodos[todoId].content,
+      completed: false,
+      editable: this.inActiveTodos[todoId].editable
+    })
+
+    this.inActiveTodos.splice(todoId, 1);
+    this.updateInActiveTodo.next(this.inActiveTodos);
   }
 
   onSetToComplete(indexItem: number, todoId: number) {
@@ -114,10 +125,10 @@ export class TodoService {
 
   addTodo(newTodo: TodoPackage) {
     this.activeTodos.push(newTodo);
-    this.activeTodosAdd.emit(this.activeTodos.slice());
+    this.activeTodosAdd.next(this.activeTodos.slice());
   }
 
   addTodoItem(todoItem: Todo, todoId: number) {
-    console.log(this.activeTodos[todoId].items.push(todoItem));
+    this.activeTodos[todoId].items.push(todoItem)
   }
 }

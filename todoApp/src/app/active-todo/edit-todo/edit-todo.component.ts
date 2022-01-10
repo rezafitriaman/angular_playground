@@ -71,5 +71,4 @@ export class EditTodoComponent implements OnInit, CanComponentDeactivate, OnDest
   ngOnDestroy() {
     this.subscription.unsubscribe();
   }
-
 }

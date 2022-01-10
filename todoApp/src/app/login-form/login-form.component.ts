@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {AfterViewInit, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {LoginService} from "./login.service";
 import {Router} from "@angular/router";
 
@@ -8,7 +8,6 @@ import {Router} from "@angular/router";
   styleUrls: ['./login-form.component.css']
 })
 export class LoginFormComponent implements OnInit {
-
 
   constructor(private loginService: LoginService,
               private router: Router) {

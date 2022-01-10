@@ -1,6 +1,7 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {TodoService} from "../../../todo.service";
 import {ActivatedRoute, UrlTree} from "@angular/router";
+import {Observable, Subscription} from "rxjs";
 
 @Component({
   selector: 'app-add-new-todo-item',
@@ -11,16 +12,18 @@ export class AddNewTodoItemComponent implements OnInit {
   @Output() newItem: EventEmitter<string>;
   @Output() inputFillUp: EventEmitter<boolean>;
   @Input() inputValue: string;
+  subscription: Subscription;
 
   constructor(private todoService: TodoService,
               private route: ActivatedRoute) {
     this.inputValue = '';
     this.newItem = new EventEmitter<string>();
     this.inputFillUp = new EventEmitter<boolean>();
+    this.subscription = new Observable().subscribe();
   }
 
   ngOnInit(): void {
-    this.todoService.resetPlaceHolder.subscribe((value: string)=> {
+    this.subscription = this.todoService.resetPlaceHolder.subscribe((value: string)=> {
       this.inputValue = value;
     })
   }
@@ -38,5 +41,9 @@ export class AddNewTodoItemComponent implements OnInit {
     if(enterKey) {
       this.addTodo(this.inputValue);
     }
+  }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
   }
 }
