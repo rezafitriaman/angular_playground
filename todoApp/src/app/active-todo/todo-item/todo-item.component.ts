@@ -1,7 +1,7 @@
 import {
   AfterViewInit,
   Component,
-  ElementRef,
+  ElementRef, Inject,
   OnDestroy,
   OnInit, QueryList,
   Renderer2,
@@ -12,36 +12,46 @@ import {ActivatedRoute, Data, Params, UrlTree} from "@angular/router";
 import {Todo} from "../../models/Todo";
 import {TodoService} from "../../todo.service";
 import {CanComponentDeactivate} from "../can-deactivate-guard.service";
-import {Observable, Subscription} from "rxjs";
+import {of, Observable, Subscription} from "rxjs";
+import {delay, timeout} from "rxjs/operators";
+import {DOCUMENT} from "@angular/common";
 
 @Component({
   selector: 'app-todo-item',
   templateUrl: './todo-item.component.html',
   styleUrls: ['./todo-item.component.css']
 })
-export class TodoItemComponent implements OnInit, AfterViewInit, CanComponentDeactivate, OnDestroy {
+export class TodoItemComponent implements OnInit,
+  AfterViewInit,
+  CanComponentDeactivate,
+  OnDestroy {
   inputFillUp: boolean;
   id: number;
   todos: Todo[];
   newItem: string;
   placeHolder: string;
   loading: boolean;
-  subscription: Subscription;
+  subscriptionLoading: Subscription;
+  subscriptionEditable: Subscription;
   @ViewChildren('contentTodo') contentTodoRef: QueryList<ElementRef> | undefined;
 
   constructor(private route: ActivatedRoute,
               private todoService: TodoService,
-              private renderer: Renderer2) {
+              private renderer: Renderer2,
+              private ref: ElementRef,
+              @Inject(DOCUMENT) private document: Document) {
     this.id = 0;
     this.todos = [];
     this.inputFillUp = false;
     this.newItem = '';
     this.placeHolder = '';
     this.loading = false;
-    this.subscription = new Observable().subscribe();
+    this.subscriptionLoading = new Observable().subscribe();
+    this.subscriptionEditable = new Observable().subscribe();
   }
 
   ngOnInit(): void {
+    console.log(this.ref.nativeElement)
     // it load via a resolver : example - 152
     this.route.data.subscribe((data: Data)=> {
       this.todos = data['activeTodoItem'];
@@ -53,17 +63,13 @@ export class TodoItemComponent implements OnInit, AfterViewInit, CanComponentDea
       this.todos = this.todoService.getActiveTodoItem(this.id);
     })
 
-    this.subscription = this.todoService.loading.subscribe((loading: boolean)=> {
+    this.subscriptionLoading = this.todoService.loading.subscribe((loading: boolean)=> {
       this.loading = loading;
     })
   }
 
   ngAfterViewInit() {
     console.log(this.contentTodoRef);
-    //console.log(this.editableText)
-    //console.log()
-    //this.renderer.selectRootElement('.todo-items')
-    //this.setCaret();
   }
 
   onInputFillUp(inputFillUp: boolean) {
@@ -85,7 +91,6 @@ export class TodoItemComponent implements OnInit, AfterViewInit, CanComponentDea
   }
 
   onSetToComplete(indexItem: number) {
-    console.log('onSetToComplete', indexItem);
     if(this.todos[indexItem].editable) return;
     this.todoService.onSetToComplete(indexItem, this.id);
   }
@@ -95,26 +100,30 @@ export class TodoItemComponent implements OnInit, AfterViewInit, CanComponentDea
   }
 
   onSetToEditable(indexItem: number) {
-    this.todoService.onSetToEditable(indexItem, this.id);
-    //TODO change todo content
-    console.log(this.contentTodoRef?.toArray()[indexItem].nativeElement.innerText.replace(/[^0-9]/g,''));
-
-    //TODO place the cursor on the text pls http://jsfiddle.net/timdown/vXnCM/
-    setTimeout(()=> {
-      //this.setCaret();
-    },2000)
+    let contentText = this.contentTodoRef?.toArray()[indexItem].nativeElement.innerText;
+    this.subscriptionEditable = this.todoService.onSetToEditable(indexItem, this.id, contentText)
+      .pipe(delay(10))
+      .subscribe((data: boolean)=> {
+        if(data) this.setCaret(indexItem);
+      });
   }
 
-  setCaret() {
-    /*const el = this.editableText.nativeElement;
-    const range = document.createRange();
-    const sel = window.getSelection()!;
-    console.log(el)
-    range.setStart(el, 0);
+  onEnterDown(event: KeyboardEvent, indexItem: number) {
+    const enterKey = (event.key === 'Enter');
+
+    if(enterKey) this.onSetToEditable(indexItem)
+  }
+
+  setCaret(indexItem: number) {
+    // example http://jsfiddle.net/timdown/vXnCM/
+    let el = this.contentTodoRef?.toArray()[indexItem].nativeElement;
+    const range = this.document.createRange();
+    const sel = this.document.defaultView?.getSelection()!;
+    range.setStart(el as Node, 0);
     range.collapse(true);
     sel.removeAllRanges();
-    sel.addRange(range);*/
-    //el.focus();
+    sel.addRange(range)
+    el.focus();
   }
 
   canDeactivate(): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
@@ -130,6 +139,7 @@ export class TodoItemComponent implements OnInit, AfterViewInit, CanComponentDea
   }
 
   ngOnDestroy() {
-    this.subscription.unsubscribe();
+    this.subscriptionLoading.unsubscribe();
+    this.subscriptionEditable.unsubscribe();
   }
 }

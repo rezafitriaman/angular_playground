@@ -17,7 +17,8 @@
         class="todo-text cursor-pointer capitalize ml-1 text-gray-700"
         [contentEditable]="todo.editable"
         (click)="onSetToComplete(i)"
-        [ngClass]="{'italic line-through text-red-400': todo.completed, 'underline': todo.editable}">
+        (keydown)="onEnterDown($event, i)"
+        [ngClass]="{'italic line-through text-red-400': todo.completed, 'underline italic border-0 outline-none text-blue-500': todo.editable}">
       {{ todo.content }}
     </span>
     <span class="flex items-center ml-auto pl-2 text-gray-400 cursor-pointer">

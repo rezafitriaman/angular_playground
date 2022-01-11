@@ -11,7 +11,7 @@ import {CanDeactivateGuardService} from "./active-todo/can-deactivate-guard.serv
 import {TodoItemResolverService} from "./active-todo/todo-item/todo-item-resolver.service";
 
 const routes: Routes = [
-  {path: '', redirectTo: 'login', pathMatch: 'full'}, // redirect to login
+  {path: '', redirectTo: 'activeTodo', pathMatch: 'full'}, // redirect to login
   {path: 'login', component: LoginFormComponent},
   {path: 'activeTodo', canActivate: [AuthGuardService], component: ActiveTodoComponent, children: [
       {path: 'new', component: EditTodoComponent, canDeactivate: [CanDeactivateGuardService]},

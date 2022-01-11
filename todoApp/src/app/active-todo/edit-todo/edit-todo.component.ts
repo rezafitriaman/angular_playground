@@ -55,9 +55,7 @@ export class EditTodoComponent implements OnInit, CanComponentDeactivate, OnDest
 
     const enterKey = (event.key === 'Enter');
 
-    if(enterKey) {
-      this.addTodo(newItem);
-    }
+    if(enterKey) this.addTodo(newItem);
   }
 
   canDeactivate(): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {

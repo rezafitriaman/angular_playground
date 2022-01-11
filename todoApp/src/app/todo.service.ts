@@ -1,6 +1,6 @@
 import {EventEmitter, Injectable} from '@angular/core';
 import {InactiveTodo, Todo, TodoPackage} from "./models/Todo";
-import {Subject} from "rxjs";
+import {of, Subject} from "rxjs";
 
 @Injectable({
   providedIn: 'root'
@@ -116,11 +116,14 @@ export class TodoService {
 
   onSetToComplete(indexItem: number, todoId: number) {
     this.activeTodos[todoId].items[indexItem].completed = !this.activeTodos[todoId].items[indexItem].completed;
-    console.log(this.activeTodos[todoId].items[indexItem])
   }
 
-  onSetToEditable(indexItem: number, todoId: number) {
+  onSetToEditable(indexItem: number, todoId: number, contentText: string) {
+    if(this.activeTodos[todoId].items[indexItem].editable) this.activeTodos[todoId].items[indexItem].content = contentText;
+
     this.activeTodos[todoId].items[indexItem].editable = !this.activeTodos[todoId].items[indexItem].editable;
+
+    return of(this.activeTodos[todoId].items[indexItem].editable);
   }
 
   addTodo(newTodo: TodoPackage) {
