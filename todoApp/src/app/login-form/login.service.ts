@@ -10,7 +10,7 @@ export class LoginService {
   loggedInInfo: Subject<boolean>;
 
   constructor() {
-    this.loggedIn = true; // false
+    this.loggedIn = false; // false
     this.loggedInInfo = new Subject<boolean>();
   }
 

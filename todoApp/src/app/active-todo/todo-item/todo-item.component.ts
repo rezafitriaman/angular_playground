@@ -33,6 +33,7 @@ export class TodoItemComponent implements OnInit,
   loading: boolean;
   subscriptionLoading: Subscription;
   subscriptionEditable: Subscription;
+  window: Window | null;
   @ViewChildren('contentTodo') contentTodoRef: QueryList<ElementRef> | undefined;
 
   constructor(private route: ActivatedRoute,
@@ -48,10 +49,12 @@ export class TodoItemComponent implements OnInit,
     this.loading = false;
     this.subscriptionLoading = new Observable().subscribe();
     this.subscriptionEditable = new Observable().subscribe();
+    this.window = this.document.defaultView;
   }
 
   ngOnInit(): void {
     console.log(this.ref.nativeElement)
+    console.log(this.renderer)
     // it load via a resolver : example - 152
     this.route.data.subscribe((data: Data)=> {
       this.todos = data['activeTodoItem'];
@@ -118,7 +121,7 @@ export class TodoItemComponent implements OnInit,
     // example http://jsfiddle.net/timdown/vXnCM/
     let el = this.contentTodoRef?.toArray()[indexItem].nativeElement;
     const range = this.document.createRange();
-    const sel = this.document.defaultView?.getSelection()!;
+    const sel = this.window?.getSelection()!;
     range.setStart(el as Node, 0);
     range.collapse(true);
     sel.removeAllRanges();
