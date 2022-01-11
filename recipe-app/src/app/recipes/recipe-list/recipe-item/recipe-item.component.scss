@@ -6,3 +6,8 @@
 .pointer {
   cursor: pointer;
 }
+
+.btn-primary.active {
+  background-color: hotpink;
+  border-color: hotpink;
+}

@@ -11,7 +11,7 @@ import {Ingredient} from "../../../shared/ingredient.model";
 })
 export class RecipeItemComponent implements OnInit {
   @Input('recipeItem') recipe: Recipe;
-  //@Output() recipeSelected = new EventEmitter<Recipe>();
+  @Input() index:number;
   constructor(private recipeService: RecipeService) {
     this.recipe = {
       name: '',
@@ -19,6 +19,7 @@ export class RecipeItemComponent implements OnInit {
       imagePath: '',
       ingredient: []
     }
+    this.index = 0;
   }
 
   ngOnInit(): void {

@@ -1,7 +1,8 @@
 <div>
   <div class="row">
     <div class="col-12">
-      <button type="button" class="btn btn-secondary">New Recipe</button>
+      <button type="button" class="btn btn-secondary"
+      (click)="onNewRecipe()">New Recipe</button>
     </div>
   </div>
   <hr>
@@ -11,7 +12,8 @@
       [recipeItem]="recipe"
       (recipeSelected)="onRecipeSelected($event)"></app-recipe-item>-->
       <app-recipe-item *ngFor="let recipe of recipes; let i = index"
-                       [recipeItem]="recipe"></app-recipe-item>
+                       [recipeItem]="recipe"
+                        [index]="i"></app-recipe-item>
     </div>
   </div>
 </div>

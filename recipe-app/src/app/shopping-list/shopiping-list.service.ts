@@ -1,7 +1,7 @@
 import {EventEmitter, Injectable, OnInit} from "@angular/core";
 import {Ingredient} from "../shared/ingredient.model";
 import {RecipeService} from "../recipes/recipe.service";
-import {CONSTRUCTOR} from "@angular/compiler-cli/ngcc/src/host/esm2015_host";
+import {Subject} from "rxjs";
 
 @Injectable({
   providedIn: 'root'
@@ -11,10 +11,10 @@ export class ShoppingListService implements OnInit{
     new Ingredient('Apples', 5),
     new Ingredient('Tomatoes', 10),
   ];
-  ingredientAdd: EventEmitter<Ingredient[]>
+  ingredientAdd: Subject<Ingredient[]>
 
   constructor() {
-    this.ingredientAdd = new EventEmitter<Ingredient[]>();
+    this.ingredientAdd = new Subject<Ingredient[]>();
   }
 
   ngOnInit() {
@@ -37,7 +37,7 @@ export class ShoppingListService implements OnInit{
     console.log('ingredientAdded')
     const exist = this.ingredients.findIndex( (key) => key.name === ingredient.name);
     this.ingredientExist(exist, ingredient);
-    this.ingredientAdd.emit(this.ingredients.slice());
+    this.ingredientAdd.next(this.ingredients.slice());
   }
 
   ingredientFromRecipe(ingredients: Ingredient[]) {

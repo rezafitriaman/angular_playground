@@ -2,13 +2,14 @@ import {EventEmitter, Injectable} from "@angular/core";
 import {Recipe} from "./recipe.model";
 import  {Ingredient} from "../shared/ingredient.model";
 import {ShoppingListService} from "../shopping-list/shopiping-list.service";
+import {Subject} from "rxjs";
 
 @Injectable({
   providedIn: 'root'
 })
 export class RecipeService {
-  public recipeWasSelected: EventEmitter<Recipe>;
-  public sendRecipeToShoppingList: EventEmitter<Ingredient[]>
+  public recipeWasSelected: Subject<Recipe>;
+  public sendRecipeToShoppingList: Subject<Ingredient[]>
   private recipes: Array<Recipe> = [
     new Recipe('Tonkatsu',
       'Tonkatsu, or pork cutlet, is a Japanese dish of pork filet that is breaded with panko breadcrumbs and deep-fried. It is traditionally served with a dark, savory tonkatsu sauce and shredded green cabbage.',
@@ -21,19 +22,19 @@ export class RecipeService {
   ];
 
   constructor(private shoppingListService: ShoppingListService) {
-    this.recipeWasSelected = new EventEmitter<Recipe>();
-    this.sendRecipeToShoppingList = new EventEmitter<Ingredient[]>();
+    this.recipeWasSelected = new Subject<Recipe>();
+    this.sendRecipeToShoppingList = new Subject<Ingredient[]>();
   }
 
   getRecipes() {
     return this.recipes.slice();
   }
+
   getRecipe(index: number) {
     return this.recipes[index];
   }
 
   getIngredientForShoppingList(ingredient: Ingredient[]) {
-
     this.shoppingListService.ingredientFromRecipe(ingredient);
   }
 }

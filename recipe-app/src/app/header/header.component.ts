@@ -10,7 +10,6 @@ export class HeaderComponent {
   show = false;
   /*recipes = true;
   shoppingList = false;*/
-  //@Output() featureSelected = new EventEmitter<string>()
 
 /*  onSelect(feature: string) {
     this.featureSelected.emit(feature);

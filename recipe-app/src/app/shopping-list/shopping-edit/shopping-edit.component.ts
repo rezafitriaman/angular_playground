@@ -11,7 +11,6 @@ import {ShoppingListService} from "../shopiping-list.service";
 export class ShoppingEditComponent implements OnInit {
   @ViewChild('nameInput', {static: false}) nameInputRef: ElementRef | undefined;
   @ViewChild('amountInput', {static: false}) amountInputRef: ElementRef | undefined;
-  //@Output() ingredientAdded = new EventEmitter<Ingredient>();
   constructor(private shoppingListService: ShoppingListService, ) {
   }
 

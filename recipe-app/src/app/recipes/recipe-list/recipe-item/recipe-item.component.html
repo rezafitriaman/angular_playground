@@ -7,7 +7,8 @@
        class="btn btn-primary pointer"
        (click)="onSelected(recipe.name, recipe.description, recipe.imagePath, recipe.ingredient)"
     >Go to Recipe</a>-->
-    <a
+    <a [routerLink]="[index]"
+       routerLinkActive="active"
       class="btn btn-primary pointer"
     >Go to Recipe</a>
   </div>
