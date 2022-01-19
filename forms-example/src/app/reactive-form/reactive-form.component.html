@@ -1,0 +1,63 @@
+<h4 class="text-2xl">Reactive-form works!</h4>
+<form class="my-4" [formGroup]="signupForm2" (ngSubmit)="onSubmit()">
+  <div class="space-y-4">
+    <div formGroupName="userData">
+      <div class="text-gray-700">
+        <label class="block mb-1"
+               for="username2">UserName</label>
+        <input type="text"
+               id="username2"
+               formControlName="username"
+               name="username"
+               class="w-full h-10 px-3 text-base placeholder-gray-600 border rounded-lg focus:shadow-md"
+               placeholder="Username">
+        <span *ngIf="signupForm2.get('userData.username')?.invalid && signupForm2.get('userData.username')?.touched"
+              class="text-base text-red-700">Please enter a valid username!</span>
+
+      </div>
+      <div class="text-gray-700">
+        <label for="email2"
+               class="block mb-1">Mail</label>
+        <input type="email"
+               id="email2"
+               formControlName="email"
+               name="email"
+               class="w-full h-10 px-3 text-base placeholder-gray-600 border rounded-lg focus:shadow-md"
+               placeholder="Email address">
+        <span *ngIf="signupForm2.get('userData.email')?.invalid && signupForm2.get('userData.email')?.touched"
+              class="text-base text-red-700">Please enter a valid username!</span>
+      </div>
+    </div>
+    <div class="text-gray-700 block w-full flex flex-col">
+        <label class="text-gray-700" *ngFor="let gender of genders">
+            <input type="radio"
+                   name="gender"
+                   formControlName="gender"
+                   [value]="gender"/>
+            <span class="ml-1">{{gender}}</span>
+        </label>
+    </div>
+    <div class="text-gray-700 block w-full flex flex-col space-y-4" formArrayName="hobbies">
+      <h4>Your hobbies</h4>
+      <button class="h-10 w-56 px-5 text-green-100 transition-colors duration-150 rounded-lg focus:shadow-md bg-yellow-700 hover:bg-yellow-800"
+              type="button"
+              (click)="onAddHobby()">Add hobbies
+      </button>
+      <label class="text-gray-700" *ngFor="let hobbie of hobbies; let i = index">
+        <input type="text"
+               name="hobbies"
+               class="w-full h-10 px-3 text-base placeholder-gray-600 border rounded-lg focus:shadow-md"
+               [placeholder]="i + ' hobbie'"
+                [formControlName]="i"/>
+      </label>
+    </div>
+    <div class="flex flex-col">
+          <span *ngIf="signupForm2.invalid && signupForm2.touched"
+                class="text-base text-green-700">Please enter a valid Data</span>
+      <button class="h-10 w-56 px-5 text-green-100 transition-colors duration-150 rounded-lg focus:shadow-md bg-green-700 hover:bg-green-800"
+              type="submit">
+        Submit
+      </button>
+    </div>
+  </div>
+</form>
