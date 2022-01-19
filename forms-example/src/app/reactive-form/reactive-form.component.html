@@ -12,7 +12,10 @@
                class="w-full h-10 px-3 text-base placeholder-gray-600 border rounded-lg focus:shadow-md"
                placeholder="Username">
         <span *ngIf="signupForm2.get('userData.username')?.invalid && signupForm2.get('userData.username')?.touched"
-              class="text-base text-red-700">Please enter a valid username!</span>
+              class="text-base text-red-700">
+          <span *ngIf="signupForm2.get('userData.username')?.errors?.nameIsForbidden">This name is not valid</span>
+          <span *ngIf="signupForm2.get('userData.username')?.errors?.required">Please enter a valid username!</span>
+        </span>
 
       </div>
       <div class="text-gray-700">
