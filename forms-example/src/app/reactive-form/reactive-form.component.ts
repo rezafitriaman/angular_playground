@@ -27,10 +27,10 @@ export class ReactiveFormComponent implements OnInit {
 
   ngOnInit(): void {
     this.signupForm2.valueChanges.subscribe((value)=> {
-      console.log(value);
+
     })
     this.signupForm2.statusChanges.subscribe((value)=> {
-      console.log(value);
+
     })
     this.signupForm2.setValue({
       userData: {
@@ -55,8 +55,8 @@ export class ReactiveFormComponent implements OnInit {
   }
 
   onSubmit() {
-    console.log(this.signupForm2);
-    console.log(this.signupForm2.get('userData.username')?.errors?.required);
+
+    //console.log(this.signupForm2.get('userData.username')?.errors?.required);
     this.signupForm2.reset({gender: 'Male'});
   }
 
@@ -68,8 +68,6 @@ export class ReactiveFormComponent implements OnInit {
   }
 
   forbiddenEmails(control: AbstractControl): Promise<any> | Observable<any> {
-    console.log(typeof  control)
-    console.log(control)
     const promise = new Promise<any>((resolve, reject)=> {
       setTimeout(()=> {
         if(control.value === 'test@test.com') {

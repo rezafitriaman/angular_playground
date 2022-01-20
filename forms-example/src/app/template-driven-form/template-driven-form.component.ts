@@ -48,7 +48,7 @@ export class TemplateDrivenFormComponent {
     }*/
   onSubmit() {
     this.submitted = true;
-    console.log('submitted', this.signupForm)
+    //console.log('submitted', this.signupForm)
     this.user.username = this.signupForm?.value.userData.username;
     this.user.email = this.signupForm?.value.userData.email;
     this.user.secretQuestions = this.signupForm?.value.secret;
