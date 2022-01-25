@@ -6,7 +6,9 @@
           <button type="submit"
                   class="btn btn-success me-2"
                   [disabled]="recipeForm.invalid">Save</button>
-          <button type="button" class="btn btn-danger">Cancel</button>
+          <button type="button"
+                  class="btn btn-danger"
+          (click)="onCancel()">Cancel</button>
         </div>
       </div>
       <div class="row">
@@ -21,12 +23,13 @@
           <div class="mb-3">
             <label for="imagePath" class="form-label">Image URL</label>
             <input type="text" class="form-control" id="imagePath"
-                   formControlName="imagePath">
+                   formControlName="imagePath"
+            #imagePath>
           </div>
         </div>
-        <div class="col-12">
+        <div class="col-12" *ngIf="imagePath.value">
           <div class="mb-3">
-            <img [src]="recipeForm?.value?.imagePath" class="img-fluid" alt="...">
+            <img [src]="imagePath.value" class="img-fluid" alt="image">
           </div>
         </div>
         <div class="col-12">
@@ -56,7 +59,9 @@
                >
             </div>
             <div class="col-2">
-              <button type="button" class="btn btn-warning">X</button>
+              <button type="button"
+                      class="btn btn-warning"
+                      (click)="onDeleteIngredient(i)">X</button>
             </div>
           </div>
         </div>

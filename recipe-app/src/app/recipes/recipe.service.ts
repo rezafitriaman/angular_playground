@@ -20,7 +20,7 @@ export class RecipeService {
         new Ingredient('boneless pork chops\n', 4),
         new Ingredient('Kosher salt, to taste', 1),
         new Ingredient('Freshly ground black pepper, to taste', 1)]),
-        new Recipe('Ramen',
+    new Recipe('Ramen',
       'Zin in een uitgebreide kooksessie? Deze noedelsoep die wat wegheeft van tonkotsu ramen is alles wat je wil!',
       'https://static.ah.nl/static/recepten/img_124772_1024x748_JPG.jpg',
       [
@@ -53,6 +53,11 @@ export class RecipeService {
 
   updateRecipe(index: number, newRecipe: Recipe) {
     this.recipes[index] = newRecipe;
+    this.recipesChanged.next(this.recipes.slice());
+  }
+
+  deleteRecipe(index: number) {
+    this.recipes.splice(index, 1);
     this.recipesChanged.next(this.recipes.slice());
   }
 }
