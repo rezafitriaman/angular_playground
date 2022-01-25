@@ -17,7 +17,7 @@ export class RecipeItemComponent implements OnInit {
       name: '',
       description: '',
       imagePath: '',
-      ingredient: []
+      ingredients: []
     }
     this.index = 0;
   }

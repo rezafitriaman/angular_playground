@@ -10,7 +10,7 @@
           <p class="card-text">{{recipe.description}}</p>
         </div>
         <ul class="list-group list-group-flush">
-          <li *ngFor="let ingredient of recipe.ingredient" class="list-group-item">({{ingredient.amount}}) - {{ingredient.name}}</li>
+          <li *ngFor="let ingredient of recipe.ingredients" class="list-group-item">({{ingredient.amount}}) - {{ingredient.name}}</li>
         </ul>
         <div class="card-body">
           <div class="dropdown"
@@ -27,7 +27,7 @@
                 aria-labelledby="dropdownMenuButton1">
               <li>
                 <a class="dropdown-item pointer"
-                (click)="sendToShoppingList(recipe.ingredient)">To Shopping list</a></li>
+                (click)="sendToShoppingList(recipe.ingredients)">To Shopping list</a></li>
               <li><a class="dropdown-item pointer" (click)="onEditRecipe()">Edit Recipe</a></li>
               <li><a class="dropdown-item pointer">Delete Recipe</a></li>
             </ul>

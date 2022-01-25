@@ -21,7 +21,7 @@ export class RecipeDetailComponent implements OnInit {
       name: '',
       description: '',
       imagePath: '',
-      ingredient: []
+      ingredients: []
     }
     this.id = 0;
   }

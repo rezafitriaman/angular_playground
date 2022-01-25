@@ -3,7 +3,6 @@ import {Recipe} from "../recipe.model";
 import {RecipeService} from "../recipe.service";
 import {ActivatedRoute, Router} from "@angular/router";
 
-
 @Component({
   selector: 'app-recipe-list',
   templateUrl: './recipe-list.component.html',
@@ -16,12 +15,17 @@ export class RecipeListComponent implements OnInit {
     new Recipe('A nice recipe','This is a simply a test','https://www.foodiesfeed.com/wp-content/uploads/2021/01/fried-egg-and-guacamole-sandwiches.jpg'),
   ];*/
 
-  constructor(private recipeService: RecipeService, private router: Router, private route: ActivatedRoute) {
+  constructor(private recipeService: RecipeService,
+              private router: Router,
+              private route: ActivatedRoute) {
+
   }
 
   ngOnInit(): void {
     this.recipes = this.recipeService.getRecipes();
-
+    this.recipeService.recipesChanged.subscribe((recipes: Array<Recipe>)=> {
+      this.recipes = recipes;
+    })
   }
 
   onNewRecipe() {
