@@ -4,10 +4,10 @@ import {InactiveTodo, Todo} from "../models/Todo";
 
 @Component({
   selector: 'app-in-active-todo',
-  templateUrl: './in-active-todo.component.html',
+  templateUrl: './inactive-todo.component.html',
   styleUrls: ['./inactive-todo.component.css']
 })
-export class InActiveTodoComponent implements OnInit {
+export class InactiveTodoComponent implements OnInit {
   todos: Array<InactiveTodo>;
   constructor(private todoService: TodoService) {
     this.todos = [];

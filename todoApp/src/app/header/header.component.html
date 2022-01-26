@@ -27,21 +27,26 @@
                   routerLink="/deletedTodo">Deleted todo</span>
           </a>
         </li>
-        <li class="nav-item" *ngIf="!loggedIn; else loggedOut">
+        <li class="nav-item" *ngIf="loggedIn">
           <a class="flex items-center text-base uppercase font-bold leading-snug text-white hover:opacity-75">
             <span class="ml-2 cursor-pointer border border-white px-4 py-2"
-                  routerLinkActive="border-b-2 border-white"
-                  routerLink="/login">Login</span>
+                  (click)="onLogout()">Logout</span>
           </a>
         </li>
-        <ng-template #loggedOut>
+        <!--<li class="nav-item" *ngIf="!loggedIn; else loggedOut">
+          <a class="flex items-center text-base uppercase font-bold leading-snug text-white hover:opacity-75">
+            <span class="ml-2 cursor-pointer border border-white px-4 py-2"
+                  routerLink="/login">Login</span>
+          </a>
+        </li>-->
+        <!--<ng-template #loggedOut>
           <li class="nav-item">
             <a class="flex items-center text-base uppercase font-bold leading-snug text-white hover:opacity-75">
             <span class="ml-2 cursor-pointer border border-white px-4 py-2"
                   (click)="onLogout()">Logout</span>
             </a>
           </li>
-        </ng-template>
+        </ng-template>-->
       </ul>
     </div>
   </div>

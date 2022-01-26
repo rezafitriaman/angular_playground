@@ -1,6 +1,7 @@
 import {EventEmitter, Injectable} from '@angular/core';
 import {UrlTree} from "@angular/router";
 import {Subject} from "rxjs";
+import {LoginOrJoinForm} from "../models/Todo";
 
 @Injectable({
   providedIn: 'root'
@@ -24,7 +25,8 @@ export class LoginService {
     return promise as Promise<boolean | UrlTree>;
   }
 
-  onLogin() {
+  onLogin(formValue: LoginOrJoinForm) {
+    console.log('submit', (formValue));
     this.loggedIn = true;
     this.loggedInInfo.next(this.loggedIn);
   }

@@ -5,7 +5,7 @@ import { AppRoutingModule }
  from './app-routing.module';
 import { AppComponent } from './app.component';
 import { ActiveTodoComponent } from './active-todo/active-todo.component';
-import { InActiveTodoComponent } from './in-active-todo/in-active-todo.component';
+import { InactiveTodoComponent } from './inactive-todo/inactive-todo.component';
 import { FormsModule } from '@angular/forms';
 import { HeaderComponent } from './header/header.component';
 
@@ -16,13 +16,14 @@ import { ListTodoComponent } from './active-todo/list-todo/list-todo.component';
 import { AddNewTodoItemComponent } from './active-todo/todo-item/add-new-todo-item/add-new-todo-item.component';
 import { HighlightDirective } from './shared/highlight.directive';
 import { LoginFormComponent } from './login-form/login-form.component';
+import { SignupFormComponent } from './signup-form/signup-form.component';
 
 
 @NgModule({
   declarations: [
     AppComponent,
     ActiveTodoComponent,
-    InActiveTodoComponent,
+    InactiveTodoComponent,
     HeaderComponent,
     TodoItemComponent,
     ErrorPageComponent,
@@ -31,6 +32,7 @@ import { LoginFormComponent } from './login-form/login-form.component';
     AddNewTodoItemComponent,
     HighlightDirective,
     LoginFormComponent,
+    SignupFormComponent,
   ],
   imports: [
     BrowserModule,

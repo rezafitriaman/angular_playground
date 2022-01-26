@@ -8,15 +8,17 @@ export type InactiveTodo = Todo & {
 }
 
 export class Todo {
-  content: string;
-  completed: boolean;
-  id: string;
-  editable: boolean;
+  constructor(
+    public content: string,
+    public completed: boolean,
+    public id: string,
+    public editable: boolean
+  ) { }
+}
 
-  constructor() {
-    this.id = '';
-    this.content = '';
-    this.completed = false;
-    this.editable = false;
-  }
+export class LoginOrJoinForm {
+  constructor(
+    public email: string,
+    public password: string,
+  ) {  }
 }
