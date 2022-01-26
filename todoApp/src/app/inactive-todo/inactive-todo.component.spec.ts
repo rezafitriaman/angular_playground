@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { InActiveTodoComponent } from './in-active-todo.component';
+import { InactiveTodoComponent } from './inactive-todo.component';
 
 describe('InActiveTodoComponent', () => {
-  let component: InActiveTodoComponent;
-  let fixture: ComponentFixture<InActiveTodoComponent>;
+  let component: InactiveTodoComponent;
+  let fixture: ComponentFixture<InactiveTodoComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ InActiveTodoComponent ]
+      declarations: [ InactiveTodoComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(InActiveTodoComponent);
+    fixture = TestBed.createComponent(InactiveTodoComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -5,7 +5,7 @@ import {InactiveTodo, Todo} from "../models/Todo";
 @Component({
   selector: 'app-in-active-todo',
   templateUrl: './in-active-todo.component.html',
-  styleUrls: ['./in-active-todo.component.css']
+  styleUrls: ['./inactive-todo.component.css']
 })
 export class InActiveTodoComponent implements OnInit {
   todos: Array<InactiveTodo>;
