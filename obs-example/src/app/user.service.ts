@@ -1,11 +1,11 @@
 import {Injectable} from "@angular/core";
-import {Subject} from "rxjs";
+import {Subject, Subscription} from "rxjs";
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
-  activatedItem: any;
+  activatedItem: Subject<boolean>;
   constructor() {
     this.activatedItem = new Subject<boolean>();
   }
