@@ -11,7 +11,7 @@ import {LoginOrJoinForm} from "../models/Todo";
 })
 export class LoginFormComponent implements OnInit {
   loginMode: boolean;
-  @ViewChild('loginOrJoinForm') form: NgForm | undefined;
+  @ViewChild('loginForm') form: NgForm | undefined;
 
   constructor(private loginService: LoginService,
               private router: Router) {
