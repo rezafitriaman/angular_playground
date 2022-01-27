@@ -15,8 +15,6 @@ import { EditTodoComponent } from './active-todo/edit-todo/edit-todo.component';
 import { ListTodoComponent } from './active-todo/list-todo/list-todo.component';
 import { AddNewTodoItemComponent } from './active-todo/todo-item/add-new-todo-item/add-new-todo-item.component';
 import { HighlightDirective } from './shared/highlight.directive';
-import { LoginFormComponent } from './login-form/login-form.component';
-import { SignupFormComponent } from './signup-form/signup-form.component';
 import { AccountComponent } from './account/account.component';
 import { SignInComponent } from './account/sign-in/sign-in.component';
 import { SignUpComponent } from './account/sign-up/sign-up.component';
@@ -34,8 +32,6 @@ import { SignUpComponent } from './account/sign-up/sign-up.component';
     ListTodoComponent,
     AddNewTodoItemComponent,
     HighlightDirective,
-    LoginFormComponent,
-    SignupFormComponent,
     AccountComponent,
     SignInComponent,
     SignUpComponent,

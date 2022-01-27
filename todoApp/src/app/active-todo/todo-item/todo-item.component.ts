@@ -25,7 +25,7 @@ export class TodoItemComponent implements OnInit,
   AfterViewInit,
   CanComponentDeactivate,
   OnDestroy {
-  inputFillUp: boolean;
+  inputFillUp: boolean | null | undefined;
   id: number;
   todos: Todo[];
   newItem: string;
@@ -53,8 +53,6 @@ export class TodoItemComponent implements OnInit,
   }
 
   ngOnInit(): void {
-    console.log(this.ref.nativeElement)
-    console.log(this.renderer)
     // it load via a resolver : example - 152
     this.route.data.subscribe((data: Data)=> {
       this.todos = data['activeTodoItem'];
@@ -72,10 +70,10 @@ export class TodoItemComponent implements OnInit,
   }
 
   ngAfterViewInit() {
-    console.log(this.contentTodoRef);
+    //console.log(this.contentTodoRef);
   }
 
-  onInputFillUp(inputFillUp: boolean) {
+  onInputFillUp(inputFillUp: boolean | null | undefined) {
     this.inputFillUp = inputFillUp;
   }
 

@@ -1,7 +1,6 @@
 import {Component, DoCheck, Input, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute, Params, Router} from "@angular/router";
 import {TodoService} from "../todo.service";
-import {LoginService} from "../login-form/login.service";
 import {Observable, Subscription} from "rxjs";
 import {AccountService} from "../account/account.service";
 
@@ -37,6 +36,10 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   onAddNewCategory() {
     console.log('onAddNewCategory')
+  }
+
+  get url() {
+    return (this.todoService.activeTodos.length > 0) ? '/activeTodo/0' : '/activeTodo';
   }
 
   ngOnDestroy() {
