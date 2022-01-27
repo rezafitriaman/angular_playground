@@ -17,6 +17,9 @@ import { AddNewTodoItemComponent } from './active-todo/todo-item/add-new-todo-it
 import { HighlightDirective } from './shared/highlight.directive';
 import { LoginFormComponent } from './login-form/login-form.component';
 import { SignupFormComponent } from './signup-form/signup-form.component';
+import { AccountComponent } from './account/account.component';
+import { SignInComponent } from './account/sign-in/sign-in.component';
+import { SignUpComponent } from './account/sign-up/sign-up.component';
 
 
 @NgModule({
@@ -33,6 +36,9 @@ import { SignupFormComponent } from './signup-form/signup-form.component';
     HighlightDirective,
     LoginFormComponent,
     SignupFormComponent,
+    AccountComponent,
+    SignInComponent,
+    SignUpComponent,
   ],
   imports: [
     BrowserModule,

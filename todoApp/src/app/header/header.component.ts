@@ -3,6 +3,7 @@ import {ActivatedRoute, Params, Router} from "@angular/router";
 import {TodoService} from "../todo.service";
 import {LoginService} from "../login-form/login.service";
 import {Observable, Subscription} from "rxjs";
+import {AccountService} from "../account/account.service";
 
 @Component({
   selector: 'app-header',
@@ -17,7 +18,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   constructor(private route: ActivatedRoute,
               private todoService: TodoService,
               private router: Router,
-              private loginService: LoginService) {
+              private loginService: AccountService) {
     this.loggedIn = false;
     this.brand = '';
     this.subscription = new Observable().subscribe();
@@ -31,7 +32,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   onLogout() {
     this.loginService.onLogout();
-    this.router.navigate(['/login'])
+    this.router.navigate(['/account/login'])
   }
 
   onAddNewCategory() {

@@ -8,14 +8,14 @@ import {
   UrlTree
 } from "@angular/router";
 import {Observable} from "rxjs";
-import {LoginService} from "./login-form/login.service";
+import {AccountService} from "./account/account.service";
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthGuardService implements CanActivate {
 
-  constructor(private loginService: LoginService,
+  constructor(private loginService: AccountService,
               private router: Router) { }
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
