@@ -3,7 +3,7 @@
     <div class="col-xs-12 col-md-6 offset-md-4">
       <form
         #postForm="ngForm"
-        (ngSubmit)="onCreatePost(postForm.value)">
+        (ngSubmit)="onCreatePost()">
         <div class="form-group">
           <label for="title">Title</label>
           <input
@@ -58,7 +58,21 @@
   </div>
   <div class="row mt-4">
     <div class="col-xs-12 col-md-6 offset-md-4">
-      <p>No posts available!</p>
+      <p *ngIf="loadedPosts.length < 1 && !isFetching">No posts available!</p>
+      <ul class="list-group" *ngIf="loadedPosts.length >= 1 && !isFetching">
+        <li class="list-group-item" *ngFor="let post of loadedPosts">
+          <h5>{{post.title}}</h5>
+          <p>{{post.content}}</p>
+        </li>
+      </ul>
+      <p *ngIf="isFetching && !error">Loading...</p>
+      <div class="alrt alert-danger" *ngIf="error">
+        <h5>An Error Occurd!</h5>
+        <p>{{error}}</p>
+        <button type="button" class="btn btn-danger" (click)="onHandleError()">
+          oke
+        </button>
+      </div>
     </div>
   </div>
 </div>
