@@ -37,10 +37,10 @@
                  [attr.aria-expanded]="show">Manage</a>
               <ul class="dropdown-menu"
                   aria-labelledby="navbarDropdown">
-                <li><a class="dropdown-item pointer">Action</a></li>
-                <li><a class="dropdown-item pointer">Another action</a></li>
+                <li><a class="dropdown-item pointer" (click)="onSaveData()">Save Data</a></li>
+                <li><a class="dropdown-item pointer" (click)="onFetchData()">Fetch Data</a></li>
                 <li><hr class="dropdown-divider"></li>
-                <li><a class="dropdown-item pointer">Something else here</a></li>
+                <li><a class="dropdown-item pointer">Log out</a></li>
               </ul>
             </li>
           </ul>

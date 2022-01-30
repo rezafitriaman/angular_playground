@@ -11,7 +11,8 @@ export class RecipeService {
   //public recipeWasSelected: Subject<Recipe>;
   //public sendRecipeToShoppingList: Subject<Ingredient[]>
   public recipesChanged: Subject<Array<Recipe>>;
-  private recipes: Array<Recipe> = [
+  private recipes: Array<Recipe> = [];
+/*  private recipes: Array<Recipe> = [
     new Recipe('Tonkatsu',
       'Tonkatsu, or pork cutlet, is a Japanese dish of pork filet that is breaded with panko breadcrumbs and deep-fried. It is traditionally served with a dark, savory tonkatsu sauce and shredded green cabbage.',
       'https://www.thespruceeats.com/thmb/UYVEJszIvbLikahIhsRTrqal0Rk=/3000x2000/filters:no_upscale()/tonkatsu-recipe-japanese-breaded-and-deep-fried-pork-2031274-step-13-2352bcbd1d9d4c59917f91ff608c3d87.jpg',
@@ -27,11 +28,17 @@ export class RecipeService {
         new Ingredient('venkelknol', 1),
         new Ingredient('ui', 1),
         new Ingredient('knoflook', 5)]),
-  ];
+  ];*/
 
   constructor(private shoppingListService: ShoppingListService) {
     this.recipesChanged = new Subject<Array<Recipe>>();
     //this.sendRecipeToShoppingList = new Subject<Ingredient[]>();
+  }
+
+  setRecipes(recipes: Array<Recipe>) {
+    //console.log(recipes)
+    this.recipes = recipes;
+    this.recipesChanged.next(this.recipes.slice());
   }
 
   getRecipes() {
