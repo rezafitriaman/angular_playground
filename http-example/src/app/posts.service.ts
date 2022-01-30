@@ -1,7 +1,7 @@
 import {Injectable} from "@angular/core";
 import {Post} from "./post.model";
-import {HttpClient, HttpHeaders, HttpParams} from "@angular/common/http";
-import {catchError, delay, map} from "rxjs/operators";
+import {HttpClient, HttpEventType, HttpHeaders, HttpParams} from "@angular/common/http";
+import {catchError, delay, map, tap} from "rxjs/operators";
 import {throwError} from "rxjs";
 
 @Injectable({
@@ -10,11 +10,15 @@ import {throwError} from "rxjs";
 export class PostsService {
   constructor(private http: HttpClient) {
   }
+
   createAndStorePost(postDataValue: Post) {
     return this.http
       .post<{ name: string}>(
         'https://ng-complete-guide-258b9-default-rtdb.europe-west1.firebasedatabase.app/testmap.json',
-        postDataValue
+        postDataValue,
+        {
+          observe: 'response'
+        }
       )
   }
 
@@ -49,6 +53,15 @@ export class PostsService {
 
   deletePosts() {
     return this.http
-      .delete('https://ng-complete-guide-258b9-default-rtdb.europe-west1.firebasedatabase.app/testmap.json')
+      .delete('https://ng-complete-guide-258b9-default-rtdb.europe-west1.firebasedatabase.app/testmap.json',
+        {
+          observe: 'events'
+        }).pipe(tap(event => {
+          console.log('event', event)
+          console.log('HttpEventType', HttpEventType)
+          if (event.type === HttpEventType.Sent) {
+            console.log('it sended')
+          }
+      }))
   }
 }

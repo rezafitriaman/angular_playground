@@ -33,6 +33,7 @@ export class AppComponent implements OnInit{
     const postDataValue: Post = this.form?.value;
     this.postService.createAndStorePost(postDataValue)
       .subscribe(response=> {
+        console.log('response', response)
         this.fetchPosts();
       });
     this.form?.reset();
