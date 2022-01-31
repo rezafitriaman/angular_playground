@@ -12,6 +12,7 @@ export class PostsService {
   }
 
   createAndStorePost(postDataValue: Post) {
+
     return this.http
       .post<{ name: string}>(
         'https://ng-complete-guide-258b9-default-rtdb.europe-west1.firebasedatabase.app/testmap.json',
@@ -42,6 +43,7 @@ export class PostsService {
 
             postsArray.push({...value, id:key});
           }
+          console.log('postsArray', postsArray)
           return postsArray;
         }),
         catchError(errorRes => {
