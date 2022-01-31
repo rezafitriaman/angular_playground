@@ -1,0 +1,19 @@
+<div class="container mt-4">
+  <div class="row">
+    <div class="col-xs-12 col-sm-10 col-md-8">
+      <h4>{{requestReceives | async}}</h4>
+      <ul class="list-group">
+        <li
+          class="list-group-item position-relative"
+          *ngFor="let server of servers | filterAlphabet:'name'"
+          [ngClass]="getStatusClasses(server)"
+        >
+          <span class="badge bg-secondary position-absolute end-0">
+            {{server.status}}
+          </span>
+          <strong>{{server.name | slice:0:10}}...</strong> | {{server.instanceType | uppercase | reverse}} | {{server.started | date:'medium'}}
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>

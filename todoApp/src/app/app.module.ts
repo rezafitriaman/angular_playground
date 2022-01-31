@@ -18,6 +18,7 @@ import { HighlightDirective } from './shared/highlight.directive';
 import { AccountComponent } from './account/account.component';
 import { SignInComponent } from './account/sign-in/sign-in.component';
 import { SignUpComponent } from './account/sign-up/sign-up.component';
+import {HttpClientModule} from "@angular/common/http";
 
 
 @NgModule({
@@ -39,7 +40,8 @@ import { SignUpComponent } from './account/sign-up/sign-up.component';
   imports: [
     BrowserModule,
     AppRoutingModule,
-    FormsModule
+    FormsModule,
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent]
