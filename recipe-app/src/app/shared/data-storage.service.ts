@@ -20,7 +20,7 @@ export class DataStorageService {
         console.log(response);
       })
   }
-
+  
   fetchRecipes() {
     return this.http
       .get<Recipe[]>('https://ng-course-recipe-book-9fefb-default-rtdb.europe-west1.firebasedatabase.app/recipes.json')
