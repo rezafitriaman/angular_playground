@@ -37,7 +37,7 @@ export class AuthComponent implements OnInit {
     
     authObs.subscribe(restData => {
       this.isLoading = false;
-      console.log(restData);
+      console.log('authObs', restData);
       this.router.navigate(['/recipes'])
     }, errorMessage => {
       this.isLoading = false;
