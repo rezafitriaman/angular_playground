@@ -1,4 +1,5 @@
 import {Component, OnInit} from '@angular/core';
+import { AuthService } from './auth/auth.service';
 
 import {Ingredient} from "./shared/ingredient.model";
 
@@ -10,10 +11,11 @@ import {Ingredient} from "./shared/ingredient.model";
 export class AppComponent implements OnInit{
   //loadedFeature = 'recipes';
 
-  constructor() {
+  constructor(private authService: AuthService) {
   }
 
   ngOnInit() {
+    this.authService.autoLogin()    
   }
 
 /*  onNavigate(feature: string) {
