@@ -10,7 +10,7 @@ export class AccountService {
   loggedIn: boolean;
   loggedInInfo: Subject<boolean>;
   constructor() {
-    this.loggedIn = false; // false
+    this.loggedIn = true; // false
     this.loggedInInfo = new Subject<boolean>();
   }
 

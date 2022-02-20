@@ -18,7 +18,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
               private todoService: TodoService,
               private router: Router,
               private loginService: AccountService) {
-    this.loggedIn = false;
+    this.loggedIn = true; // false
     this.brand = '';
     this.subscription = new Observable().subscribe();
   }
