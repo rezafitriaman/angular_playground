@@ -18,7 +18,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
               private todoService: TodoService,
               private router: Router,
               private loginService: AccountService) {
-    this.loggedIn = true; // false
+    this.loggedIn = false; // false
     this.brand = '';
     this.subscription = new Observable().subscribe();
   }
@@ -36,10 +36,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   onAddNewCategory() {
     console.log('onAddNewCategory')
-  }
-
-  get url() {
-    return (this.todoService.activeTodos.length > 0) ? '/activeTodo/0' : '/activeTodo';
   }
 
   ngOnDestroy() {
