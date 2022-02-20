@@ -23,6 +23,12 @@ export class ListTodoComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+  	const urlTarget =
+		this.todoService.activeTodos.length > 0
+			? '/activeTodo/0'
+			: '/activeTodo';
+
+	this.router.navigate([urlTarget]);
     this.todos = this.todoService.getActiveTodos();
     this.todoService.activeTodosAdd.subscribe((todos: Array<TodoPackage>)=> {
       this.todos = todos;
