@@ -17,8 +17,5 @@ export class Todo {
 }
 
 export class LoginOrJoinForm {
-  constructor(
-    public email: string,
-    public password: string,
-  ) {  }
+	constructor(public email: string, public password: string) {}
 }

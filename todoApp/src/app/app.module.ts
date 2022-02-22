@@ -20,7 +20,6 @@ import { SignInComponent } from './account/sign-in/sign-in.component';
 import { SignUpComponent } from './account/sign-up/sign-up.component';
 import {HttpClientModule} from "@angular/common/http";
 
-
 @NgModule({
   declarations: [
     AppComponent,

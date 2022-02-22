@@ -1,8 +1,8 @@
-import {Component, DoCheck, Input, OnDestroy, OnInit} from '@angular/core';
-import {ActivatedRoute, Params, Router} from "@angular/router";
-import {TodoService} from "../todo.service";
-import {Observable, Subscription} from "rxjs";
-import {AccountService} from "../account/account.service";
+import { Component, DoCheck, Input, OnDestroy, OnInit } from '@angular/core';
+import { ActivatedRoute, Params, Router } from '@angular/router';
+import { TodoService } from '../todo.service';
+import { Observable, Subscription } from 'rxjs';
+import { AccountService } from '../account/account.service';
 
 @Component({
 	selector: 'app-header',
