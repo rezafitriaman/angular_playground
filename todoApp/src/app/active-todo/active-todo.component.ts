@@ -1,29 +1,28 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
-import {Todo} from "../models/Todo";
-import {TodoService} from "../todo.service";
-import {Observable, Subscription} from "rxjs";
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Todo } from '../models/Todo';
+import { TodoService } from '../todo.service';
+import { Observable, Subscription } from 'rxjs';
 
 @Component({
-  selector: 'app-active-todo',
-  templateUrl: './active-todo.component.html',
-  styleUrls: ['./active-todo.component.css']
+    selector: 'app-active-todo',
+    templateUrl: './active-todo.component.html',
+    styleUrls: ['./active-todo.component.css'],
 })
 export class ActiveTodoComponent implements OnInit, OnDestroy {
-  loading: boolean;
-  subscription: Subscription;
+    public loading: boolean = false;
+    public subscription: Subscription = new Observable().subscribe();
 
-  constructor(private todoService: TodoService) {
-    this.loading = false;
-    this.subscription = new Observable().subscribe();
-  }
+    constructor(private todoService: TodoService) {}
 
-  ngOnInit(): void {
-    this.subscription = this.todoService.loading.subscribe((loading: boolean)=> {
-      this.loading = loading;
-    })
-  }
+    ngOnInit(): void {
+        this.subscription = this.todoService.loading.subscribe(
+            (loading: boolean) => {
+                this.loading = loading;
+            }
+        );
+    }
 
-  ngOnDestroy() {
-    this.subscription.unsubscribe();
-  }
+    ngOnDestroy() {
+        this.subscription.unsubscribe();
+    }
 }

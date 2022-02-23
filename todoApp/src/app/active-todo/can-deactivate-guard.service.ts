@@ -1,23 +1,37 @@
 import { Injectable } from '@angular/core';
-import {Observable} from "rxjs";
-import {ActivatedRouteSnapshot, CanDeactivate, RouterStateSnapshot, UrlTree} from "@angular/router";
+import { Observable } from 'rxjs';
+import {
+    ActivatedRouteSnapshot,
+    CanDeactivate,
+    RouterStateSnapshot,
+    UrlTree,
+} from '@angular/router';
 export interface CanComponentDeactivate {
-  canDeactivate: () => Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree
+    canDeactivate: () =>
+        | Observable<boolean | UrlTree>
+        | Promise<boolean | UrlTree>
+        | boolean
+        | UrlTree;
 }
 
 @Injectable({
-  providedIn: 'root'
+    providedIn: 'root',
 })
-export class CanDeactivateGuardService implements CanDeactivate<CanComponentDeactivate> {
+export class CanDeactivateGuardService
+    implements CanDeactivate<CanComponentDeactivate>
+{
+    constructor() {}
 
-  constructor() { }
-
-  canDeactivate(component: CanComponentDeactivate,
-                currentRoute: ActivatedRouteSnapshot,
-                currentState: RouterStateSnapshot,
-                nextState?: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
-
-    return component.canDeactivate();
+    canDeactivate(
+        component: CanComponentDeactivate,
+        currentRoute: ActivatedRouteSnapshot,
+        currentState: RouterStateSnapshot,
+        nextState?: RouterStateSnapshot
+    ):
+        | Observable<boolean | UrlTree>
+        | Promise<boolean | UrlTree>
+        | boolean
+        | UrlTree {
+        return component.canDeactivate();
     }
 }
-

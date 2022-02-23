@@ -15,50 +15,50 @@ import { SignInComponent } from './account/sign-in/sign-in.component';
 import { SignUpComponent } from './account/sign-up/sign-up.component';
 
 const routes: Routes = [
-	{ path: '', redirectTo: 'account/login', pathMatch: 'full' }, // redirect to login
-	//{ path: '', redirectTo: 'activeTodo/0', pathMatch: 'full' }, // redirect to login
-	{
-		path: 'account',
-		component: AccountComponent,
-		children: [
-			{ path: 'login', component: SignInComponent },
-			{ path: 'signup', component: SignUpComponent },
-		],
-	},
-	{
-		path: 'activeTodo',
-		canActivate: [AuthGuardService],
-		component: ActiveTodoComponent,
-		children: [
-			{
-				path: 'new',
-				component: EditTodoComponent,
-				canDeactivate: [CanDeactivateGuardService],
-			},
+    { path: '', redirectTo: 'account/login', pathMatch: 'full' }, // redirect to login
+    //{ path: '', redirectTo: 'activeTodo/0', pathMatch: 'full' }, // redirect to login
+    {
+        path: 'account',
+        component: AccountComponent,
+        children: [
+            { path: 'login', component: SignInComponent },
+            { path: 'signup', component: SignUpComponent },
+        ],
+    },
+    {
+        path: 'activeTodo',
+        canActivate: [AuthGuardService],
+        component: ActiveTodoComponent,
+        children: [
+            {
+                path: 'new',
+                component: EditTodoComponent,
+                canDeactivate: [CanDeactivateGuardService],
+            },
 
-			{
-				path: ':id',
-				component: TodoItemComponent,
-				canDeactivate: [CanDeactivateGuardService],
-				resolve: { activeTodoItem: TodoItemResolverService },
-			},
-		],
-	},
-	{
-		path: 'deletedTodo',
-		canActivate: [AuthGuardService],
-		component: InactiveTodoComponent,
-	},
-	{
-		path: 'not-found',
-		component: ErrorPageComponent,
-		data: { message: 'Page not found' },
-	},
-	{ path: '**', redirectTo: '/not-found', pathMatch: 'full' },
+            {
+                path: ':id',
+                component: TodoItemComponent,
+                canDeactivate: [CanDeactivateGuardService],
+                resolve: { activeTodoItem: TodoItemResolverService },
+            },
+        ],
+    },
+    {
+        path: 'deletedTodo',
+        canActivate: [AuthGuardService],
+        component: InactiveTodoComponent,
+    },
+    {
+        path: 'not-found',
+        component: ErrorPageComponent,
+        data: { message: 'Page not found' },
+    },
+    { path: '**', redirectTo: '/not-found', pathMatch: 'full' },
 ];
 
 @NgModule({
-	imports: [RouterModule.forRoot(routes)],
-	exports: [RouterModule],
+    imports: [RouterModule.forRoot(routes)],
+    exports: [RouterModule],
 })
 export class AppRoutingModule {}

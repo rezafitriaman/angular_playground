@@ -1,20 +1,17 @@
 import { Component, OnInit } from '@angular/core';
-import {ActivatedRoute, Router} from "@angular/router";
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
-  selector: 'app-error-page',
-  templateUrl: './error-page.component.html',
-  styleUrls: ['./error-page.component.css']
+    selector: 'app-error-page',
+    templateUrl: './error-page.component.html',
+    styleUrls: ['./error-page.component.css'],
 })
 export class ErrorPageComponent implements OnInit {
-  message:string
-  constructor(private route: ActivatedRoute) {
-    this.message = ''
-  }
+    public message: string = '';
+    constructor(private route: ActivatedRoute) {}
 
-  ngOnInit(): void {
-    console.log(this.route.snapshot.data['message']);
-    this.message = this.route.snapshot.data['message'];
-  }
-
+    ngOnInit(): void {
+        console.log(this.route.snapshot.data['message']);
+        this.message = this.route.snapshot.data['message'];
+    }
 }
