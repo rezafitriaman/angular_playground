@@ -45,8 +45,6 @@ export class TodoService {
             },
         ],
     };
-    //public activeTodos: Array<TodoPackage>;
-    //public inActiveTodos: Array<InactiveTodo>;
     public activeTodosAdd: Subject<Array<TodoPackage>> = new Subject<
         Array<TodoPackage>
     >();
@@ -56,80 +54,7 @@ export class TodoService {
     >();
     public loading: Subject<boolean> = new Subject<boolean>();
 
-    constructor() {
-        // this.activeTodos = [
-        // 	{
-        // 		label: 'cadeau',
-        // 		items: [
-        // 			{
-        // 				id: '13434639321192946',
-        // 				content: 'Dragon fruit',
-        // 				completed: false,
-        // 				editable: false,
-        // 			},
-        // 			{
-        // 				id: '1639321192946',
-        // 				content: 'apple',
-        // 				completed: false,
-        // 				editable: false,
-        // 			},
-        // 			{
-        // 				id: '33333',
-        // 				content: 'Orange',
-        // 				completed: false,
-        // 				editable: false,
-        // 			},
-        // 		],
-        // 	},
-        // 	{
-        // 		label: 'tv',
-        // 		items: [
-        // 			{
-        // 				id: '1639321192946',
-        // 				content: 'koffie',
-        // 				completed: false,
-        // 				editable: false,
-        // 			},
-        // 			{
-        // 				id: '33333',
-        // 				content: 'laptop',
-        // 				completed: false,
-        // 				editable: false,
-        // 			},
-        // 		],
-        // 	},
-        // 	{
-        // 		label: 'game',
-        // 		items: [],
-        // 	},
-        // 	{
-        // 		label: 'vliegen',
-        // 		items: [
-        // 			{
-        // 				id: '1639321192946',
-        // 				content: 'Tandenborstel',
-        // 				completed: false,
-        // 				editable: false,
-        // 			},
-        // 			{
-        // 				id: '33333',
-        // 				content: 'Tandenborstel',
-        // 				completed: false,
-        // 				editable: false,
-        // 			},
-        // 		],
-        // 	},
-        // ];
-        // this.inActiveTodos = [
-        // 	{
-        // 		id: '33333',
-        // 		content: 'Tandenborstel',
-        // 		completed: false,
-        // 		editable: false,
-        // 		label: 'cadeau',
-        // 	},
-        // ];
-    }
+    constructor() {}
 
     getActiveTodoItem(id: number) {
         return this.todos.activeTodos[id].items;
