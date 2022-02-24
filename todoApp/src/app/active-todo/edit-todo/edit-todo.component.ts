@@ -1,59 +1,80 @@
-import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {TodoPackage} from "../../models/Todo";
-import {TodoService} from "../../todo.service";
-import {ActivatedRoute, Router, UrlTree} from "@angular/router";
-import {CanComponentDeactivate} from "../can-deactivate-guard.service";
-import {Observable, Subscription} from "rxjs";
-import {NgForm} from "@angular/forms";
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { TodoPackage } from '../../models/Todo';
+import { TodoService } from '../../todo.service';
+import { ActivatedRoute, Router, UrlTree } from '@angular/router';
+import { CanComponentDeactivate } from '../can-deactivate-guard.service';
+import { Observable, Subscription } from 'rxjs';
+import { NgForm } from '@angular/forms';
 
 @Component({
-  selector: 'app-edit-todo',
-  templateUrl: './edit-todo.component.html',
-  styleUrls: ['./edit-todo.component.css']
+    selector: 'app-edit-todo',
+    templateUrl: './edit-todo.component.html',
+    styleUrls: ['./edit-todo.component.css'],
 })
-export class EditTodoComponent implements OnInit, CanComponentDeactivate, OnDestroy {
-  @ViewChild('addTodoForm') form: NgForm | undefined;
-  newActiveTodo: TodoPackage;
-  changesSaved: boolean;
-  loading: boolean;
-  subscription: Subscription;
+export class EditTodoComponent
+    implements OnInit, CanComponentDeactivate, OnDestroy
+{
+    @ViewChild('addTodoForm') form: NgForm | undefined;
+    public newActiveTodo: TodoPackage = {
+        label: '',
+        items: [],
+    };
+    public changesSaved: boolean = false;
+    public loading: boolean = false;
+    public subscription: Subscription = new Observable().subscribe();
 
-  constructor(private todoService: TodoService, private route: ActivatedRoute, private router: Router) {
-    this.newActiveTodo = {
-      label: '',
-      items: [],
+    constructor(
+        private todoService: TodoService,
+        private route: ActivatedRoute,
+        private router: Router
+    ) {}
+
+    ngOnInit(): void {
+        this.subscription = this.todoService.loading.subscribe(
+            (loading: boolean) => {
+                this.loading = loading;
+            }
+        );
     }
-    this.changesSaved = false;
-    this.loading = false;
-    this.subscription = new Observable().subscribe();
-  }
 
-  ngOnInit(): void {
-    this.subscription = this.todoService.loading.subscribe((loading: boolean)=> {
-      this.loading = loading;
-    })
-  }
+    onSubmit() {
+        const newTodo = this.form?.value.newTodo;
+        if (newTodo === '') return;
 
-  onSubmit() {
-    const newTodo = this.form?.value.newTodo;
-    if (newTodo === '') return;
+        this.newActiveTodo = {
+            label: newTodo,
+            items: [],
+        };
+        this.todoService.addTodo(this.newActiveTodo);
+        this.form?.reset();
+        const lastAddedTodoItem = this.todoService.getActiveTodos().length - 1;
+        this.changesSaved = true;
 
-    this.newActiveTodo = {
-      label: newTodo,
-      items: [],
+        this.router.navigate(['../', lastAddedTodoItem], {
+            relativeTo: this.route,
+        });
+        this.todoService.loading.next(true);
     }
-    this.todoService.addTodo(this.newActiveTodo);
-    this.form?.reset();
-    const lastAdded = this.todoService.getActiveTodos().length - 1;
-    this.changesSaved = true;
 
-    this.router.navigate(['../', lastAdded], {relativeTo: this.route})
-    this.todoService.loading.next(true);
-  }
+    canDeactivate():
+        | Observable<boolean | UrlTree>
+        | Promise<boolean | UrlTree>
+        | boolean
+        | UrlTree {
+        if (this.form?.value.newTodo !== '' && !this.changesSaved) {
+            return confirm('Do you want to discard the changes?');
+        } else {
+            return true;
+        }
+    }
 
-  addTodo(newTodo: string) {
-/*    if (newTodo === '') return;
+    ngOnDestroy() {
+        this.subscription.unsubscribe();
+    }
 
+    addTodo(newTodo: string) {
+        /*    if (newTodo === '') return;
+    
     this.newActiveTodo = {
       label: newTodo,
       items: [],
@@ -62,28 +83,16 @@ export class EditTodoComponent implements OnInit, CanComponentDeactivate, OnDest
     this.newTodo = '';
     const lastAdded = this.todoService.getActiveTodos().length - 1;
     this.changesSaved = true;
-
+    
     this.router.navigate(['../', lastAdded], {relativeTo: this.route})
     this.todoService.loading.next(true);*/
-  }
-
-  onEnterDown(event: KeyboardEvent, newItem: string) {
-/*    if(newItem === '') return;
-
-    const enterKey = (event.key === 'Enter');
-
-    if(enterKey) this.addTodo(newItem);*/
-  }
-
-  canDeactivate(): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
-    if(this.form?.value.newTodo !== '' && !this.changesSaved) {
-      return confirm('Do you want to discard the changes?')
-    }else {
-      return true;
     }
-  }
 
-  ngOnDestroy() {
-    this.subscription.unsubscribe();
-  }
+    onEnterDown(event: KeyboardEvent, newItem: string) {
+        /*    if(newItem === '') return;
+    
+    const enterKey = (event.key === 'Enter');
+    
+    if(enterKey) this.addTodo(newItem);*/
+    }
 }

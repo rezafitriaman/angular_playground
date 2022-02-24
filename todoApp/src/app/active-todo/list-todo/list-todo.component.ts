@@ -35,7 +35,7 @@ export class ListTodoComponent implements OnInit, OnDestroy {
 
     ngOnInit(): void {
         const urlTarget =
-            this.todoService.activeTodos.length > 0
+            this.todoService.todos.activeTodos.length > 0
                 ? '/activeTodo/0'
                 : '/activeTodo';
 

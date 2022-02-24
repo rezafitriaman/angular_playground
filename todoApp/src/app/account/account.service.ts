@@ -1,37 +1,41 @@
 import { Injectable } from '@angular/core';
-import {Subject} from "rxjs";
-import {UrlTree} from "@angular/router";
-import {LoginOrJoinForm} from "../models/Todo";
+import { Subject } from 'rxjs';
+import { UrlTree } from '@angular/router';
+import { LoginOrJoinForm } from '../models/Todo';
+import { TodoService } from '../todo.service';
 
 @Injectable({
-  providedIn: 'root'
+    providedIn: 'root',
 })
 export class AccountService {
-  loggedIn: boolean;
-  loggedInInfo: Subject<boolean>;
-  constructor() {
-    this.loggedIn = false; // false
-    this.loggedInInfo = new Subject<boolean>();
-  }
+    public loggedIn: boolean = true; // if u need to loggin set this to 'false'
+    public loggedInInfo: Subject<boolean> = new Subject<boolean>();
+    constructor(private todoService: TodoService) {}
 
-  isAuthenticated(): Promise<boolean | UrlTree>  {
-    const promise = new Promise((resolve, reject) => {
-      setTimeout(() => {
-        resolve(this.loggedIn)
-      }, 800)
-    })
+    isAuthenticated(): Promise<boolean | UrlTree> {
+        const promise = new Promise((resolve, reject) => {
+            setTimeout(() => {
+                resolve(this.loggedIn);
+            }, 800);
+        });
 
-    return promise as Promise<boolean | UrlTree>;
-  }
+        return promise as Promise<boolean | UrlTree>;
+    }
 
-  onLogin(formValue: LoginOrJoinForm) {
-    console.log('submit', (formValue));
-    this.loggedIn = true;
-    this.loggedInInfo.next(this.loggedIn);
-  }
+    initUrl() {
+        return this.todoService.todos.activeTodos.length > 0
+            ? '/activeTodo/0'
+            : '/activeTodo';
+    }
 
-  onLogout() {
-    this.loggedIn = false;
-    this.loggedInInfo.next(this.loggedIn);
-  }
+    onLogin(formValue: LoginOrJoinForm) {
+        console.log('submit', formValue);
+        this.loggedIn = true;
+        this.loggedInInfo.next(this.loggedIn);
+    }
+
+    onLogout() {
+        this.loggedIn = false;
+        this.loggedInInfo.next(this.loggedIn);
+    }
 }

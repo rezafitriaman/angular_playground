@@ -24,10 +24,11 @@
             <ul class="flex flex-col lg:flex-row list-none ml-auto">
                 <li class="nav-item" *ngIf="loggedIn">
                     <a
-                        class="px-3 py-2 flex items-center text-base uppercase font-bold leading-snug text-white hover:opacity-75">
+                        class="px-3 py-2 flex items-center text-base uppercase font-bold leading-snug text-white hover:opacity-75"
+                        routerLinkActive="hover:opacity-100">
                         <span
                             class="ml-2 border-white cursor-pointer"
-                            routerLinkActive="border-b-2"
+                            routerLinkActive="border-b-2 border-white pointer-events-none"
                             routerLink="/activeTodo">
                             Active Todo
                         </span>
@@ -35,10 +36,11 @@
                 </li>
                 <li class="nav-item" *ngIf="loggedIn">
                     <a
-                        class="px-3 py-2 flex items-center text-base uppercase font-bold leading-snug text-white hover:opacity-75">
+                        class="px-3 py-2 flex items-center text-base uppercase font-bold leading-snug text-white hover:opacity-75"
+                        routerLinkActive="hover:opacity-100">
                         <span
                             class="ml-2 cursor-pointer"
-                            routerLinkActive="border-b-2 border-white"
+                            routerLinkActive="border-b-2 border-white pointer-events-none"
                             routerLink="/deletedTodo">
                             Deleted todo
                         </span>
@@ -46,7 +48,8 @@
                 </li>
                 <li class="nav-item" *ngIf="loggedIn">
                     <a
-                        class="flex items-center text-base uppercase font-bold leading-snug text-white hover:opacity-75">
+                        class="flex items-center text-base uppercase font-bold leading-snug text-white hover:opacity-75"
+                        routerLinkActive="hover:opacity-100">
                         <span
                             class="ml-2 cursor-pointer border border-white px-4 py-2"
                             (click)="onLogout()"

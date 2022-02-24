@@ -7,7 +7,7 @@
                 class="cursor-pointer capitalize h-6 flex items-center border-b-2 border-white"
                 [routerLink]="['/activeTodo', i]"
                 routerLinkActive="border-gray-300">
-                <span class="block flex relative">
+                <span class="flex relative">
                     <span
                         class="text-emerald-500 flex items-center mr-0.5"
                         *ngIf="newItem && todos.length === i + 1">
@@ -37,7 +37,7 @@
                 [routerLink]="['/activeTodo', 'new']"
                 routerLinkActive="border-gray-300">
                 <span
-                    class="capitalize text-gray-600 hover:text-gray-400 flex items-center block"
+                    class="capitalize text-gray-600 hover:text-gray-400 flex items-center"
                     >new</span
                 >
                 <span class="absolute -right-3 -top-0.5 text-emerald-500">
