@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { TodoPackage } from '../../models/Todo';
+import { ActiveTodo } from '../../models/Todo';
 import { TodoService } from '../../todo.service';
 import { ActivatedRoute, Router, UrlTree } from '@angular/router';
 import { CanComponentDeactivate } from '../can-deactivate-guard.service';
@@ -11,14 +11,9 @@ import { NgForm } from '@angular/forms';
     templateUrl: './edit-todo.component.html',
     styleUrls: ['./edit-todo.component.css'],
 })
-export class EditTodoComponent
-    implements OnInit, CanComponentDeactivate, OnDestroy
-{
+export class EditTodoComponent implements OnInit, CanComponentDeactivate, OnDestroy {
     @ViewChild('addTodoForm') form: NgForm | undefined;
-    public newActiveTodo: TodoPackage = {
-        label: '',
-        items: [],
-    };
+    public newActiveTodo: ActiveTodo = new ActiveTodo('', []);
     public changesSaved: boolean = false;
     public loading: boolean = false;
     public subscription: Subscription = new Observable().subscribe();
@@ -30,21 +25,16 @@ export class EditTodoComponent
     ) {}
 
     ngOnInit(): void {
-        this.subscription = this.todoService.loading.subscribe(
-            (loading: boolean) => {
-                this.loading = loading;
-            }
-        );
+        this.subscription = this.todoService.loading.subscribe((loading: boolean) => {
+            this.loading = loading;
+        });
     }
 
     onSubmit() {
         const newTodo = this.form?.value.newTodo;
         if (newTodo === '') return;
 
-        this.newActiveTodo = {
-            label: newTodo,
-            items: [],
-        };
+        this.newActiveTodo = new ActiveTodo(newTodo, []);
         this.todoService.addTodo(this.newActiveTodo);
         this.form?.reset();
         const lastAddedTodoItem = this.todoService.getActiveTodos().length - 1;

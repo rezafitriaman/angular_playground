@@ -18,9 +18,7 @@ export class SignInComponent implements OnInit {
         private todoService: TodoService
     ) {}
 
-    ngOnInit(): void {
-        console.log(this.todoService.todos.activeTodos.length > 0);
-    }
+    ngOnInit(): void {}
 
     onSubmit() {
         let initUrl = this.loginService.initUrl();

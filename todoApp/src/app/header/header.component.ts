@@ -16,11 +16,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
     constructor(private router: Router, private loginService: AccountService) {}
 
     ngOnInit(): void {
-        this.subscription = this.loginService.loggedInInfo.subscribe(
-            (loggedInInfo: boolean) => {
-                this.loggedIn = loggedInInfo;
-            }
-        );
+        this.subscription = this.loginService.loggedInInfo.subscribe((loggedInInfo: boolean) => {
+            this.loggedIn = loggedInInfo;
+        });
     }
 
     onLogout() {

@@ -1,5 +1,5 @@
 import { EventEmitter, Injectable } from '@angular/core';
-import { InactiveTodo, Todo, TodoPackage } from './models/Todo';
+import { ActiveTodo, InactiveTodo, Todo } from './models/Todo';
 import { of, Subject } from 'rxjs';
 
 @Injectable({
@@ -7,60 +7,35 @@ import { of, Subject } from 'rxjs';
 })
 export class TodoService {
     public todos: {
-        activeTodos: Array<TodoPackage>;
+        activeTodos: Array<ActiveTodo>;
         inActiveTodos: Array<InactiveTodo>;
     } = {
         activeTodos: [
-            {
-                label: 'cadeau',
-                items: [
-                    {
-                        id: '13434639321192946',
-                        content: 'Dragon fruit',
-                        completed: false,
-                        editable: false,
-                    },
-                    {
-                        id: '1639321192946',
-                        content: 'apple',
-                        completed: false,
-                        editable: false,
-                    },
-                    {
-                        id: '33333',
-                        content: 'Orange',
-                        completed: false,
-                        editable: false,
-                    },
-                ],
-            },
+            new ActiveTodo('cadeau', [
+                new Todo('Blueberry', false, false),
+                new Todo('Dragon fruit', false, false),
+                new Todo('Apple', false, false),
+                new Todo('Orange', false, false),
+            ]),
         ],
-        inActiveTodos: [
-            {
-                id: '33333',
-                content: 'Tandenborstel',
-                completed: false,
-                editable: false,
-                label: 'cadeau',
-            },
-        ],
+        inActiveTodos: [new InactiveTodo('cadeau', new Todo('Tandenborstel', false, false))],
     };
-    public activeTodosAdd: Subject<Array<TodoPackage>> = new Subject<
-        Array<TodoPackage>
-    >();
+    public activeTodosAdd: Subject<Array<ActiveTodo>> = new Subject<Array<ActiveTodo>>();
     public resetPlaceHolder: Subject<string> = new Subject<string>();
-    public updateInActiveTodo: Subject<Array<InactiveTodo>> = new Subject<
-        Array<InactiveTodo>
-    >();
+    public updateInActiveTodo: Subject<Array<InactiveTodo>> = new Subject<Array<InactiveTodo>>();
     public loading: Subject<boolean> = new Subject<boolean>();
 
     constructor() {}
+
+    getTodos() {
+        return this.todos;
+    }
 
     getActiveTodoItem(id: number) {
         return this.todos.activeTodos[id].items;
     }
 
-    getActiveTodos(): Array<TodoPackage> {
+    getActiveTodos(): Array<ActiveTodo> {
         return this.todos.activeTodos.slice();
     }
 
@@ -69,10 +44,10 @@ export class TodoService {
     }
 
     onSetToInactive(indexItem: number, todoId: number) {
-        this.todos.inActiveTodos.push({
-            ...this.todos.activeTodos[todoId].items[indexItem],
-            label: this.todos.activeTodos[todoId].label,
-        });
+        const label = this.todos.activeTodos[todoId].label;
+        const todo = this.todos.activeTodos[todoId].items[indexItem];
+
+        this.todos.inActiveTodos.push(new InactiveTodo(label, todo));
         this.todos.activeTodos[todoId].items.splice(indexItem, 1);
     }
 
@@ -81,12 +56,9 @@ export class TodoService {
             (target) => target.label === this.todos.inActiveTodos[todoId].label
         );
 
-        this.todos.activeTodos[labelIndex].items.push({
-            id: this.todos.inActiveTodos[todoId].id,
-            content: this.todos.inActiveTodos[todoId].content,
-            completed: false,
-            editable: this.todos.inActiveTodos[todoId].editable,
-        });
+        this.todos.activeTodos[labelIndex].items.push(
+            new Todo(this.todos.inActiveTodos[todoId].todo.content, false, false)
+        );
 
         this.todos.inActiveTodos.splice(todoId, 1);
         this.updateInActiveTodo.next(this.todos.inActiveTodos);
@@ -99,8 +71,7 @@ export class TodoService {
 
     onSetToEditable(indexItem: number, todoId: number, contentText: string) {
         if (this.todos.activeTodos[todoId].items[indexItem].editable)
-            this.todos.activeTodos[todoId].items[indexItem].content =
-                contentText;
+            this.todos.activeTodos[todoId].items[indexItem].content = contentText;
 
         this.todos.activeTodos[todoId].items[indexItem].editable =
             !this.todos.activeTodos[todoId].items[indexItem].editable;
@@ -108,7 +79,7 @@ export class TodoService {
         return of(this.todos.activeTodos[todoId].items[indexItem].editable);
     }
 
-    addTodo(newTodo: TodoPackage) {
+    addTodo(newTodo: ActiveTodo) {
         this.todos.activeTodos.push(newTodo);
         this.activeTodosAdd.next(this.todos.activeTodos.slice());
     }

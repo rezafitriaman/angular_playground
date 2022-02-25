@@ -17,7 +17,6 @@ export class SignUpComponent implements OnInit {
     onSubmit() {
         let initUrl = this.loginService.initUrl();
 
-        console.log(this.form);
         this.loginService.onLogin(this.form?.value);
         this.router.navigate([initUrl]);
     }

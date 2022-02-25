@@ -18,21 +18,15 @@ export class AuthGuardService implements CanActivate {
     canActivate(
         route: ActivatedRouteSnapshot,
         state: RouterStateSnapshot
-    ):
-        | Observable<boolean | UrlTree>
-        | Promise<boolean | UrlTree>
-        | boolean
-        | UrlTree {
-        return this.loginService
-            .isAuthenticated()
-            .then((authenticated: boolean | UrlTree) => {
-                if (authenticated) {
-                    return true;
-                } else {
-                    console.log('login is deny');
-                    this.router.navigate(['/']);
-                    return false;
-                }
-            });
+    ): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
+        return this.loginService.isAuthenticated().then((authenticated: boolean | UrlTree) => {
+            if (authenticated) {
+                return true;
+            } else {
+                console.log('login is deny');
+                this.router.navigate(['/']);
+                return false;
+            }
+        });
     }
 }

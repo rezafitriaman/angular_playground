@@ -7,9 +7,7 @@
     <h3 class="font-bold text-2xl text-gray-600">Todo</h3>
 
     <ul class="todo-items">
-        <li
-            class="my-3 font-light text-medium text-gray-600"
-            *ngIf="todos.length < 1">
+        <li class="my-3 font-light text-medium text-gray-600" *ngIf="todos.length < 1">
             Nothing to do :)
         </li>
         <li
@@ -24,13 +22,11 @@
                 (keydown)="onEnterDown($event, i)"
                 [ngClass]="{
                     'italic line-through text-red-400': todo.completed,
-                    'underline italic border-0 outline-none text-sky-500':
-                        todo.editable
+                    'underline italic border-0 outline-none text-sky-500': todo.editable
                 }">
                 {{ todo.content }}
             </span>
-            <span
-                class="flex items-center ml-auto pl-2 text-gray-400 cursor-pointer">
+            <span class="flex items-center ml-auto pl-2 text-gray-400 cursor-pointer">
                 <span class="px-2" (click)="onSetToEditable(i)">
                     <svg
                         *ngIf="!todo.editable; else notEditable"
@@ -49,9 +45,7 @@
                 </span>
                 <ng-template #notEditable> save </ng-template>
 
-                <span
-                    class="border-l-2 border-gray-200 px-2"
-                    (click)="onSetToInactive(i)">
+                <span class="border-l-2 border-gray-200 px-2" (click)="onSetToInactive(i)">
                     <svg
                         aria-hidden="true"
                         focusable="false"

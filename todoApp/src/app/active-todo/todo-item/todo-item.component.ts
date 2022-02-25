@@ -23,9 +23,7 @@ import { DOCUMENT } from '@angular/common';
     templateUrl: './todo-item.component.html',
     styleUrls: ['./todo-item.component.css'],
 })
-export class TodoItemComponent
-    implements OnInit, AfterViewInit, CanComponentDeactivate, OnDestroy
-{
+export class TodoItemComponent implements OnInit, AfterViewInit, CanComponentDeactivate, OnDestroy {
     public inputFillUp: boolean | null | undefined = false;
     public id: number = 0;
     public todos: Todo[] = [];
@@ -35,9 +33,7 @@ export class TodoItemComponent
     public subscriptionLoading: Subscription = new Observable().subscribe();
     public subscriptionEditable: Subscription = new Observable().subscribe();
     public window: Window | null = this.document.defaultView;
-    @ViewChildren('contentTodo') contentTodoRef:
-        | QueryList<ElementRef>
-        | undefined;
+    @ViewChildren('contentTodo') contentTodoRef: QueryList<ElementRef> | undefined;
 
     constructor(
         private route: ActivatedRoute,
@@ -53,17 +49,15 @@ export class TodoItemComponent
             this.todos = data['activeTodoItem'];
         });
 
-        // it load via a normal route
+        //it load via a normal route
         this.route.params.subscribe((params: Params) => {
             this.id = +params['id'];
             this.todos = this.todoService.getActiveTodoItem(this.id);
         });
 
-        this.subscriptionLoading = this.todoService.loading.subscribe(
-            (loading: boolean) => {
-                this.loading = loading;
-            }
-        );
+        this.subscriptionLoading = this.todoService.loading.subscribe((loading: boolean) => {
+            this.loading = loading;
+        });
     }
 
     ngAfterViewInit() {
@@ -78,15 +72,7 @@ export class TodoItemComponent
         if (newItem === '') return;
         this.newItem = newItem;
 
-        this.todoService.addTodoItem(
-            {
-                id: Date.now().toString(),
-                content: newItem,
-                completed: false,
-                editable: false,
-            },
-            this.id
-        );
+        this.todoService.addTodoItem(new Todo(newItem, false, false), this.id);
 
         this.inputFillUp = false;
     }
@@ -101,8 +87,7 @@ export class TodoItemComponent
     }
 
     onSetToEditable(indexItem: number) {
-        let contentText =
-            this.contentTodoRef?.toArray()[indexItem].nativeElement.innerText;
+        let contentText = this.contentTodoRef?.toArray()[indexItem].nativeElement.innerText;
         this.subscriptionEditable = this.todoService
             .onSetToEditable(indexItem, this.id, contentText)
             .pipe(delay(10))

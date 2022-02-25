@@ -1,20 +1,7 @@
-import {
-    AfterViewInit,
-    Component,
-    Input,
-    OnChanges,
-    OnDestroy,
-    OnInit,
-} from '@angular/core';
-import { Todo, TodoPackage } from '../../models/Todo';
+import { AfterViewInit, Component, Input, OnChanges, OnDestroy, OnInit } from '@angular/core';
+import { ActiveTodo } from '../../models/Todo';
 import { TodoService } from '../../todo.service';
-import {
-    ActivatedRoute,
-    NavigationEnd,
-    Params,
-    Route,
-    Router,
-} from '@angular/router';
+import { ActivatedRoute, NavigationEnd, Params, Route, Router } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
 
 @Component({
@@ -23,7 +10,7 @@ import { Observable, Subscription } from 'rxjs';
     styleUrls: ['./list-todo.component.css'],
 })
 export class ListTodoComponent implements OnInit, OnDestroy {
-    public todos: Array<TodoPackage> = [];
+    public todos: Array<ActiveTodo> = [];
     public newItem: boolean = false;
     public subscription: Subscription = new Observable().subscribe();
 
@@ -35,22 +22,18 @@ export class ListTodoComponent implements OnInit, OnDestroy {
 
     ngOnInit(): void {
         const urlTarget =
-            this.todoService.todos.activeTodos.length > 0
-                ? '/activeTodo/0'
-                : '/activeTodo';
+            this.todoService.todos.activeTodos.length > 0 ? '/activeTodo/0' : '/activeTodo';
 
         this.router.navigate([urlTarget]);
         this.todos = this.todoService.getActiveTodos();
-        this.todoService.activeTodosAdd.subscribe(
-            (todos: Array<TodoPackage>) => {
-                this.todos = todos;
-                this.newItem = true;
+        this.todoService.activeTodosAdd.subscribe((todos: Array<ActiveTodo>) => {
+            this.todos = todos;
+            this.newItem = true;
 
-                setTimeout(() => {
-                    this.newItem = false;
-                }, 4000);
-            }
-        );
+            setTimeout(() => {
+                this.newItem = false;
+            }, 4000);
+        });
     }
 
     ngOnDestroy() {
