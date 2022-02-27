@@ -32,8 +32,9 @@ export class TodoService {
     constructor() {}
 
     setTodos(todos: Todos) {
-        console.log('set todo', todos);
-        this.todos = todos as Todos;
+        this.todos = todos;
+        console.log('set todo', this.todos);
+        console.log('set todo', this.todos.activeTodos);
 
         this.activeTodosAdd.next(this.todos.activeTodos.slice());
     }

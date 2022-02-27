@@ -28,6 +28,7 @@ export class ListTodoComponent implements OnInit, OnDestroy {
         //this.router.navigate([urlTarget]);
         this.todos = this.todoService.getActiveTodos();
         this.todoService.activeTodosAdd.subscribe((activeTodos: Array<ActiveTodo>) => {
+            console.log('on list todo component', activeTodos);
             this.todos = activeTodos;
             this.newItem = true;
 

@@ -16,7 +16,6 @@ export class ActiveTodoComponent implements OnInit, OnDestroy {
     constructor(private todoService: TodoService, private dataStorageService: DataStorageService) {}
 
     ngOnInit(): void {
-        console.log('active todo component', this.todoService.getTodos());
         this.subscription = this.todoService.loading.subscribe((loading: boolean) => {
             this.loading = loading;
         });

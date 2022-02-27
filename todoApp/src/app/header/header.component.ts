@@ -14,6 +14,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     @Input() brand: string = '';
     public loggedIn: boolean = false; // set to 'false' if u need to log in;
     public subscription: Subscription = new Observable().subscribe();
+    public subscription2: Subscription = new Observable().subscribe();
     public brandUrl = '/';
 
     constructor(
@@ -28,10 +29,12 @@ export class HeaderComponent implements OnInit, OnDestroy {
         });
 
         // change the brandlink to /activeTodo if activeTodo has a value.
-        this.todoService.activeTodosAdd.subscribe((activeTodo: Array<ActiveTodo>) => {
-            let url = activeTodo.length > 0 ? '/activeTodo' : '/';
-            this.brandUrl = url;
-        });
+        this.subscription2 = this.todoService.activeTodosAdd.subscribe(
+            (activeTodo: Array<ActiveTodo>) => {
+                let url = activeTodo.length > 0 ? '/activeTodo' : '/';
+                this.brandUrl = url;
+            }
+        );
     }
 
     onLogout() {
@@ -45,6 +48,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
     ngOnDestroy() {
         this.subscription.unsubscribe();
+        this.subscription2.unsubscribe();
     }
 
     // get url() {

@@ -5,6 +5,7 @@ import { ActivatedRoute, Router, UrlTree } from '@angular/router';
 import { CanComponentDeactivate } from '../can-deactivate-guard.service';
 import { Observable, Subscription } from 'rxjs';
 import { NgForm } from '@angular/forms';
+import { DataStorageService } from 'src/app/shared/storage/data-storage.service';
 
 @Component({
     selector: 'app-edit-todo',
@@ -21,7 +22,8 @@ export class EditTodoComponent implements OnInit, CanComponentDeactivate, OnDest
     constructor(
         private todoService: TodoService,
         private route: ActivatedRoute,
-        private router: Router
+        private router: Router,
+        private dataStorageService: DataStorageService
     ) {}
 
     ngOnInit(): void {
@@ -35,8 +37,19 @@ export class EditTodoComponent implements OnInit, CanComponentDeactivate, OnDest
         const newTodo = this.form?.value.newTodo;
         if (newTodo === '') return;
 
-        this.newActiveTodo = new ActiveTodo(newTodo, []);
+        this.newActiveTodo = new ActiveTodo(newTodo, [
+            {
+                completed: false,
+                content: 'Blueberry',
+                editable: false,
+            },
+        ]);
         this.todoService.addTodo(this.newActiveTodo);
+        console.log('on add new label todo,');
+        // ? push a new Todo object but be aware it push without the items property on the firebase
+        this.dataStorageService.postTodos(this.newActiveTodo).subscribe((added) => {
+            console.log('add todo', added);
+        });
         this.form?.reset();
         const lastAddedTodoItem = this.todoService.getActiveTodos().length - 1;
         this.changesSaved = true;
