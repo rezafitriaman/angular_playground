@@ -42,12 +42,12 @@ export class TodoService {
         return this.todos;
     }
 
-    getActiveTodoItem(id: number) {
-        return this.todos.activeTodos[id].items;
-    }
-
     getActiveTodos(): Array<ActiveTodo> {
         return this.todos.activeTodos.slice();
+    }
+
+    getActiveTodoItem(id: number) {
+        return this.todos.activeTodos[id].items;
     }
 
     getInActiveTodos(): Array<InactiveTodo> {
