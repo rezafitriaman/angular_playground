@@ -10,7 +10,7 @@ import { AccountService } from '../account/account.service';
 })
 export class HeaderComponent implements OnInit, OnDestroy {
     @Input() brand: string = '';
-    public loggedIn: boolean = true; // set to 'false' if u need to log in;
+    public loggedIn: boolean = false; // set to 'false' if u need to log in;
     public subscription: Subscription = new Observable().subscribe();
 
     constructor(private router: Router, private loginService: AccountService) {}

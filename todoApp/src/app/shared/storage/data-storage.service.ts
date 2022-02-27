@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Todos } from 'src/app/models/Todo';
 import { TodoService } from 'src/app/todo.service';
 
 @Injectable({
@@ -10,9 +11,16 @@ export class DataStorageService {
 
     storeTodos() {
         const todos = this.todoService.getTodos();
-        return this.http.put(
-            'https://todoapp-1b1f3-default-rtdb.europe-west1.firebasedatabase.app/todos.json',
+
+        return this.http.put<Todos>(
+            'https://todoapp-1b1f3-default-rtdb.europe-west1.firebasedatabase.app/fitriaman@gmail.json',
             todos
+        );
+    }
+
+    fetchTodos() {
+        return this.http.get<Todos>(
+            'https://todoapp-1b1f3-default-rtdb.europe-west1.firebasedatabase.app/fitriaman@gmail.json'
         );
     }
 }

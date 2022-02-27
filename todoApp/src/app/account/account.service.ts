@@ -1,31 +1,36 @@
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
 import { UrlTree } from '@angular/router';
-import { LoginOrJoinForm } from '../models/Todo';
+import { LoginOrJoinForm, Todos } from '../models/Todo';
 import { TodoService } from '../todo.service';
+import { DataStorageService } from '../shared/storage/data-storage.service';
 
 @Injectable({
     providedIn: 'root',
 })
 export class AccountService {
-    public loggedIn: boolean = true; // if u need to loggin set this to 'false'
+    public loggedIn: boolean = false; // if u need to loggin set this to 'false'
     public loggedInInfo: Subject<boolean> = new Subject<boolean>();
-    constructor(private todoService: TodoService) {}
+    constructor(private todoService: TodoService, private dataStorageService: DataStorageService) {}
 
     isAuthenticated(): Promise<boolean | UrlTree> {
         const promise = new Promise((resolve, reject) => {
-            setTimeout(() => {
+            this.dataStorageService.fetchTodos().subscribe((todos: Todos) => {
+                this.todoService.setTodos(todos);
                 resolve(this.loggedIn);
-            }, 800);
+            });
+            // setTimeout(() => {
+            //     resolve(this.loggedIn);
+            // }, 800);
         });
 
         return promise as Promise<boolean | UrlTree>;
     }
 
     initUrl() {
-        return this.todoService.todos.activeTodos.length > 0
-            ? '/activeTodo/0'
-            : '/activeTodo';
+        //console.log('account service', this.todoService.todos);
+        //return this.todoService.todos.activeTodos.length > 0 ? '/activeTodo/0' : '/activeTodo';
+        return '/activeTodo';
     }
 
     onLogin(formValue: LoginOrJoinForm) {

@@ -1,7 +1,8 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Todo } from '../models/Todo';
+import { Todo, Todos } from '../models/Todo';
 import { TodoService } from '../todo.service';
 import { Observable, Subscription } from 'rxjs';
+import { DataStorageService } from '../shared/storage/data-storage.service';
 
 @Component({
     selector: 'app-active-todo',
@@ -12,14 +13,13 @@ export class ActiveTodoComponent implements OnInit, OnDestroy {
     public loading: boolean = false;
     public subscription: Subscription = new Observable().subscribe();
 
-    constructor(private todoService: TodoService) {}
+    constructor(private todoService: TodoService, private dataStorageService: DataStorageService) {}
 
     ngOnInit(): void {
-        this.subscription = this.todoService.loading.subscribe(
-            (loading: boolean) => {
-                this.loading = loading;
-            }
-        );
+        console.log('active todo component', this.todoService.getTodos());
+        this.subscription = this.todoService.loading.subscribe((loading: boolean) => {
+            this.loading = loading;
+        });
     }
 
     ngOnDestroy() {

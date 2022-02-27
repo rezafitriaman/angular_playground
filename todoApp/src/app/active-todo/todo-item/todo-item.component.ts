@@ -44,8 +44,10 @@ export class TodoItemComponent implements OnInit, AfterViewInit, CanComponentDea
     ) {}
 
     ngOnInit(): void {
+        console.log('todo item component');
         // it load via a resolver : example - 152
         this.route.data.subscribe((data: Data) => {
+            console.log('todo item resolver', data);
             this.todos = data['activeTodoItem'];
         });
 

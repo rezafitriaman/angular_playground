@@ -1,24 +1,28 @@
 import { EventEmitter, Injectable } from '@angular/core';
-import { ActiveTodo, InactiveTodo, Todo } from './models/Todo';
+import { ActiveTodo, InactiveTodo, Todo, Todos } from './models/Todo';
 import { of, Subject } from 'rxjs';
 
 @Injectable({
     providedIn: 'root',
 })
 export class TodoService {
-    public todos: {
-        activeTodos: Array<ActiveTodo>;
-        inActiveTodos: Array<InactiveTodo>;
-    } = {
-        activeTodos: [
-            new ActiveTodo('cadeau', [
-                new Todo('Blueberry', false, false),
-                new Todo('Dragon fruit', false, false),
-                new Todo('Apple', false, false),
-                new Todo('Orange', false, false),
-            ]),
-        ],
-        inActiveTodos: [new InactiveTodo('cadeau', new Todo('Tandenborstel', false, false))],
+    // public todos: {
+    //     activeTodos: Array<ActiveTodo>;
+    //     inActiveTodos: Array<InactiveTodo>;
+    // } = {
+    //     activeTodos: [
+    //         new ActiveTodo('cadeau', [
+    //             new Todo('Blueberry', false, false),
+    //             new Todo('Dragon fruit', false, false),
+    //             new Todo('Apple', false, false),
+    //             new Todo('Orange', false, false),
+    //         ]),
+    //     ],
+    //     inActiveTodos: [new InactiveTodo('cadeau', new Todo('Tandenborstel', false, false))],
+    // };
+    public todos: { activeTodos: Array<ActiveTodo>; inActiveTodos: Array<InactiveTodo> } = {
+        activeTodos: [],
+        inActiveTodos: [],
     };
     public activeTodosAdd: Subject<Array<ActiveTodo>> = new Subject<Array<ActiveTodo>>();
     public resetPlaceHolder: Subject<string> = new Subject<string>();
@@ -26,6 +30,13 @@ export class TodoService {
     public loading: Subject<boolean> = new Subject<boolean>();
 
     constructor() {}
+
+    setTodos(todos: Todos) {
+        console.log('set todo', todos);
+        this.todos = todos as Todos;
+
+        this.activeTodosAdd.next(this.todos.activeTodos.slice());
+    }
 
     getTodos() {
         return this.todos;

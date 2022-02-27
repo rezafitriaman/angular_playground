@@ -8,6 +8,7 @@ import {
     ViewChildren,
 } from '@angular/core';
 import { HeaderComponent } from './header/header.component';
+import { Todos } from './models/Todo';
 import { DataStorageService } from './shared/storage/data-storage.service';
 import { TodoService } from './todo.service';
 
@@ -23,9 +24,13 @@ export class AppComponent implements AfterViewInit, OnInit {
     //@ViewChildren(HeaderComponent) myValue: QueryList<HeaderComponent> | undefined
     constructor(private dataStorageService: DataStorageService, private todoService: TodoService) {}
     ngOnInit(): void {
-        console.log(this.todoService.getTodos().inActiveTodos[0].todo.content);
         // this.dataStorageService.storeTodos().subscribe((arg) => {
         //     console.log('todo stored', arg);
+        // });
+        console.log('app component', this.todoService.todos);
+        // this.dataStorageService.fetchTodos().subscribe((todos: Todos) => {
+        //     console.log('app component', todos);
+        //     this.todoService.setTodos(todos);
         // });
     }
     ngAfterViewInit() {

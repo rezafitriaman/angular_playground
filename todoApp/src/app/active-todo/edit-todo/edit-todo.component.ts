@@ -31,6 +31,7 @@ export class EditTodoComponent implements OnInit, CanComponentDeactivate, OnDest
     }
 
     onSubmit() {
+        // ? push the item to firebase
         const newTodo = this.form?.value.newTodo;
         if (newTodo === '') return;
 
