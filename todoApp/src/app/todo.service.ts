@@ -42,7 +42,7 @@ export class TodoService {
     getTodos() {
         return this.todos;
     }
-
+  
     getActiveTodos(): Array<ActiveTodo> {
         return this.todos.activeTodos.slice();
     }
