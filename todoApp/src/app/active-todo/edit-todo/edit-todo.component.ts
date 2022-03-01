@@ -42,7 +42,7 @@ export class EditTodoComponent implements OnInit, CanComponentDeactivate, OnDest
                 completed: false,
                 content: 'Blueberry',
                 editable: false,
-            },
+            }, 
         ]);
         this.todoService.addTodo(this.newActiveTodo);
         console.log('on add new label todo,');
