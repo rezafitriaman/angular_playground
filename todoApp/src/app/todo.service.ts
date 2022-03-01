@@ -6,24 +6,24 @@ import { of, Subject } from 'rxjs';
     providedIn: 'root',
 })
 export class TodoService {
-    // public todos: {
-    //     activeTodos: Array<ActiveTodo>;
-    //     inActiveTodos: Array<InactiveTodo>;
-    // } = {
-    //     activeTodos: [
-    //         new ActiveTodo('cadeau', [
-    //             new Todo('Blueberry', false, false),
-    //             new Todo('Dragon fruit', false, false),
-    //             new Todo('Apple', false, false),
-    //             new Todo('Orange', false, false),
-    //         ]),
-    //     ],
-    //     inActiveTodos: [new InactiveTodo('cadeau', new Todo('Tandenborstel', false, false))],
-    // };
-    public todos: { activeTodos: Array<ActiveTodo>; inActiveTodos: Array<InactiveTodo> } = {
-        activeTodos: [],
-        inActiveTodos: [],
+    public todos: {
+        activeTodos: Array<ActiveTodo>;
+        inActiveTodos: Array<InactiveTodo>;
+    } = {
+        activeTodos: [
+            new ActiveTodo('cadeau', [
+                new Todo('Blueberry', false, false),
+                new Todo('Dragon fruit', false, false),
+                new Todo('Apple', false, false),
+                new Todo('Orange', false, false),
+            ]),
+        ],
+        inActiveTodos: [new InactiveTodo('cadeau', new Todo('Tandenborstel', false, false))],
     };
+    // public todos: { activeTodos: Array<ActiveTodo>; inActiveTodos: Array<InactiveTodo> } = {
+    //     activeTodos: [],
+    //     inActiveTodos: [],
+    // };
     public activeTodosAdd: Subject<Array<ActiveTodo>> = new Subject<Array<ActiveTodo>>();
     public resetPlaceHolder: Subject<string> = new Subject<string>();
     public updateInActiveTodo: Subject<Array<InactiveTodo>> = new Subject<Array<InactiveTodo>>();
