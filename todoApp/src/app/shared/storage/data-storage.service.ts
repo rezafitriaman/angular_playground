@@ -14,10 +14,7 @@ export class DataStorageService {
         const todos = this.todoService.getTodos();
 
         return this.http.put<Todos>(
-            'https://todoapp-1b1f3-default-rtdb.europe-west1.firebasedatabase.app/fitriaman@gmail.json',
-            {
-                todos        
-            }
+            'https://todoapp-1b1f3-default-rtdb.europe-west1.firebasedatabase.app/fitriaman@gmail.json', todos
         );
     }
     
@@ -27,9 +24,13 @@ export class DataStorageService {
             'https://todoapp-1b1f3-default-rtdb.europe-west1.firebasedatabase.app/fitriaman@gmail.json'
         ).pipe(map(todos => {
             let fetchedTodo = Object.values(todos);
-            console.log('fetchedTodo---entry', Object.keys(fetchedTodo[0].activeTodos));
-            console.log('fetchedTodo---value', Object.values(fetchedTodo[0].activeTodos));
-            console.log('fetchedTodo---entries', Object.entries(fetchedTodo[0].activeTodos));
+            console.log('fetchedTodo ----', todos);
+            console.log('fetchedTodo keys----', Object.keys(todos));
+            console.log('fetchedTodo value----', Object.values(todos));
+            console.log('fetchedTodo entries----', Object.entries(todos));
+            // console.log('fetchedTodo---entry', Object.keys(fetchedTodo[0].activeTodos));
+            // console.log('fetchedTodo---value', Object.values(fetchedTodo[0].activeTodos));
+            // console.log('fetchedTodo---entries', Object.entries(fetchedTodo[0].activeTodos));
             
             return fetchedTodo[0]
         }));
@@ -38,10 +39,7 @@ export class DataStorageService {
     postTodos(todo: ActiveTodo) {
         console.log('postTodos : ',todo);
         return this.http.post<ActiveTodo>(
-            'https://todoapp-1b1f3-default-rtdb.europe-west1.firebasedatabase.app/fitriaman@gmail/todos/activeTodos.json',
-            {
-                todo
-            }
+            'https://todoapp-1b1f3-default-rtdb.europe-west1.firebasedatabase.app/fitriaman@gmail/activeTodos.json', todo
         );
     }
 }
