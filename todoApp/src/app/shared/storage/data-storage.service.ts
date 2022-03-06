@@ -20,30 +20,28 @@ export class DataStorageService {
             }
         );
     }
-
+    
+    // TODO fix this please
     fetchTodos() {
         return this.http.get<Todos>(
             'https://todoapp-1b1f3-default-rtdb.europe-west1.firebasedatabase.app/fitriaman@gmail.json'
         ).pipe(map(todos => {
-            console.log('fetch Todos', Object.values(todos));
-            let fetchedTodo = Object.values(todos)
-            console.log('activeTodos', fetchedTodo[0]);
+            let fetchedTodo = Object.values(todos);
+            console.log('fetchedTodo---', Object.values(fetchedTodo[0].activeTodos));
+            
             return fetchedTodo[0]
         }));
     }
     // ? fix this
-    // postTodos(todo: ActiveTodo) {
-    //     return this.http.post<Todo>(
-    //         'https://todoapp-1b1f3-default-rtdb.europe-west1.firebasedatabase.app/fitriaman@gmail/activeTodos/0/items.json',
-    //         {
-                
-    //                 completed: false,
-    //                 content: 'vliegen',
-    //                 editable: false,
-                
-    //         }
-    //     );
-    // }
+    postTodos(todo: ActiveTodo) {
+        console.log('postTodos : ',todo);
+        return this.http.post<ActiveTodo>(
+            'https://todoapp-1b1f3-default-rtdb.europe-west1.firebasedatabase.app/fitriaman@gmail/todos/activeTodos.json',
+            {
+                todo
+            }
+        );
+    }
 }
 
 // "activeTodos": {

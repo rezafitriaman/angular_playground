@@ -17,7 +17,7 @@ export class AccountService {
         const promise = new Promise((resolve, reject) => {
             this.dataStorageService.fetchTodos().subscribe((todos: Todos) => {
                 console.log('account service--->',todos);
-                this.todoService.setTodos(todos);
+                //this.todoService.setTodos(todos);
                 resolve(this.loggedIn);
             });
             // setTimeout(() => {
