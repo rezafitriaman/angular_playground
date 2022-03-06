@@ -21,8 +21,6 @@ export class ActiveTodoComponent implements OnInit, OnDestroy {
         });
     }
 
-    
-
     ngOnDestroy() {
         this.subscription.unsubscribe();
     }

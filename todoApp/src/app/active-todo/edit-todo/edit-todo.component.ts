@@ -37,19 +37,13 @@ export class EditTodoComponent implements OnInit, CanComponentDeactivate, OnDest
         const newTodo = this.form?.value.newTodo;
         if (newTodo === '') return;
 
-        this.newActiveTodo = new ActiveTodo(newTodo, [
-            {
-                completed: false,
-                content: 'Blueberry',
-                editable: false,
-            }, 
-        ]);
+        this.newActiveTodo = new ActiveTodo(newTodo, []);
         this.todoService.addTodo(this.newActiveTodo);
         console.log('on add new label todo,');
         // ? push a new Todo object but be aware it push without the items property on the firebase
-        this.dataStorageService.postTodos(this.newActiveTodo).subscribe((added) => {
-            console.log('add todo', added);
-        });
+        // this.dataStorageService.postTodos(this.newActiveTodo).subscribe((added) => {
+        //     console.log('add todo', added);
+        // });
         this.form?.reset();
         const lastAddedTodoItem = this.todoService.getActiveTodos().length - 1;
         this.changesSaved = true;
