@@ -18,7 +18,7 @@ export class DataStorageService {
         );
     }
     
-    // TODO fix this please
+    // TODO fix this please, okey
     fetchTodos() {
         return this.http.get<Todos>(
             'https://todoapp-1b1f3-default-rtdb.europe-west1.firebasedatabase.app/fitriaman@gmail.json'
