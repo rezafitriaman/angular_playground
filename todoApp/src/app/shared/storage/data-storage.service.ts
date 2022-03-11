@@ -31,7 +31,7 @@ export class DataStorageService {
             // console.log('fetchedTodo---entry', Object.keys(fetchedTodo[0].activeTodos));
             // console.log('fetchedTodo---value', Object.values(fetchedTodo[0].activeTodos));
             // console.log('fetchedTodo---entries', Object.entries(fetchedTodo[0].activeTodos));
-            
+        
             return fetchedTodo[0]
         }));
     }
