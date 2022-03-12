@@ -17,6 +17,7 @@ import { CanComponentDeactivate } from '../can-deactivate-guard.service';
 import { of, Observable, Subscription } from 'rxjs';
 import { delay, timeout } from 'rxjs/operators';
 import { DOCUMENT } from '@angular/common';
+import { DataStorageService } from 'src/app/shared/storage/data-storage.service';
 
 @Component({
     selector: 'app-todo-item',
@@ -38,6 +39,7 @@ export class TodoItemComponent implements OnInit, AfterViewInit, CanComponentDea
     constructor(
         private route: ActivatedRoute,
         private todoService: TodoService,
+        private dataStorage: DataStorageService,
         private renderer: Renderer2,
         private ref: ElementRef,
         @Inject(DOCUMENT) private document: Document
@@ -73,7 +75,9 @@ export class TodoItemComponent implements OnInit, AfterViewInit, CanComponentDea
     onAddNewTodoItem(newItem: string) {
         if (newItem === '') return;
         this.newItem = newItem;
-
+        this.dataStorage.postTodos(new Todo(newItem, false, false), this.id).subscribe(todo =>{
+            console.log(todo);
+        })
         this.todoService.addTodoItem(new Todo(newItem, false, false), this.id);
 
         this.inputFillUp = false;

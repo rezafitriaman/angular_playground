@@ -22,24 +22,38 @@ export class DataStorageService {
     fetchTodos() {
         return this.http.get<Todos>(
             'https://todoapp-1b1f3-default-rtdb.europe-west1.firebasedatabase.app/fitriaman@gmail.json'
-        ).pipe(map(todos => {
-            let fetchedTodo = Object.values(todos);
-            console.log('fetchedTodo ----', todos);
-            console.log('fetchedTodo keys----', Object.keys(todos));
-            console.log('fetchedTodo value----', Object.values(todos));
-            console.log('fetchedTodo entries----', Object.entries(todos));
+        ).pipe(map(todosFromFireBase => {
+            // let fetchedTodo = Object.values(todosFromFireBase);
+            // console.log('fetchedTodo ----', todosFromFireBase);
+            // console.log('fetchedTodo keys----', Object.keys(todosFromFireBase));
+            // console.log('fetchedTodo value----', Object.values(todosFromFireBase));
+            // console.log('fetchedTodo entries----', Object.entries(todosFromFireBase));
             // console.log('fetchedTodo---entry', Object.keys(fetchedTodo[0].activeTodos));
             // console.log('fetchedTodo---value', Object.values(fetchedTodo[0].activeTodos));
             // console.log('fetchedTodo---entries', Object.entries(fetchedTodo[0].activeTodos));
-            
-            return fetchedTodo[0]
+            const todos: Todos = {
+                activeTodos: [],
+                inActiveTodos: [],
+            }
+
+            const activeTodosList = Object.values(todosFromFireBase)[0] as Array<ActiveTodo>;
+            console.log(Object.values(activeTodosList));
+            Object.values(activeTodosList).forEach((val: ActiveTodo) => {
+                const label = val.label
+                const items: Array<Todo> = !val.items ? [] : Object.values(val.items);
+                console.log('-----', !val.items ? [] : Object.values(val.items));
+                todos.activeTodos.push(new ActiveTodo(label, items))
+            })
+
+
+            return todos
         }));
     }
     // ? fix this
-    postTodos(todo: ActiveTodo) {
+    postTodos(todo: Todo, todoId: number) {
         console.log('postTodos : ',todo);
-        return this.http.post<ActiveTodo>(
-            'https://todoapp-1b1f3-default-rtdb.europe-west1.firebasedatabase.app/fitriaman@gmail/activeTodos.json', todo
+        return this.http.post<any>(
+            `https://todoapp-1b1f3-default-rtdb.europe-west1.firebasedatabase.app/fitriaman@gmail/activeTodos/${todoId}/items.json`, todo
         );
     }
 }

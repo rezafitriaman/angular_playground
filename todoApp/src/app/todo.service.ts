@@ -20,7 +20,7 @@ export class TodoService {
     //     ],
     //     inActiveTodos: [new InactiveTodo('cadeau', new Todo('Tandenborstel', false, false))],
     // };
-    public todos: { activeTodos: Array<ActiveTodo>; inActiveTodos: Array<InactiveTodo> } = {
+    public todos: Todos = {
         activeTodos: [],
         inActiveTodos: [],
     };
@@ -101,5 +101,6 @@ export class TodoService {
 
     addTodoItem(todoItem: Todo, todoId: number) {
         this.todos.activeTodos[todoId].items.push(todoItem);
+    
     }
 }
