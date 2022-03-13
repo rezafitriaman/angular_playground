@@ -35,7 +35,8 @@ export class TodoService {
     
     setTodos(todos: Todos) {
         this.todos = todos;
-        //console.log('set todo', this.todos);
+
+        console.log('set todo', this.todos);
         //console.log('set todo', this.todos.activeTodos);
 
         this.activeTodosAdd.next(this.todos.activeTodos.slice());
@@ -50,48 +51,53 @@ export class TodoService {
         return this.todos.activeTodos.slice();
     }
 
-    getActiveTodoItem(id: number) {
-        return this.todos.activeTodos[id].items;
+    getActiveTodoItem(id: string) {
+        const activeTodo: ActiveTodo | undefined = this.todos.activeTodos.find((value)=>{
+            return value.id === id;
+        })
+        
+        return activeTodo ? activeTodo.items : [];
     }
 
     getInActiveTodos(): Array<InactiveTodo> {
         return this.todos.inActiveTodos.slice();
     }
 
-    onSetToInactive(indexItem: number, todoId: number) {
-        const label = this.todos.activeTodos[todoId].label;
-        const todo = this.todos.activeTodos[todoId].items[indexItem];
+    onSetToInactive(indexItem: number, todoId: string) {
+        // const label = this.todos.activeTodos[todoId].label;
+        // const todo = this.todos.activeTodos[todoId].items[indexItem];
 
-        this.todos.inActiveTodos.push(new InactiveTodo(label, todo));
-        this.todos.activeTodos[todoId].items.splice(indexItem, 1);
+        // this.todos.inActiveTodos.push(new InactiveTodo(label, todo));
+        // this.todos.activeTodos[todoId].items.splice(indexItem, 1);
     }
 
-    onSetToActive(todoId: number) {
-        let labelIndex = this.todos.activeTodos.findIndex(
-            (target) => target.label === this.todos.inActiveTodos[todoId].label
-        );
+    onSetToActive(todoId: string) {
+        // let labelIndex = this.todos.activeTodos.findIndex(
+        //     (target) => target.label === this.todos.inActiveTodos[todoId].label
+        // );
 
-        this.todos.activeTodos[labelIndex].items.push(
-            new Todo(this.todos.inActiveTodos[todoId].todo.content, false, false)
-        );
+        // this.todos.activeTodos[labelIndex].items.push(
+        //     new Todo(this.todos.inActiveTodos[todoId].todo.content, false, false) // fix the id
+        // );
 
-        this.todos.inActiveTodos.splice(todoId, 1);
-        this.updateInActiveTodo.next(this.todos.inActiveTodos);
+        // this.todos.inActiveTodos.splice(todoId, 1);
+        // this.updateInActiveTodo.next(this.todos.inActiveTodos);
     }
 
-    onSetToComplete(indexItem: number, todoId: number) {
-        this.todos.activeTodos[todoId].items[indexItem].completed =
-            !this.todos.activeTodos[todoId].items[indexItem].completed;
+    onSetToComplete(indexItem: number, todoId: string) {
+        // this.todos.activeTodos[todoId].items[indexItem].completed =
+        //     !this.todos.activeTodos[todoId].items[indexItem].completed;
     }
 
-    onSetToEditable(indexItem: number, todoId: number, contentText: string) {
-        if (this.todos.activeTodos[todoId].items[indexItem].editable)
-            this.todos.activeTodos[todoId].items[indexItem].content = contentText;
+    onSetToEditable(indexItem: number, todoId: string, contentText: string) {
+        // if (this.todos.activeTodos[todoId].items[indexItem].editable)
+        //     this.todos.activeTodos[todoId].items[indexItem].content = contentText;
 
-        this.todos.activeTodos[todoId].items[indexItem].editable =
-            !this.todos.activeTodos[todoId].items[indexItem].editable;
+        // this.todos.activeTodos[todoId].items[indexItem].editable =
+        //     !this.todos.activeTodos[todoId].items[indexItem].editable;
 
-        return of(this.todos.activeTodos[todoId].items[indexItem].editable);
+        // return of(this.todos.activeTodos[todoId].items[indexItem].editable);
+        return of(false)
     }
 
     addTodo(newTodo: ActiveTodo) {
@@ -99,8 +105,18 @@ export class TodoService {
         this.activeTodosAdd.next(this.todos.activeTodos.slice());
     }
 
-    addTodoItem(todoItem: Todo, todoId: number) {
-        this.todos.activeTodos[todoId].items.push(todoItem);
+    addTodoItem(todoItem: Todo, todoId: string) {
+        console.log('todo item',todoItem);
+        console.log('this.todos.activeTodos',this.todos.activeTodos);
+        console.log('todo id',todoId);
+
+        const activeTodoIndex = this.todos.activeTodos.findIndex(value=> {
+           console.log('value', value.id);
+           return value.id === todoId; 
+        })
+        console.log('object', activeTodoIndex);
+
+        this.todos.activeTodos[activeTodoIndex].items.push(todoItem);
     
     }
 }

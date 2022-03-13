@@ -23,26 +23,18 @@ export class DataStorageService {
         return this.http.get<Todos>(
             'https://todoapp-1b1f3-default-rtdb.europe-west1.firebasedatabase.app/fitriaman@gmail.json'
         ).pipe(map(todosFromFireBase => {
-            // let fetchedTodo = Object.values(todosFromFireBase);
-            // console.log('fetchedTodo ----', todosFromFireBase);
-            // console.log('fetchedTodo keys----', Object.keys(todosFromFireBase));
-            // console.log('fetchedTodo value----', Object.values(todosFromFireBase));
-            // console.log('fetchedTodo entries----', Object.entries(todosFromFireBase));
-            // console.log('fetchedTodo---entry', Object.keys(fetchedTodo[0].activeTodos));
-            // console.log('fetchedTodo---value', Object.values(fetchedTodo[0].activeTodos));
-            // console.log('fetchedTodo---entries', Object.entries(fetchedTodo[0].activeTodos));
             const todos: Todos = {
                 activeTodos: [],
                 inActiveTodos: [],
             }
 
             const activeTodosList = Object.values(todosFromFireBase)[0] as Array<ActiveTodo>;
-            console.log(Object.values(activeTodosList));
-            Object.values(activeTodosList).forEach((val: ActiveTodo) => {
-                const label = val.label
-                const items: Array<Todo> = !val.items ? [] : Object.values(val.items);
-                console.log('-----', !val.items ? [] : Object.values(val.items));
-                todos.activeTodos.push(new ActiveTodo(label, items))
+
+            Object.entries(activeTodosList).forEach((val: any) => {
+                const id = val[0]; 
+                const label = val[1].label
+                const items: Array<Todo> = !val[1].items ? [] : Object.values(val[1].items);
+                todos.activeTodos.push(new ActiveTodo(label, items, id))
             })
 
 
@@ -50,7 +42,7 @@ export class DataStorageService {
         }));
     }
     // ? fix this
-    postTodos(todo: Todo, todoId: number) {
+    postTodos(todo: Todo, todoId: string) {
         console.log('postTodos : ',todo);
         return this.http.post<any>(
             `https://todoapp-1b1f3-default-rtdb.europe-west1.firebasedatabase.app/fitriaman@gmail/activeTodos/${todoId}/items.json`, todo

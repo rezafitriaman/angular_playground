@@ -26,7 +26,7 @@ import { DataStorageService } from 'src/app/shared/storage/data-storage.service'
 })
 export class TodoItemComponent implements OnInit, AfterViewInit, CanComponentDeactivate, OnDestroy {
     public inputFillUp: boolean | null | undefined = false;
-    public id: number = 0;
+    public id: string = '';
     public todos: Todo[] = [];
     public newItem: string = '';
     public placeHolder: string = '';
@@ -55,7 +55,7 @@ export class TodoItemComponent implements OnInit, AfterViewInit, CanComponentDea
 
         //it load via a normal route
         this.route.params.subscribe((params: Params) => {
-            this.id = +params['id'];
+            this.id = params['id'];
             this.todos = this.todoService.getActiveTodoItem(this.id);
         });
 
@@ -78,6 +78,7 @@ export class TodoItemComponent implements OnInit, AfterViewInit, CanComponentDea
         this.dataStorage.postTodos(new Todo(newItem, false, false), this.id).subscribe(todo =>{
             console.log(todo);
         })
+
         this.todoService.addTodoItem(new Todo(newItem, false, false), this.id);
 
         this.inputFillUp = false;

@@ -13,7 +13,10 @@ export class ActiveTodoComponent implements OnInit, OnDestroy {
     public loading: boolean = false;
     public subscription: Subscription = new Observable().subscribe();
 
-    constructor(private todoService: TodoService, private dataStorageService: DataStorageService) {}
+    constructor(
+        private todoService: TodoService, 
+        private dataStorageService: DataStorageService
+    ) {}
 
     ngOnInit(): void {
         this.subscription = this.todoService.loading.subscribe((loading: boolean) => {

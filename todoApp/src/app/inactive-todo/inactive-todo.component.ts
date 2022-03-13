@@ -19,7 +19,7 @@ export class InactiveTodoComponent implements OnInit {
         });
     }
 
-    onSetToActive(index: number) {
+    onSetToActive(index: string) {
         this.todoService.onSetToActive(index);
     }
 }
