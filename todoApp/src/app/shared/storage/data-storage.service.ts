@@ -28,15 +28,22 @@ export class DataStorageService {
             }
 
             const activeTodosList = Object.values(todosFromFireBase)[0] as Array<ActiveTodo>;
-
             Object.entries(activeTodosList).forEach((val: any) => {
-                console.log('fetch todo items', Object.entries(val[1].items));
                 const name = val[0]; 
                 const label = val[1].label
-                const items: Array<Todo> = !val[1].items ? [] : Object.values(val[1].items); //Todo add name/id on the item array from firebase id/name
+                const items: Array<Todo> = [];
+
+                if(val[1].items){
+                    //console.log('fetch todo items', Object.entries(val[1].items));
+                    const targetItems = Object.entries(val[1].items);
+                    targetItems.forEach(val =>{
+                        const name = val[0];
+                        items.push(new Todo((val[1] as Todo).content, (val[1] as Todo).completed, (val[1] as Todo).editable, name))
+                    })
+                }
+       
                 todos.activeTodos.push(new ActiveTodo(label, items, name))
             })
-
 
             return todos
         }));
