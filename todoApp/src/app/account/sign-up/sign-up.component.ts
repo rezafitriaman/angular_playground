@@ -10,14 +10,14 @@ import { AccountService } from '../account.service';
 })
 export class SignUpComponent implements OnInit {
     @ViewChild('signInForm') form: NgForm | undefined;
-    constructor(private loginService: AccountService, private router: Router) {}
+    constructor(private accountService: AccountService, private router: Router) {}
 
     ngOnInit(): void {}
 
     onSubmit() {
-        let initUrl = this.loginService.initUrl();
+        let initUrl = this.accountService.initUrl();
 
-        this.loginService.onLogin(this.form?.value);
+        this.accountService.onLogin(this.form?.value);
         this.router.navigate([initUrl]);
     }
 

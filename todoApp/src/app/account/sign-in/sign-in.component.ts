@@ -13,7 +13,7 @@ export class SignInComponent implements OnInit {
     @ViewChild('loginForm') form: NgForm | undefined;
     public signInTitle: string = '';
     constructor(
-        private loginService: AccountService,
+        private accountService: AccountService,
         private router: Router,
         private todoService: TodoService
     ) {}
@@ -21,9 +21,9 @@ export class SignInComponent implements OnInit {
     ngOnInit(): void {}
 
     onSubmit() {
-        let initUrl = this.loginService.initUrl();
+        let initUrl = this.accountService.initUrl();
 
-        this.loginService.onLogin(this.form?.value);
+        this.accountService.onLogin(this.form?.value);
         this.router.navigate([initUrl]);
     }
 

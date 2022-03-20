@@ -19,12 +19,12 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
     constructor(
         private router: Router,
-        private loginService: AccountService,
+        private accountService: AccountService,
         private todoService: TodoService
     ) {}
 
     ngOnInit(): void {
-        this.subscription = this.loginService.loggedInInfo.subscribe((loggedInInfo: boolean) => {
+        this.subscription = this.accountService.loggedInInfo.subscribe((loggedInInfo: boolean) => {
             this.loggedIn = loggedInInfo;
         });
 
@@ -38,7 +38,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     }
 
     onLogout() {
-        this.loginService.onLogout();
+        this.accountService.onLogout();
         this.router.navigate(['/account/login']);
     }
 
