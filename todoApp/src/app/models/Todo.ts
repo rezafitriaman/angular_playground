@@ -7,7 +7,7 @@ export class Todo {
 }
 
 export class ActiveTodo {
-    constructor(public label: string, public items: Array<Todo>, public id?: string) {}
+    constructor(public label: string, public items: Array<Todo>, public name?: string) {}
 }
 
 export class InactiveTodo {

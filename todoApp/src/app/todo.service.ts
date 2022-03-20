@@ -53,7 +53,7 @@ export class TodoService {
 
     getActiveTodoItem(id: string) {
         const activeTodo: ActiveTodo | undefined = this.todos.activeTodos.find((value)=>{
-            return value.id === id;
+            return value.name === id;
         })
         
         return activeTodo ? activeTodo.items : [];
@@ -111,8 +111,8 @@ export class TodoService {
         console.log('todo id',todoId);
 
         const activeTodoIndex = this.todos.activeTodos.findIndex(value=> {
-           console.log('value', value.id);
-           return value.id === todoId; 
+           console.log('value', value.name);
+           return value.name === todoId; 
         })
         console.log('object', activeTodoIndex);
 

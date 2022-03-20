@@ -5,7 +5,7 @@
             *ngFor="let todo of todos; let i = index">
             <a
                 class="cursor-pointer capitalize h-6 flex items-center border-b-2 border-white"
-                [routerLink]="['/activeTodo', todo.id]"
+                [routerLink]="['/activeTodo', todo.name]"
                 routerLinkActive="border-gray-300">
                 <span class="flex relative">
                     <span

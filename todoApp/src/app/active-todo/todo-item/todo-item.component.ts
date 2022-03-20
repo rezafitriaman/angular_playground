@@ -50,7 +50,7 @@ export class TodoItemComponent implements OnInit, AfterViewInit, CanComponentDea
         // it load via a resolver : example - 152
         this.route.data.subscribe((data: Data) => {
             console.log('todo item resolver', data);
-            this.todos = data['activeTodoItem'];
+            this.todos = data['activeTodoItem']; // the name: activeTodoItem - it is a custom name from route module
         });
 
         //it load via a normal route

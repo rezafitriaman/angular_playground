@@ -16,13 +16,21 @@ export class TodoItemResolverService implements Resolve<Todo[]> {
         state: RouterStateSnapshot
     ): Observable<Todo[]> | Promise<Todo[]> | Todo[] {
         this.todoService.loading.next(true);
-        console.log('resolve');
         return new Promise((resolve, reject) => {
-            setTimeout(() => {
-                console.log('TodoItemResolverService');
-                resolve(this.todoService.getActiveTodoItem(route.params['id']));
+
+            this.dataStorageService.fetchTodos().subscribe((todos: Todos)=>{
+                const name = todos.activeTodos.find(activeTodo => activeTodo.name === route.params['id']);
+                
                 this.todoService.loading.next(false);
-            }, 1000);
+                
+                resolve(name ? name.items : [])
+            })
+            
+            // setTimeout(() => {
+            //     console.log('TodoItemResolverService', this.todoService.getActiveTodoItem(route.params['id']));
+            //     resolve(this.todoService.getActiveTodoItem(route.params['id']));
+            //     this.todoService.loading.next(false);
+            // }, 1000);
         });
     }
 }

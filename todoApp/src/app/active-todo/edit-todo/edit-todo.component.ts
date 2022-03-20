@@ -39,11 +39,11 @@ export class EditTodoComponent implements OnInit, CanComponentDeactivate, OnDest
         // this.newActiveTodo = new ActiveTodo(newTodo, []);
         
         console.log('on add new label todo,');
-        this.dataStorageService.postTodoList(new ActiveTodo(newTodo, [])).subscribe((idObject: any ) => {
-            console.log('add todoList', idObject.name);
+        this.dataStorageService.postTodoList(new ActiveTodo(newTodo, [])).subscribe((id: ActiveTodo ) => {
+            console.log('add todoList', id.name);
 
-            this.todoService.addTodo(new ActiveTodo(newTodo, [], idObject.name));
-            this.router.navigate(['../', idObject.name], {
+            this.todoService.addTodo(new ActiveTodo(newTodo, [], id.name));
+            this.router.navigate(['../', id.name], {
                 relativeTo: this.route,
             });
         });
