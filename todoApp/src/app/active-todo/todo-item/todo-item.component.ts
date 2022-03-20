@@ -75,7 +75,7 @@ export class TodoItemComponent implements OnInit, AfterViewInit, CanComponentDea
     onAddNewTodoItem(newItem: string) {
         if (newItem === '') return;
         this.newItem = newItem;
-        this.dataStorage.postTodos(new Todo(newItem, false, false), this.id).subscribe(todo =>{
+        this.dataStorage.postTodo(new Todo(newItem, false, false), this.id).subscribe(todo =>{
             console.log(todo);
         })
 

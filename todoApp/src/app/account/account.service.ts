@@ -16,13 +16,9 @@ export class AccountService {
     isAuthenticated(): Promise<boolean | UrlTree> {
         const promise = new Promise((resolve, reject) => {
             this.dataStorageService.fetchTodos().subscribe((todos: Todos) => {
-                //console.log('account service--->',todos);
                 this.todoService.setTodos(todos);
                 resolve(this.loggedIn);
             });
-            // setTimeout(() => {
-            //     resolve(this.loggedIn);
-            // }, 800);
         });
 
         return promise as Promise<boolean | UrlTree>;

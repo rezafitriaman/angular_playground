@@ -24,13 +24,5 @@ export class TodoItemResolverService implements Resolve<Todo[]> {
                 this.todoService.loading.next(false);
             }, 1000);
         });
-        // ? dont do the fetch here
-        // return this.dataStorageService.fetchTodos().pipe(
-        //     map((todos: Todos) => {
-        //         console.log('test');
-        //         this.todoService.setTodos(todos);
-        //         return this.todoService.getActiveTodoItem(+route.params['id']);
-        //     })
-        // );
     }
 }

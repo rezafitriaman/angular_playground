@@ -14,7 +14,7 @@ import { DataStorageService } from 'src/app/shared/storage/data-storage.service'
 })
 export class EditTodoComponent implements OnInit, CanComponentDeactivate, OnDestroy {
     @ViewChild('addTodoForm') form: NgForm | undefined;
-    public newActiveTodo: ActiveTodo = new ActiveTodo('', []);
+    //public newActiveTodo: ActiveTodo = new ActiveTodo('', [], '');
     public changesSaved: boolean = false;
     public loading: boolean = false;
     public subscription: Subscription = new Observable().subscribe();
@@ -36,21 +36,20 @@ export class EditTodoComponent implements OnInit, CanComponentDeactivate, OnDest
         // ? push the item to firebase
         const newTodo = this.form?.value.newTodo;
         if (newTodo === '') return;
-
-        this.newActiveTodo = new ActiveTodo(newTodo, []);
-        this.todoService.addTodo(this.newActiveTodo);
+        // this.newActiveTodo = new ActiveTodo(newTodo, []);
+        
         console.log('on add new label todo,');
-        // ? push a new Todo object but be aware it push without the items property on the firebase
-        // this.dataStorageService.postTodos(this.newActiveTodo).subscribe((added) => {
-        //     console.log('add todo', added);
-        // });
-        this.form?.reset();
-        const lastAddedTodoItem = this.todoService.getActiveTodos().length - 1;
-        this.changesSaved = true;
+        this.dataStorageService.postTodoList(new ActiveTodo(newTodo, [])).subscribe((idObject: any ) => {
+            console.log('add todoList', idObject.name);
 
-        this.router.navigate(['../', lastAddedTodoItem], {
-            relativeTo: this.route,
+            this.todoService.addTodo(new ActiveTodo(newTodo, [], idObject.name));
+            this.router.navigate(['../', idObject.name], {
+                relativeTo: this.route,
+            });
         });
+        this.form?.reset();
+
+        this.changesSaved = true;
         this.todoService.loading.next(true);
     }
 
