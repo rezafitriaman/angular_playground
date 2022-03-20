@@ -6,20 +6,6 @@ import { of, Subject } from 'rxjs';
     providedIn: 'root',
 })
 export class TodoService {
-    // public todos: {
-    //     activeTodos: Array<ActiveTodo>;
-    //     inActiveTodos: Array<InactiveTodo>;
-    // } = {
-    //     activeTodos: [
-    //         new ActiveTodo('cadeau', [
-    //             new Todo('Blueberry', false, false),
-    //             new Todo('Dragon fruit', false, false),
-    //             new Todo('Apple', false, false),
-    //             new Todo('Orange', false, false),
-    //         ]),
-    //     ],
-    //     inActiveTodos: [new InactiveTodo('cadeau', new Todo('Tandenborstel', false, false))],
-    // };
     public todos: Todos = {
         activeTodos: [],
         inActiveTodos: [],
@@ -31,8 +17,6 @@ export class TodoService {
     public loading: Subject<boolean> = new Subject<boolean>();
 
     constructor() {}
-
-
     
     setTodos(todos: Todos) {
         this.todos = todos;
