@@ -25,6 +25,7 @@ export class TodoService {
         inActiveTodos: [],
     };
     public activeTodosAdd: Subject<Array<ActiveTodo>> = new Subject<Array<ActiveTodo>>();
+    public activeTodosItemAdd: Subject<Array<Todo>> = new Subject<Array<Todo>>();
     public resetPlaceHolder: Subject<string> = new Subject<string>();
     public updateInActiveTodo: Subject<Array<InactiveTodo>> = new Subject<Array<InactiveTodo>>();
     public loading: Subject<boolean> = new Subject<boolean>();
@@ -114,9 +115,10 @@ export class TodoService {
            console.log('value', value.name);
            return value.name === todoId; 
         })
-        console.log('object', activeTodoIndex);
 
         this.todos.activeTodos[activeTodoIndex].items.push(todoItem);
-    
+        console.log('object', this.todos.activeTodos[activeTodoIndex]);
+
+        this.activeTodosItemAdd.next(this.todos.activeTodos[activeTodoIndex].items.slice());
     }
 }

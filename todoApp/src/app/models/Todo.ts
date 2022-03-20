@@ -3,7 +3,7 @@ export interface Todos {
     inActiveTodos: Array<InactiveTodo>;
 }
 export class Todo {
-    constructor(public content: string, public completed: boolean, public editable: boolean, public id?: string) {}
+    constructor(public content: string, public completed: boolean, public editable: boolean, public name?: string) {}
 }
 
 export class ActiveTodo {

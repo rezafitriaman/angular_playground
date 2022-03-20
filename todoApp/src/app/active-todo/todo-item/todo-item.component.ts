@@ -11,7 +11,7 @@ import {
     ViewChildren,
 } from '@angular/core';
 import { ActivatedRoute, Data, Params, UrlTree } from '@angular/router';
-import { Todo } from '../../models/Todo';
+import { ActiveTodo, Todo } from '../../models/Todo';
 import { TodoService } from '../../todo.service';
 import { CanComponentDeactivate } from '../can-deactivate-guard.service';
 import { of, Observable, Subscription } from 'rxjs';
@@ -31,6 +31,7 @@ export class TodoItemComponent implements OnInit, AfterViewInit, CanComponentDea
     public newItem: string = '';
     public placeHolder: string = '';
     public loading: boolean = false;
+    public subscription: Subscription = new Observable().subscribe();
     public subscriptionLoading: Subscription = new Observable().subscribe();
     public subscriptionEditable: Subscription = new Observable().subscribe();
     public window: Window | null = this.document.defaultView;
@@ -59,6 +60,12 @@ export class TodoItemComponent implements OnInit, AfterViewInit, CanComponentDea
             this.todos = this.todoService.getActiveTodoItem(this.id);
         });
 
+        this.subscription = this.todoService.activeTodosItemAdd.subscribe( (todos: Array<Todo>) => {
+            console.log('on list todo component------', todos);
+            this.todos = todos
+
+        });
+
         this.subscriptionLoading = this.todoService.loading.subscribe((loading: boolean) => {
             this.loading = loading;
         });
@@ -77,9 +84,9 @@ export class TodoItemComponent implements OnInit, AfterViewInit, CanComponentDea
         this.newItem = newItem;
         this.dataStorage.postTodo(new Todo(newItem, false, false), this.id).subscribe(todo =>{
             console.log(todo);
+            this.todoService.addTodoItem(new Todo(newItem, false, false, todo.name), this.id);
         })
 
-        this.todoService.addTodoItem(new Todo(newItem, false, false), this.id);
 
         this.inputFillUp = false;
     }
