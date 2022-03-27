@@ -73,11 +73,11 @@ export class DataStorageService {
         )
     }
 
-    updateTodoPropValue(todoId: string, todIdName: string, content: string) {
+    updateTodoPropValue(todoId: string, content: string) {
         console.log('updateTodoProp value');
 
         return this.http.patch<any>(
-            `https://todoapp-1b1f3-default-rtdb.europe-west1.firebasedatabase.app/fitriaman@gmail/activeTodos/${todoId}/items/${todIdName}.json`, {'content': content}
+            `https://todoapp-1b1f3-default-rtdb.europe-west1.firebasedatabase.app/fitriaman@gmail/activeTodos/${todoId}/items/${'-My2o-KOcYbWA0qlLrqU'}.json`, {'content': content}
         )
     }
 

@@ -76,19 +76,21 @@ export class TodoService {
     }
 
     onSetToEditable(indexItem: number, todoListIdName: string, contentText: string) {
-
         let targetedIdName = this.todos.activeTodos.find(activeTodo => {
             return activeTodo.name === todoListIdName;
         })
-
-        if (!targetedIdName) return  of(false);
-
+        
+        if (!targetedIdName) return of(false);
+        
         if (targetedIdName.items[indexItem].editable) {
             targetedIdName.items[indexItem].content = contentText;
         }
+        console.log('all active todos', this.todos.activeTodos);
 
         targetedIdName.items[indexItem].editable = !targetedIdName?.items[indexItem].editable
-       console.log('todo serveice', targetedIdName.items[indexItem].editable); 
+        console.log('todo serveice', targetedIdName.items); 
+        
+        this.activeTodosItemAdd.next(targetedIdName.items.slice());
         return of(targetedIdName.items[indexItem].editable)
         
     }

@@ -98,11 +98,11 @@ export class TodoItemComponent implements OnInit, AfterViewInit, CanComponentDea
         this.todoService.onSetToInactive(indexItem, this.id);
     }
 
-    onSetToEditable(indexItem: number, todoIdName: string | undefined) { // TODO it added an new line on enter
-        if(!todoIdName) return;
+    onSetToEditable(indexItem: number) { // TODO it added an new line on enter and update the content, editable of the todo
+     
 
-        let contentText = this.contentTodoRef?.toArray()[indexItem].nativeElement.innerText;
-        // this.subscriptionEditable = this.dataStorage.updateTodoPropValue(this.id, todoIdName, contentText).subscribe((payrol: {content: string})=> {
+         let contentText = this.contentTodoRef?.toArray()[indexItem].nativeElement.innerText;
+        // this.subscriptionEditable = this.dataStorage.updateTodoPropValue(this.id, contentText).subscribe((payrol: {content: string})=> {
         //     console.log('on set to editable', payrol.content);
         //     console.log('on set id', this.id);
             
@@ -126,10 +126,10 @@ export class TodoItemComponent implements OnInit, AfterViewInit, CanComponentDea
             });
     }
 
-    onEnterDown(event: KeyboardEvent, indexItem: number, todoIdName: string | undefined) {
+    onEnterDown(event: KeyboardEvent, indexItem: number) {
         const enterKey = event.key === 'Enter';
 
-        if (enterKey) this.onSetToEditable(indexItem, todoIdName);
+        if (enterKey) this.onSetToEditable(indexItem);
     }
 
     setCaret(indexItem: number) {
