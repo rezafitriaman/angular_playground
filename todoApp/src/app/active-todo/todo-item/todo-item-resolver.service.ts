@@ -25,12 +25,6 @@ export class TodoItemResolverService implements Resolve<Todo[]> {
                 
                 resolve(name ? name.items : [])
             })
-            
-            // setTimeout(() => {
-            //     console.log('TodoItemResolverService', this.todoService.getActiveTodoItem(route.params['id']));
-            //     resolve(this.todoService.getActiveTodoItem(route.params['id']));
-            //     this.todoService.loading.next(false);
-            // }, 1000);
         });
     }
 }

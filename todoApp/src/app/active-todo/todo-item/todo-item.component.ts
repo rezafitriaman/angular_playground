@@ -98,25 +98,44 @@ export class TodoItemComponent implements OnInit, AfterViewInit, CanComponentDea
         this.todoService.onSetToInactive(indexItem, this.id);
     }
 
-    onSetToEditable(indexItem: number) {
+    onSetToEditable(indexItem: number, todoIdName: string | undefined) { // TODO it added an new line on enter
+        if(!todoIdName) return;
+
         let contentText = this.contentTodoRef?.toArray()[indexItem].nativeElement.innerText;
+        // this.subscriptionEditable = this.dataStorage.updateTodoPropValue(this.id, todoIdName, contentText).subscribe((payrol: {content: string})=> {
+        //     console.log('on set to editable', payrol.content);
+        //     console.log('on set id', this.id);
+            
+
+        //     const editable: boolean = this.todoService.onSetToEditable(indexItem, this.id, contentText);
+            
+        //     setTimeout(() => {
+        //         if(editable) {
+        //             console.log('ooooov', editable);
+        //             this.setCaret(indexItem);
+        //         }
+        //     }, 1000);
+        // });
+
         this.subscriptionEditable = this.todoService
-            .onSetToEditable(indexItem, this.id, contentText)
-            .pipe(delay(10))
-            .subscribe((data: boolean) => {
-                if (data) this.setCaret(indexItem);
+        .onSetToEditable(indexItem, this.id, contentText)
+        .pipe(delay(10))
+        .subscribe((editable: boolean) => {
+                console.log('onset to editable', editable);
+                if (editable) this.setCaret(indexItem);
             });
     }
 
-    onEnterDown(event: KeyboardEvent, indexItem: number) {
+    onEnterDown(event: KeyboardEvent, indexItem: number, todoIdName: string | undefined) {
         const enterKey = event.key === 'Enter';
 
-        if (enterKey) this.onSetToEditable(indexItem);
+        if (enterKey) this.onSetToEditable(indexItem, todoIdName);
     }
 
     setCaret(indexItem: number) {
         // example http://jsfiddle.net/timdown/vXnCM/
         let el = this.contentTodoRef?.toArray()[indexItem].nativeElement;
+        console.log('ellll', el);
         const range = this.document.createRange();
         const sel = this.window?.getSelection()!;
         range.setStart(el as Node, 0);

@@ -37,7 +37,7 @@ const routes: Routes = [
             },
 
             {
-                path: ':id', //? how does it work? and u need to put the property name from firebase in this ID
+                path: ':id',
                 component: TodoItemComponent,
                 canDeactivate: [CanDeactivateGuardService],
                 resolve: { activeTodoItem: TodoItemResolverService },

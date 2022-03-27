@@ -1,6 +1,7 @@
 import { EventEmitter, Injectable } from '@angular/core';
 import { ActiveTodo, InactiveTodo, Todo, Todos } from './models/Todo';
 import { of, Subject } from 'rxjs';
+import { DataStorageService } from './shared/storage/data-storage.service';
 
 @Injectable({
     providedIn: 'root',
@@ -74,15 +75,22 @@ export class TodoService {
         //     !this.todos.activeTodos[todoId].items[indexItem].completed;
     }
 
-    onSetToEditable(indexItem: number, todoId: string, contentText: string) {
-        // if (this.todos.activeTodos[todoId].items[indexItem].editable)
-        //     this.todos.activeTodos[todoId].items[indexItem].content = contentText;
+    onSetToEditable(indexItem: number, todoListIdName: string, contentText: string) {
 
-        // this.todos.activeTodos[todoId].items[indexItem].editable =
-        //     !this.todos.activeTodos[todoId].items[indexItem].editable;
+        let targetedIdName = this.todos.activeTodos.find(activeTodo => {
+            return activeTodo.name === todoListIdName;
+        })
 
-        // return of(this.todos.activeTodos[todoId].items[indexItem].editable);
-        return of(false)
+        if (!targetedIdName) return  of(false);
+
+        if (targetedIdName.items[indexItem].editable) {
+            targetedIdName.items[indexItem].content = contentText;
+        }
+
+        targetedIdName.items[indexItem].editable = !targetedIdName?.items[indexItem].editable
+       console.log('todo serveice', targetedIdName.items[indexItem].editable); 
+        return of(targetedIdName.items[indexItem].editable)
+        
     }
 
     addTodo(newTodo: ActiveTodo) {
