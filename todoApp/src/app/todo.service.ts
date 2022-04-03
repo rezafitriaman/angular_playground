@@ -12,7 +12,7 @@ export class TodoService {
         inActiveTodos: [],
     };
     public activeTodosAdd: Subject<Array<ActiveTodo>> = new Subject<Array<ActiveTodo>>();
-    public activeTodosItemAdd: Subject<Array<Todo>> = new Subject<Array<Todo>>();
+    public activeTodosItemUpdate: Subject<Array<Todo>> = new Subject<Array<Todo>>();
     public resetPlaceHolder: Subject<string> = new Subject<string>();
     public updateInActiveTodo: Subject<Array<InactiveTodo>> = new Subject<Array<InactiveTodo>>();
     public loading: Subject<boolean> = new Subject<boolean>();
@@ -45,9 +45,9 @@ export class TodoService {
         return this.todos.inActiveTodos.slice();
     }
 
-    onSetToInactive(indexItem: number, todoId: string, itemId: string | undefined) {
-        if(!itemId) return;
-        itemId
+    onSetToInactive(indexItem: number, todoId: string, itemIdName: string | undefined) {
+        if(!itemIdName) return;
+ 
         // const label = this.todos.activeTodos[todoId].label;
         // const todo = this.todos.activeTodos[todoId].items[indexItem];
 
@@ -68,30 +68,39 @@ export class TodoService {
         // this.updateInActiveTodo.next(this.todos.inActiveTodos);
     }
 
-    onSetToComplete(indexItem: number, todoId: string) {
-        // this.todos.activeTodos[todoId].items[indexItem].completed =
-        //     !this.todos.activeTodos[todoId].items[indexItem].completed;
+    onSetToComplete(todoListIdName: string, itemIdName: string, isCompleted: boolean) {
+        let todoIndex = this.todos.activeTodos.findIndex(activeTodo => {
+            return activeTodo.name === todoListIdName;
+        })
+
+        let itemIndex = this.todos.activeTodos[todoIndex].items.findIndex(item => {
+            return item.name === itemIdName;
+        })
+
+        this.todos.activeTodos[todoIndex].items[itemIndex].completed = isCompleted
+
+        this.activeTodosItemUpdate.next(this.todos.activeTodos[todoIndex].items.slice());
     }
 
-    onSetToEditable(todoListIdName: string, itemId: string, contentText: string) {
-        let todoIdName = this.todos.activeTodos.find(activeTodo => {
+    onSetToEditable(todoListIdName: string, itemIdName: string, contentText: string) {
+        let todo = this.todos.activeTodos.find(activeTodo => {
             return activeTodo.name === todoListIdName;
         })
         
-        if (!todoIdName) return false;
+        if (!todo) return false;
         
-        let targetItemId = todoIdName.items.findIndex(item => {
-            return item.name === itemId
+        let targetItemId = todo.items.findIndex(item => {
+            return item.name === itemIdName
         })
         
-        if (todoIdName.items[targetItemId].editable) {
-            todoIdName.items[targetItemId].content = contentText;
+        if (todo.items[targetItemId].editable) {
+            todo.items[targetItemId].content = contentText;
         }
 
-        todoIdName.items[targetItemId].editable = !todoIdName?.items[targetItemId].editable        
-        this.activeTodosItemAdd.next(todoIdName.items.slice());
+        todo.items[targetItemId].editable = !todo?.items[targetItemId].editable        
+        this.activeTodosItemUpdate.next(todo.items.slice());
 
-        return todoIdName.items[targetItemId].editable
+        return todo.items[targetItemId].editable
     }
 
     addTodo(newTodo: ActiveTodo) {
@@ -106,6 +115,6 @@ export class TodoService {
 
         this.todos.activeTodos[activeTodoIndex].items.push(todoItem);
 
-        this.activeTodosItemAdd.next(this.todos.activeTodos[activeTodoIndex].items.slice());
+        this.activeTodosItemUpdate.next(this.todos.activeTodos[activeTodoIndex].items.slice());
     }
 }

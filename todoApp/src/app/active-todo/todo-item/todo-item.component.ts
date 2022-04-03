@@ -34,6 +34,7 @@ export class TodoItemComponent implements OnInit, AfterViewInit, CanComponentDea
     public subscription: Subscription = new Observable().subscribe();
     public subscriptionLoading: Subscription = new Observable().subscribe();
     public subscriptionEditable: Subscription = new Observable().subscribe();
+    public subscriptionCompleted: Subscription = new Observable().subscribe();
     public window: Window | null = this.document.defaultView;
     @ViewChildren('contentTodo') contentTodoRef: QueryList<ElementRef> | undefined;
 
@@ -60,10 +61,9 @@ export class TodoItemComponent implements OnInit, AfterViewInit, CanComponentDea
             this.todos = this.todoService.getActiveTodoItem(this.id);
         });
 
-        this.subscription = this.todoService.activeTodosItemAdd.subscribe( (todos: Array<Todo>) => {
+        this.subscription = this.todoService.activeTodosItemUpdate.subscribe( (todos: Array<Todo>) => {
             console.log('on list todo component------', todos);
             this.todos = todos
-
         });
 
         this.subscriptionLoading = this.todoService.loading.subscribe((loading: boolean) => {
@@ -91,9 +91,20 @@ export class TodoItemComponent implements OnInit, AfterViewInit, CanComponentDea
         this.inputFillUp = false;
     }
 
-    onSetToComplete(indexItem: number) {
-        if (this.todos[indexItem].editable) return;
-        this.todoService.onSetToComplete(indexItem, this.id);
+    onSetToComplete(itemId: string | undefined) {
+        if (!itemId) return;
+
+        let targetItemId = this.todos.find(todo => {
+            return todo.name === itemId
+        })
+        
+        let isCompleted = targetItemId?.completed ? false : true;
+
+        this.subscriptionCompleted = this.dataStorage.updateTodoOnComplete(this.id, itemId, isCompleted)
+        .subscribe((payrol: { completed: boolean })=> {
+            console.log('payrol', payrol);
+            this.todoService.onSetToComplete(this.id, itemId, payrol.completed);
+        });
     }
 
     onSetToInactive(indexItem: number, itemId: string | undefined) {
@@ -104,8 +115,8 @@ export class TodoItemComponent implements OnInit, AfterViewInit, CanComponentDea
         if (!itemId) return;
         
         let contentText = this.contentTodoRef?.toArray()[indexItem].nativeElement.innerText;
-        this.subscriptionEditable = this.dataStorage.updateTodoPropValue(this.id, itemId, contentText)
-            .subscribe((payrol: { content: string })=> {
+        this.subscriptionEditable = this.dataStorage.updateTodoContent(this.id, itemId, contentText)
+        .subscribe((payrol: { content: string })=> {
             
             const editable: boolean = this.todoService.onSetToEditable(this.id, itemId, payrol.content);
             
@@ -152,5 +163,6 @@ export class TodoItemComponent implements OnInit, AfterViewInit, CanComponentDea
     ngOnDestroy() {
         this.subscriptionLoading.unsubscribe();
         this.subscriptionEditable.unsubscribe();
+        this.subscriptionCompleted.unsubscribe();
     }
 }

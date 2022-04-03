@@ -18,7 +18,7 @@
                 #contentTodo
                 class="todo-text flex cursor-pointer capitalize ml-1 text-gray-700"
                 [contentEditable]="todo.editable"
-                (click)="onSetToComplete(i)"
+                (click)="onSetToComplete(todo.name)"
                 (keydown)="onEnterDown($event, i, todo.name)"
                 [ngClass]="{
                     'italic line-through text-red-400': todo.completed,

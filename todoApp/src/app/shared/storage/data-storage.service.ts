@@ -22,6 +22,7 @@ export class DataStorageService {
         return this.http.get<Todos>(
             'https://todoapp-1b1f3-default-rtdb.europe-west1.firebasedatabase.app/fitriaman@gmail.json'
         ).pipe(map(todosFromFireBase => {
+            console.log('todos from firebase', todosFromFireBase);
             const todos: Todos = {
                 activeTodos: [],
                 inActiveTodos: [],
@@ -54,7 +55,7 @@ export class DataStorageService {
                 todos.activeTodos.push(new ActiveTodo(label, items(), name))
             })
 
-            return todos
+            return todos;
         }));
     }
 
@@ -73,11 +74,17 @@ export class DataStorageService {
         )
     }
 
-    updateTodoPropValue(todoId: string, itemId:string, content: string) {
+    updateTodoContent(todoId: string, itemId:string, content: string) {
         console.log('updateTodoProp value');
 
         return this.http.patch<Todo>(
             `https://todoapp-1b1f3-default-rtdb.europe-west1.firebasedatabase.app/fitriaman@gmail/activeTodos/${todoId}/items/${itemId}.json`, {'content': content}
+        )
+    }
+
+    updateTodoOnComplete(todoId: string, itemId:string, value: boolean) {
+        return this.http.patch<Todo>(
+            `https://todoapp-1b1f3-default-rtdb.europe-west1.firebasedatabase.app/fitriaman@gmail/activeTodos/${todoId}/items/${itemId}.json`, {'completed': value}
         )
     }
 

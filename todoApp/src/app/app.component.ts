@@ -28,11 +28,12 @@ export class AppComponent implements AfterViewInit, OnInit {
         //     console.log('todo stored', arg);
         // });
         console.log('app component', this.todoService.todos);
-        // this.dataStorageService.fetchTodos().subscribe((todos: Todos) => {
-        //     console.log('app component2', todos);
-        //     this.todoService.setTodos(todos);
-        // });
+        this.dataStorageService.fetchTodos().subscribe((todos: Todos) => {
+            console.log('app component2', todos);
+            this.todoService.setTodos(todos);
+        });
     }
+    
     ngAfterViewInit() {
         //console.log("Hello ", this.myValue?.toArray());
     }
