@@ -81,7 +81,9 @@ export class TodoItemComponent implements OnInit, AfterViewInit, CanComponentDea
 
     onAddNewTodoItem(newItem: string) {
         if (newItem === '') return;
+
         this.newItem = newItem;
+
         this.dataStorage.postTodo(new Todo(newItem, false, false), this.id).subscribe(todo =>{
             this.todoService.addTodoItem(new Todo(newItem, false, false, todo.name), this.id);
         })
@@ -94,42 +96,31 @@ export class TodoItemComponent implements OnInit, AfterViewInit, CanComponentDea
         this.todoService.onSetToComplete(indexItem, this.id);
     }
 
-    onSetToInactive(indexItem: number) {
-        this.todoService.onSetToInactive(indexItem, this.id);
+    onSetToInactive(indexItem: number, itemId: string | undefined) {
+        this.todoService.onSetToInactive(indexItem, this.id, itemId);
     }
 
-    onSetToEditable(indexItem: number) { // TODO it added an new line on enter and update the content, editable of the todo
-     
-
-         let contentText = this.contentTodoRef?.toArray()[indexItem].nativeElement.innerText;
-        // this.subscriptionEditable = this.dataStorage.updateTodoPropValue(this.id, contentText).subscribe((payrol: {content: string})=> {
-        //     console.log('on set to editable', payrol.content);
-        //     console.log('on set id', this.id);
+    onSetToEditable(indexItem: number, itemId: string | undefined) {
+        if (!itemId) return;
+        
+        let contentText = this.contentTodoRef?.toArray()[indexItem].nativeElement.innerText;
+        this.subscriptionEditable = this.dataStorage.updateTodoPropValue(this.id, itemId, contentText)
+            .subscribe((payrol: { content: string })=> {
             
-
-        //     const editable: boolean = this.todoService.onSetToEditable(indexItem, this.id, contentText);
+            const editable: boolean = this.todoService.onSetToEditable(this.id, itemId, payrol.content);
             
-        //     setTimeout(() => {
-        //         if(editable) {
-        //             console.log('ooooov', editable);
-        //             this.setCaret(indexItem);
-        //         }
-        //     }, 1000);
-        // });
-
-        this.subscriptionEditable = this.todoService
-        .onSetToEditable(indexItem, this.id, contentText)
-        .pipe(delay(10))
-        .subscribe((editable: boolean) => {
-                console.log('onset to editable', editable);
-                if (editable) this.setCaret(indexItem);
-            });
+            setTimeout(() => {
+                if(editable) {
+                    this.setCaret(indexItem);
+                }
+            }, 100);
+        });
     }
 
-    onEnterDown(event: KeyboardEvent, indexItem: number) {
+    onEnterDown(event: KeyboardEvent, indexItem: number, itemId: string | undefined) {
         const enterKey = event.key === 'Enter';
 
-        if (enterKey) this.onSetToEditable(indexItem);
+        if (enterKey) this.onSetToEditable(indexItem, itemId);
     }
 
     setCaret(indexItem: number) {
@@ -145,16 +136,13 @@ export class TodoItemComponent implements OnInit, AfterViewInit, CanComponentDea
         el.focus();
     }
 
-    canDeactivate():
-        | Observable<boolean | UrlTree>
-        | Promise<boolean | UrlTree>
-        | boolean
-        | UrlTree {
+    canDeactivate(): | Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
         if (this.inputFillUp) {
             if (!confirm('Do you want to discard the changes?')) return false;
 
             this.todoService.resetPlaceHolder.next('');
             this.inputFillUp = false;
+
             return true;
         } else {
             return true;

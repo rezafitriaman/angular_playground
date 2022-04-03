@@ -21,10 +21,6 @@ export class TodoService {
     
     setTodos(todos: Todos) {
         this.todos = todos;
-
-        console.log('set todo', this.todos);
-        //console.log('set todo', this.todos.activeTodos);
-
         this.activeTodosAdd.next(this.todos.activeTodos.slice());
     }
  
@@ -49,7 +45,9 @@ export class TodoService {
         return this.todos.inActiveTodos.slice();
     }
 
-    onSetToInactive(indexItem: number, todoId: string) {
+    onSetToInactive(indexItem: number, todoId: string, itemId: string | undefined) {
+        if(!itemId) return;
+        itemId
         // const label = this.todos.activeTodos[todoId].label;
         // const todo = this.todos.activeTodos[todoId].items[indexItem];
 
@@ -75,24 +73,25 @@ export class TodoService {
         //     !this.todos.activeTodos[todoId].items[indexItem].completed;
     }
 
-    onSetToEditable(indexItem: number, todoListIdName: string, contentText: string) {
-        let targetedIdName = this.todos.activeTodos.find(activeTodo => {
+    onSetToEditable(todoListIdName: string, itemId: string, contentText: string) {
+        let todoIdName = this.todos.activeTodos.find(activeTodo => {
             return activeTodo.name === todoListIdName;
         })
         
-        if (!targetedIdName) return of(false);
+        if (!todoIdName) return false;
         
-        if (targetedIdName.items[indexItem].editable) {
-            targetedIdName.items[indexItem].content = contentText;
+        let targetItemId = todoIdName.items.findIndex(item => {
+            return item.name === itemId
+        })
+        
+        if (todoIdName.items[targetItemId].editable) {
+            todoIdName.items[targetItemId].content = contentText;
         }
-        console.log('all active todos', this.todos.activeTodos);
 
-        targetedIdName.items[indexItem].editable = !targetedIdName?.items[indexItem].editable
-        console.log('todo serveice', targetedIdName.items); 
-        
-        this.activeTodosItemAdd.next(targetedIdName.items.slice());
-        return of(targetedIdName.items[indexItem].editable)
-        
+        todoIdName.items[targetItemId].editable = !todoIdName?.items[targetItemId].editable        
+        this.activeTodosItemAdd.next(todoIdName.items.slice());
+
+        return todoIdName.items[targetItemId].editable
     }
 
     addTodo(newTodo: ActiveTodo) {
@@ -101,17 +100,11 @@ export class TodoService {
     }
 
     addTodoItem(todoItem: Todo, todoId: string) {
-        console.log('todo item',todoItem);
-        console.log('this.todos.activeTodos',this.todos.activeTodos);
-        console.log('todo id',todoId);
-
         const activeTodoIndex = this.todos.activeTodos.findIndex(value=> {
-           console.log('value', value.name);
            return value.name === todoId; 
         })
 
         this.todos.activeTodos[activeTodoIndex].items.push(todoItem);
-        console.log('object', this.todos.activeTodos[activeTodoIndex]);
 
         this.activeTodosItemAdd.next(this.todos.activeTodos[activeTodoIndex].items.slice());
     }
