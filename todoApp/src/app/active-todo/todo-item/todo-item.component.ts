@@ -103,7 +103,6 @@ export class TodoItemComponent implements OnInit, AfterViewInit, CanComponentDea
 
         this.subscriptionCompleted = this.dataStorage.updateTodoOnComplete(this.id, itemId, isCompleted)
         .subscribe((payrol: { completed: boolean })=> {
-            console.log('payrol', payrol);
             this.todoService.onSetToComplete(this.id, itemId, payrol.completed);
         });
     }
@@ -134,10 +133,13 @@ export class TodoItemComponent implements OnInit, AfterViewInit, CanComponentDea
         });
     }
 
-    onEnterDown(event: KeyboardEvent, indexItem: number, itemId: string | undefined) {
+    onEnterDown(event: KeyboardEvent, indexItem: number, itemId: string | undefined) {        
         const enterKey = event.key === 'Enter';
-
-        if (enterKey) this.onSetToEditable(indexItem, itemId);
+    
+        if (enterKey) {
+            event.preventDefault(); 
+            this.onSetToEditable(indexItem, itemId);
+        }
     }
 
     setCaret(indexItem: number) {
