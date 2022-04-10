@@ -1,4 +1,4 @@
-import { EventEmitter, Injectable } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { ActiveTodo, InactiveTodo, Todo, Todos } from './models/Todo';
 import { of, Subject } from 'rxjs';
 import { DataStorageService } from './shared/storage/data-storage.service';
@@ -45,16 +45,6 @@ export class TodoService {
         return this.todos.inActiveTodos.slice();
     }
 
-    onSetToInactive(indexItem: number, todoId: string, itemIdName: string | undefined) {
-        if(!itemIdName) return;
- 
-        // const label = this.todos.activeTodos[todoId].label;
-        // const todo = this.todos.activeTodos[todoId].items[indexItem];
-
-        // this.todos.inActiveTodos.push(new InactiveTodo(label, todo));
-        // this.todos.activeTodos[todoId].items.splice(indexItem, 1);
-    }
-
     onSetToActive(todoId: string) {
         // let labelIndex = this.todos.activeTodos.findIndex(
         //     (target) => target.label === this.todos.inActiveTodos[todoId].label
@@ -66,6 +56,25 @@ export class TodoService {
 
         // this.todos.inActiveTodos.splice(todoId, 1);
         // this.updateInActiveTodo.next(this.todos.inActiveTodos);
+    }
+
+    onSetToInactive(todoListIdName: string, itemIdName: string) {
+        let todoIndex = this.todos.activeTodos.findIndex(activeTodo => {
+            return activeTodo.name === todoListIdName;
+        })
+        
+        let itemIndex = this.todos.activeTodos[todoIndex].items.findIndex(item => {
+            return item.name === itemIdName;
+        })
+
+        this.todos.activeTodos[todoIndex].items.splice(itemIndex, 1);
+        
+        // TODO push to inActive list
+        // const label = this.todos.activeTodos[todoId].label;
+        // const todo = this.todos.activeTodos[todoId].items[indexItem];
+
+        // this.todos.inActiveTodos.push(new InactiveTodo(label, todo));
+        // this.todos.activeTodos[todoId].items.splice(indexItem, 1);
     }
 
     onSetToComplete(todoListIdName: string, itemIdName: string, isCompleted: boolean) {

@@ -29,6 +29,7 @@ export class DataStorageService {
             }
 
             const activeTodosList = Object.values(todosFromFireBase)[0] as Array<ActiveTodo>;
+            console.log('active todo list', activeTodosList);
 
             Object.entries(activeTodosList).forEach( (val: [string, ActiveTodo]) => {
                 const name = val[0]; 
@@ -59,7 +60,7 @@ export class DataStorageService {
         }));
     }
 
-    postTodo(todo: Todo, todoId: string) {
+    postTodoItem(todo: Todo, todoId: string) {
         console.log('postTodos : ',todo);
         return this.http.post<Todo>(
             `https://todoapp-1b1f3-default-rtdb.europe-west1.firebasedatabase.app/fitriaman@gmail/activeTodos/${todoId}/items.json`, todo
@@ -88,4 +89,22 @@ export class DataStorageService {
         )
     }
 
+    updateSetToInactive(todoId: string, itemId:string){
+        return this.http.delete<null>(
+            `https://todoapp-1b1f3-default-rtdb.europe-west1.firebasedatabase.app/fitriaman@gmail/activeTodos/${todoId}/items/${itemId}.json`
+        );
+    }
 }
+
+// Firebase:
+// GET - Reading Data
+// - Data from your Realtime Database can be read by issuing an HTTP GET request to an endpoint. 
+// The following example demonstrates how you might retrieve a user's name that you had previously stored in Realtime Database.
+// PUT - Writing Data
+// - You can write data with a PUT request.
+// POST - Pushing Data
+// - To accomplish the equivalent of the JavaScript push() method (see Lists of Data), you can issue a POST request.
+// PATCH - Updating Data
+// - You can update specific children at a location without overwriting existing data using a PATCH request.
+// DELETE - Removing Data
+// - You can delete data with a DELETE request

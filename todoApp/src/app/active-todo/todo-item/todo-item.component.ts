@@ -35,6 +35,7 @@ export class TodoItemComponent implements OnInit, AfterViewInit, CanComponentDea
     public subscriptionLoading: Subscription = new Observable().subscribe();
     public subscriptionEditable: Subscription = new Observable().subscribe();
     public subscriptionCompleted: Subscription = new Observable().subscribe();
+    public subscriptionSetToInactive: Subscription = new Observable().subscribe();
     public window: Window | null = this.document.defaultView;
     @ViewChildren('contentTodo') contentTodoRef: QueryList<ElementRef> | undefined;
 
@@ -84,7 +85,7 @@ export class TodoItemComponent implements OnInit, AfterViewInit, CanComponentDea
 
         this.newItem = newItem;
 
-        this.dataStorage.postTodo(new Todo(newItem, false, false), this.id).subscribe(todo =>{
+        this.dataStorage.postTodoItem(new Todo(newItem, false, false), this.id).subscribe(todo =>{
             this.todoService.addTodoItem(new Todo(newItem, false, false, todo.name), this.id);
         })
 
@@ -107,8 +108,13 @@ export class TodoItemComponent implements OnInit, AfterViewInit, CanComponentDea
         });
     }
 
-    onSetToInactive(indexItem: number, itemId: string | undefined) {
-        this.todoService.onSetToInactive(indexItem, this.id, itemId);
+    onSetToInactive(itemId: string | undefined) {
+        if (!itemId) return;
+
+        this.subscriptionSetToInactive = this.dataStorage.updateSetToInactive(this.id, itemId)
+        .subscribe((payrol: null) => {
+            if(!payrol) this.todoService.onSetToInactive(this.id, itemId);
+        });
     }
 
     onSetToEditable(indexItem: number, itemId: string | undefined) {
@@ -164,5 +170,6 @@ export class TodoItemComponent implements OnInit, AfterViewInit, CanComponentDea
         this.subscriptionLoading.unsubscribe();
         this.subscriptionEditable.unsubscribe();
         this.subscriptionCompleted.unsubscribe();
+        this.subscriptionSetToInactive.unsubscribe();
     }
 }
