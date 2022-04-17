@@ -23,7 +23,7 @@ export class EditTodoComponent implements OnInit, CanComponentDeactivate, OnDest
         private todoService: TodoService,
         private route: ActivatedRoute,
         private router: Router,
-        private dataStorageService: DataStorageService
+        private dataStorage: DataStorageService
     ) {}
 
     ngOnInit(): void {
@@ -39,7 +39,7 @@ export class EditTodoComponent implements OnInit, CanComponentDeactivate, OnDest
         // this.newActiveTodo = new ActiveTodo(newTodo, []);
         
         console.log('on add new label todo,');
-        this.dataStorageService.postTodoList(new ActiveTodo(newTodo, [])).subscribe((id: ActiveTodo ) => {
+        this.dataStorage.postTodoList(new ActiveTodo(newTodo, []), 'activeTodos').subscribe((id: ActiveTodo ) => {
             console.log('add todoList', id.name);
 
             this.todoService.addTodo(new ActiveTodo(newTodo, [], id.name));

@@ -42,6 +42,7 @@ export class TodoService {
     }
 
     getInActiveTodos(): Array<InactiveTodo> {
+        console.log('getInActiveTodos', this.todos);
         return this.todos.inActiveTodos.slice();
     }
 

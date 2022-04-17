@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { map } from 'rxjs/operators';
-import { ActiveTodo, Todo, Todos } from 'src/app/models/Todo';
+import { ActiveTodo, InactiveTodo, Todo, Todos } from 'src/app/models/Todo';
 import { TodoService } from 'src/app/todo.service';
 
 @Injectable({
@@ -11,10 +11,38 @@ export class DataStorageService {
     constructor(private http: HttpClient, private todoService: TodoService) {}
 
     storeTodos() {
-        const todos = this.todoService.getTodos();
+        // const todos = this.todoService.getTodos();
 
-        return this.http.put<Todos>(
-            'https://todoapp-1b1f3-default-rtdb.europe-west1.firebasedatabase.app/fitriaman@gmail.json', todos
+        // return this.http.put<Todos>(
+        //     'https://todoapp-1b1f3-default-rtdb.europe-west1.firebasedatabase.app/fitriaman@gmail.json', todos
+        // );
+        return this.http.put<any>(
+            `https://todoapp-1b1f3-default-rtdb.europe-west1.firebasedatabase.app/fitriaman@gmail/inActiveTodos.json`, {
+                _asdfdsfdasd: {
+                    label: "testwqerer",
+                    todo: {
+                        completed: false, 
+                        content: "yes",
+                        editable: false
+                    }    
+                },
+                _testesdfdfs: {
+                    label: "tes2343wr",
+                    todo: {
+                        completed: false, 
+                        content: "broeken",
+                        editable: false
+                    }                                            
+                },
+                _testesdfdfs55: {
+                    label: "tes2343wr",
+                    todo: {
+                        completed: false, 
+                        content: "broeken",
+                        editable: false
+                    }                                            
+                }
+            }
         );
     }
     
@@ -67,11 +95,11 @@ export class DataStorageService {
         );
     }
 
-    postTodoList(newActiveTodo: ActiveTodo){
+    postTodoList(todoMode: ActiveTodo | InactiveTodo, mode: string){
         console.log('postTodo list', );
         
         return this.http.post<ActiveTodo>(
-            `https://todoapp-1b1f3-default-rtdb.europe-west1.firebasedatabase.app/fitriaman@gmail/activeTodos.json`, newActiveTodo
+            `https://todoapp-1b1f3-default-rtdb.europe-west1.firebasedatabase.app/fitriaman@gmail/${mode}.json`, todoMode
         )
     }
 

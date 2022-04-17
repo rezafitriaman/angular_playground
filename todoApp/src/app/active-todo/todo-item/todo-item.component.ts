@@ -112,7 +112,20 @@ export class TodoItemComponent implements OnInit, AfterViewInit, CanComponentDea
 
         this.subscriptionSetToInactive = this.dataStorage.updateSetToInactive(this.id, itemId)
         .subscribe((payrol: null) => {
-            if(!payrol) this.todoService.onSetToInactive(this.id, itemId);
+
+            if(!payrol) {
+                this.todoService.onSetToInactive(this.id, itemId);
+                this.dataStorage.storeTodos().subscribe(arg => {
+                    console.log('arg---->', arg);
+                })
+                // this.dataStorage.postTodoList(new ActiveTodo(newTodo, []), 'activeTodos').subscribe((id: ActiveTodo ) => {
+                //     this.todoService.onSetToInactive(this.id, itemId);
+                //     console.log('add todoList', id.name);
+        
+                //     this.todoService.addTodo(new ActiveTodo(newTodo, [], id.name));
+                // });
+            }
+            
         });
     }
 
