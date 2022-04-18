@@ -11,38 +11,10 @@ export class DataStorageService {
     constructor(private http: HttpClient, private todoService: TodoService) {}
 
     storeTodos() {
-        // const todos = this.todoService.getTodos();
+        const todos = this.todoService.getTodos();
 
-        // return this.http.put<Todos>(
-        //     'https://todoapp-1b1f3-default-rtdb.europe-west1.firebasedatabase.app/fitriaman@gmail.json', todos
-        // );
-        return this.http.put<any>(
-            `https://todoapp-1b1f3-default-rtdb.europe-west1.firebasedatabase.app/fitriaman@gmail/inActiveTodos.json`, {
-                _asdfdsfdasd: {
-                    label: "testwqerer",
-                    todo: {
-                        completed: false, 
-                        content: "yes",
-                        editable: false
-                    }    
-                },
-                _testesdfdfs: {
-                    label: "tes2343wr",
-                    todo: {
-                        completed: false, 
-                        content: "broeken",
-                        editable: false
-                    }                                            
-                },
-                _testesdfdfs55: {
-                    label: "tes2343wr",
-                    todo: {
-                        completed: false, 
-                        content: "broeken",
-                        editable: false
-                    }                                            
-                }
-            }
+        return this.http.put<Todos>(
+            'https://todoapp-1b1f3-default-rtdb.europe-west1.firebasedatabase.app/fitriaman@gmail.json', todos
         );
     }
     
@@ -55,26 +27,25 @@ export class DataStorageService {
                 activeTodos: [],
                 inActiveTodos: [],
             }
-
             const activeTodosList = Object.values(todosFromFireBase)[0] as Array<ActiveTodo>;
-            console.log('active todo list', activeTodosList);
+            const inActiveTodosList = Object.values(todosFromFireBase)[1] as Array<InactiveTodo>
 
-            Object.entries(activeTodosList).forEach( (val: [string, ActiveTodo]) => {
+            Object.entries(activeTodosList).forEach((val: [string, ActiveTodo]) => {
                 const name = val[0]; 
                 const label = val[1].label
-                const items = function () {
+                const items = () => {
                     const target: Array<Todo> = [];
                     
                     if(val[1].items) {
                         const targetItems = Object.entries(val[1].items);
 
-                        targetItems.forEach((val: [string, Todo]) =>{
+                        targetItems.forEach((val: [string, Todo]) => {
                             const name = val[0];
                             const content = val[1].content;
                             const completed = val[1].completed;
                             const editable = val[1].editable;
 
-                            target.push(new Todo(content, completed, editable, name))
+                            target.push(new Todo(content, completed, editable, name));
                         })
                     }
                     
@@ -82,6 +53,10 @@ export class DataStorageService {
                 }
 
                 todos.activeTodos.push(new ActiveTodo(label, items(), name))
+            })
+            
+            Object.entries(inActiveTodosList).forEach((val: [string, InactiveTodo]) => {
+                todos.inActiveTodos.push(new InactiveTodo(val[1].label, val[1].todo));
             })
 
             return todos;
@@ -117,10 +92,16 @@ export class DataStorageService {
         )
     }
 
-    updateSetToInactive(todoId: string, itemId:string){
+    deleteTodo(todoId: string, itemId:string){
         return this.http.delete<null>(
             `https://todoapp-1b1f3-default-rtdb.europe-west1.firebasedatabase.app/fitriaman@gmail/activeTodos/${todoId}/items/${itemId}.json`
         );
+    }
+
+    setToInactive(inActiveTodo: any){
+        return this.http.patch<any>(
+            `https://todoapp-1b1f3-default-rtdb.europe-west1.firebasedatabase.app/fitriaman@gmail/inActiveTodos.json`, inActiveTodo
+        )
     }
 }
 

@@ -11,7 +11,7 @@ import {
     ViewChildren,
 } from '@angular/core';
 import { ActivatedRoute, Data, Params, UrlTree } from '@angular/router';
-import { ActiveTodo, Todo } from '../../models/Todo';
+import { ActiveTodo, InactiveTodo, Todo } from '../../models/Todo';
 import { TodoService } from '../../todo.service';
 import { CanComponentDeactivate } from '../can-deactivate-guard.service';
 import { of, Observable, Subscription } from 'rxjs';
@@ -38,7 +38,11 @@ export class TodoItemComponent implements OnInit, AfterViewInit, CanComponentDea
     public subscriptionSetToInactive: Subscription = new Observable().subscribe();
     public window: Window | null = this.document.defaultView;
     @ViewChildren('contentTodo') contentTodoRef: QueryList<ElementRef> | undefined;
-
+    private arrayToObject = <T extends Record<K, any>, K extends keyof any>(array: T[] = [], getKey: (item: T) => K) => array.reduce((obj, cur) => {
+        const key = getKey(cur)
+        return ({...obj, [key]: cur})
+      }, {} as Record<K, T>)
+    
     constructor(
         private route: ActivatedRoute,
         private todoService: TodoService,
@@ -102,30 +106,29 @@ export class TodoItemComponent implements OnInit, AfterViewInit, CanComponentDea
         let isCompleted = targetItemId?.completed ? false : true;
 
         this.subscriptionCompleted = this.dataStorage.updateTodoOnComplete(this.id, itemId, isCompleted)
-        .subscribe((payrol: { completed: boolean })=> {
-            this.todoService.onSetToComplete(this.id, itemId, payrol.completed);
+        .subscribe((payload: { completed: boolean })=> {
+            this.todoService.onSetToComplete(this.id, itemId, payload.completed);
         });
     }
 
     onSetToInactive(itemId: string | undefined) {
         if (!itemId) return;
 
-        this.subscriptionSetToInactive = this.dataStorage.updateSetToInactive(this.id, itemId)
-        .subscribe((payrol: null) => {
-
-            if(!payrol) {
+        this.subscriptionSetToInactive = this.dataStorage.deleteTodo(this.id, itemId)
+        .subscribe((payload: null) => {
+            if(!payload) {
                 this.todoService.onSetToInactive(this.id, itemId);
-                this.dataStorage.storeTodos().subscribe(arg => {
-                    console.log('arg---->', arg);
+
+                let inActiveTodo = this.todoService.getInActiveTodos();
+                
+                let inActiveTodoObj = this.arrayToObject(inActiveTodo, target =>  (target.todo.name) ? target.todo.name : '');
+
+                this.dataStorage.setToInactive(inActiveTodoObj).subscribe(payload => {
+                    console.log('arg---->', payload);
+
+                    //TODO create an info or redo function
                 })
-                // this.dataStorage.postTodoList(new ActiveTodo(newTodo, []), 'activeTodos').subscribe((id: ActiveTodo ) => {
-                //     this.todoService.onSetToInactive(this.id, itemId);
-                //     console.log('add todoList', id.name);
-        
-                //     this.todoService.addTodo(new ActiveTodo(newTodo, [], id.name));
-                // });
             }
-            
         });
     }
 

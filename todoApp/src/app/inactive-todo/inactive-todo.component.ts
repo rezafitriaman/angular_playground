@@ -14,6 +14,7 @@ export class InactiveTodoComponent implements OnInit {
 
     ngOnInit(): void {
         this.todos = this.todoService.getInActiveTodos();
+        console.log('this.todos--->', this.todos);
         this.todoService.updateInActiveTodo.subscribe((inActiveTodos) => {
             this.todos = inActiveTodos;
         });

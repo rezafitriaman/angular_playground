@@ -61,8 +61,6 @@ export class TodoService {
 
     onSetToInactive(todoListIdName: string, itemIdName: string) {
         console.log('on set to inactive');
-        console.log('todoListIdName', todoListIdName);
-        console.log('itemIdName', itemIdName);
         let todoIndex = this.todos.activeTodos.findIndex(activeTodo => {
             return activeTodo.name === todoListIdName;
         })
@@ -71,16 +69,15 @@ export class TodoService {
             return item.name === itemIdName;
         })
 
-        console.log( this.todos.activeTodos[todoIndex].items);
-        this.todos.activeTodos[todoIndex].items.splice(itemIndex, 1);
-        this.activeTodosItemUpdate.next(this.todos.activeTodos[todoIndex].items.slice());
-        
-        // TODO push to inActive list
-        // const label = this.todos.activeTodos[todoId].label;
-        // const todo = this.todos.activeTodos[todoId].items[indexItem];
+        let label = this.todos.activeTodos[todoIndex].label;
 
-        // this.todos.inActiveTodos.push(new InactiveTodo(label, todo));
-        // this.todos.activeTodos[todoId].items.splice(indexItem, 1);
+        let todo = this.todos.activeTodos[todoIndex].items[itemIndex]
+
+        this.todos.activeTodos[todoIndex].items.splice(itemIndex, 1);
+
+        this.todos.inActiveTodos.push(new InactiveTodo(label, todo))
+
+        this.activeTodosItemUpdate.next(this.todos.activeTodos[todoIndex].items.slice());
     }
 
     onSetToComplete(todoListIdName: string, itemIdName: string, isCompleted: boolean) {
