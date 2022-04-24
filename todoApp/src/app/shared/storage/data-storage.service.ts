@@ -22,14 +22,13 @@ export class DataStorageService {
         return this.http.get<Todos>(
             'https://todoapp-1b1f3-default-rtdb.europe-west1.firebasedatabase.app/fitriaman@gmail.json'
         ).pipe(map(todosFromFireBase => {
-            console.log('todos from firebase', todosFromFireBase);
             const todos: Todos = {
                 activeTodos: [],
                 inActiveTodos: [],
             }
             const activeTodosList = Object.values(todosFromFireBase)[0] as Array<ActiveTodo>;
             const inActiveTodosList = Object.values(todosFromFireBase)[1] as Array<InactiveTodo> ? Object.values(todosFromFireBase)[1] as Array<InactiveTodo> : [];
-            
+
             Object.entries(activeTodosList).forEach((val: [string, ActiveTodo]) => {
                 const name = val[0]; 
                 const label = val[1].label
@@ -56,8 +55,7 @@ export class DataStorageService {
             })
             
             Object.entries(inActiveTodosList).forEach((val: [string, InactiveTodo]) => {
-                console.log('ddddd',todos.inActiveTodos);
-                todos.inActiveTodos.push(new InactiveTodo(val[1].label, val[1].todo));
+                todos.inActiveTodos.push(new InactiveTodo(val[1].label, val[1].todo, val[0]));
             })
 
             return todos;
@@ -93,18 +91,30 @@ export class DataStorageService {
         )
     }
 
-    deleteTodo(todoId: string, itemId:string){
+    deleteActiveTodo(todoId: string, itemId:string){
         return this.http.delete<null>(
             `https://todoapp-1b1f3-default-rtdb.europe-west1.firebasedatabase.app/fitriaman@gmail/activeTodos/${todoId}/items/${itemId}.json`
         );
     }
 
-    setToInactive(inActiveTodo: any){
-        return this.http.patch<any>(
+    setToInactive(inActiveTodo: Record<string, InactiveTodo>){
+        return this.http.patch<{string: InactiveTodo}>(
             `https://todoapp-1b1f3-default-rtdb.europe-west1.firebasedatabase.app/fitriaman@gmail/inActiveTodos.json`, inActiveTodo
         )
     }
-}
+
+    deleteInActiveTodo(todoId: string){
+        return this.http.delete<null>(
+            `https://todoapp-1b1f3-default-rtdb.europe-west1.firebasedatabase.app/fitriaman@gmail/activeTodos/${todoId}.json`
+        );
+    }
+
+    setToActive(todo: Todo, todoId: string) {
+        return this.http.patch<any>(
+            `https://todoapp-1b1f3-default-rtdb.europe-west1.firebasedatabase.app/fitriaman@gmail/activeTodos/${todoId}/items.json`, todo
+        )
+    }
+} 
 
 // Firebase:
 // GET - Reading Data

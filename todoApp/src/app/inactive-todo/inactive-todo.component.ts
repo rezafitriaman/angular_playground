@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { TodoService } from '../todo.service';
 import { InactiveTodo, Todo } from '../models/Todo';
+import { DataStorageService } from '../shared/storage/data-storage.service';
+import { Observable, Subscription } from 'rxjs';
 
 @Component({
     selector: 'app-in-active-todo',
@@ -9,8 +11,12 @@ import { InactiveTodo, Todo } from '../models/Todo';
 })
 export class InactiveTodoComponent implements OnInit {
     public todos: Array<InactiveTodo> = [];
+    public subscriptionSetToActive: Subscription = new Observable().subscribe();
 
-    constructor(private todoService: TodoService) {}
+    constructor(
+        private todoService: TodoService,
+        private dataStorage: DataStorageService
+    ) {}
 
     ngOnInit(): void {
         this.todos = this.todoService.getInActiveTodos();
@@ -20,7 +26,14 @@ export class InactiveTodoComponent implements OnInit {
         });
     }
 
-    onSetToActive(index: string) {
-        this.todoService.onSetToActive(index);
+    onSetToActive(itemId: string) {
+        this.subscriptionSetToActive = this.dataStorage.deleteInActiveTodo(itemId)
+        .subscribe((payload: null) => {
+            if (!payload) {
+                // finish this please
+            }
+        })
+
+        // this.todoService.onSetToActive(index);
     }
 }

@@ -11,7 +11,7 @@ export class ActiveTodo {
 }
 
 export class InactiveTodo {
-    constructor(public label: string, public todo: Todo) {}
+    constructor(public label: string, public todo: Todo, public name?: string) {}
 }
 export class LoginOrJoinForm {
     constructor(public email: string, public password: string) {}
