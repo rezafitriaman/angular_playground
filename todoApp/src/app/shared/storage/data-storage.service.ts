@@ -28,8 +28,8 @@ export class DataStorageService {
                 inActiveTodos: [],
             }
             const activeTodosList = Object.values(todosFromFireBase)[0] as Array<ActiveTodo>;
-            const inActiveTodosList = Object.values(todosFromFireBase)[1] as Array<InactiveTodo>
-
+            const inActiveTodosList = Object.values(todosFromFireBase)[1] as Array<InactiveTodo> ? Object.values(todosFromFireBase)[1] as Array<InactiveTodo> : [];
+            
             Object.entries(activeTodosList).forEach((val: [string, ActiveTodo]) => {
                 const name = val[0]; 
                 const label = val[1].label
@@ -56,6 +56,7 @@ export class DataStorageService {
             })
             
             Object.entries(inActiveTodosList).forEach((val: [string, InactiveTodo]) => {
+                console.log('ddddd',todos.inActiveTodos);
                 todos.inActiveTodos.push(new InactiveTodo(val[1].label, val[1].todo));
             })
 
