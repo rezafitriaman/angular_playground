@@ -26,14 +26,14 @@ export class InactiveTodoComponent implements OnInit {
         });
     }
 
-    onSetToActive(itemId: string) {
-        this.subscriptionSetToActive = this.dataStorage.deleteInActiveTodo(itemId)
-        .subscribe((payload: null) => {
-            if (!payload) {
-                // finish this please
-            }
-        })
+     onSetToActive(itemId: string | undefined) {
+    //     this.subscriptionSetToActive = this.dataStorage.deleteInActiveTodo(itemId)
+    //     .subscribe((payload: null) => {
+    //         if (!payload) {
+    //             // finish this please
+    //         }
+    //     })
 
-        // this.todoService.onSetToActive(index);
+         this.todoService.onSetToActive('');
     }
 }

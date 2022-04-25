@@ -114,7 +114,7 @@ export class TodoItemComponent implements OnInit, AfterViewInit, CanComponentDea
     onSetToInactive(itemId: string | undefined) {
         if (!itemId) return;
 
-        this.subscriptionSetToInactive = this.dataStorage.deleteTodo(this.id, itemId)
+        this.subscriptionSetToInactive = this.dataStorage.deleteActiveTodo(this.id, itemId)
         .subscribe((payload: null) => {
             if(!payload) {
                 this.todoService.onSetToInactive(this.id, itemId);
@@ -122,7 +122,7 @@ export class TodoItemComponent implements OnInit, AfterViewInit, CanComponentDea
                 let inActiveTodo = this.todoService.getInActiveTodos();
                 
                 let inActiveTodoObj = this.arrayToObject(inActiveTodo, target =>  (target.todo.name) ? target.todo.name : '');
-                console.log('0000', inActiveTodoObj);
+
                 this.dataStorage.setToInactive(inActiveTodoObj).subscribe(payload => {
                     console.log('arg---->', payload);
 
