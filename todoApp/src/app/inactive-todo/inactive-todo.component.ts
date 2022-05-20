@@ -12,6 +12,11 @@ import { Observable, Subscription } from 'rxjs';
 export class InactiveTodoComponent implements OnInit {
     public todos: Array<InactiveTodo> = [];
     public subscriptionSetToActive: Subscription = new Observable().subscribe();
+    // reference https://stackoverflow.com/questions/4215737/convert-array-to-object
+    private arrayToObject = <T extends Record<K, any>, K extends keyof any>(array: T[] = [], getKey: (item: T) => K) => array.reduce((obj, cur) => {
+        const key = getKey(cur)
+        return ({...obj, [key]: cur})
+      }, {} as Record<K, T>)
 
     constructor(
         private todoService: TodoService,
@@ -26,14 +31,25 @@ export class InactiveTodoComponent implements OnInit {
         });
     }
 
-     onSetToActive(itemId: string | undefined) {
-    //     this.subscriptionSetToActive = this.dataStorage.deleteInActiveTodo(itemId)
-    //     .subscribe((payload: null) => {
-    //         if (!payload) {
-    //             // finish this please
-    //         }
-    //     })
+     onSetToActive(labelId: string | undefined, todoId: string | undefined) {
+        if (!labelId || !todoId) return;
 
-         this.todoService.onSetToActive('');
+        this.subscriptionSetToActive = this.dataStorage.deleteInActiveTodo(todoId)
+        .subscribe((payload: null) => {
+            if (!payload) {
+                console.log('deleted from firebase inActiveTodo');
+                this.todoService.onSetToActive(labelId, todoId);
+
+                let activeTodo = this.todoService.getActiveTodos();
+                let activeTodoObj = this.arrayToObject(activeTodo, target =>  (target.name) ? target.name : '');
+
+                this.dataStorage.setToActive(activeTodoObj, labelId).subscribe(payload => {
+                    console.log('arg---->', payload);
+
+                    //TODO create an info or redo function
+                })
+
+            }
+        })
     }
 }

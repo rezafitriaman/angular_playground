@@ -46,17 +46,25 @@ export class TodoService {
         return this.todos.inActiveTodos.slice();
     }
 
-    onSetToActive(todoId: string) {
-        // let labelIndex = this.todos.activeTodos.findIndex(
-        //     (target) => target.label === this.todos.inActiveTodos[todoId].label
-        // );
+    onSetToActive(labelId: string, todoId: string) {
+        let inActiveTodoIndex = this.todos.inActiveTodos.findIndex(inActiveTodo => {
+            return inActiveTodo.todo.name === todoId;
+        });
 
-        // this.todos.activeTodos[labelIndex].items.push(
-        //     new Todo(this.todos.inActiveTodos[todoId].todo.content, false, false) // fix the id
-        // );
+        let activeTodoIndex = this.todos.activeTodos.findIndex(activeTodo => {
+            return activeTodo.name === labelId;
+        });
 
-        // this.todos.inActiveTodos.splice(todoId, 1);
-        // this.updateInActiveTodo.next(this.todos.inActiveTodos);
+        let content = this.todos.inActiveTodos[inActiveTodoIndex].todo.content;
+        let completed = false;
+        let editable = this.todos.inActiveTodos[inActiveTodoIndex].todo.editable;
+        let name = this.todos.inActiveTodos[inActiveTodoIndex].todo.name;
+        
+        this.todos.activeTodos[activeTodoIndex].items.push(new Todo(content, completed, editable, name));
+
+        this.todos.inActiveTodos.splice(inActiveTodoIndex, 1);
+        
+        this.updateInActiveTodo.next(this.todos.inActiveTodos);
     }
 
     onSetToInactive(todoListIdName: string, itemIdName: string) {
@@ -71,11 +79,13 @@ export class TodoService {
 
         let label = this.todos.activeTodos[todoIndex].label;
 
-        let todo = this.todos.activeTodos[todoIndex].items[itemIndex]
+        let todo = this.todos.activeTodos[todoIndex].items[itemIndex];
+
+        let activeTodoId = this.todos.activeTodos[todoIndex].name;
 
         this.todos.activeTodos[todoIndex].items.splice(itemIndex, 1);
 
-        this.todos.inActiveTodos.push(new InactiveTodo(label, todo))
+        this.todos.inActiveTodos.push(new InactiveTodo(label, todo, activeTodoId));
 
         this.activeTodosItemUpdate.next(this.todos.activeTodos[todoIndex].items.slice());
     }

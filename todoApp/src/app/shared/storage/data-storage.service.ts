@@ -55,7 +55,7 @@ export class DataStorageService {
             })
             
             Object.entries(inActiveTodosList).forEach((val: [string, InactiveTodo]) => {
-                todos.inActiveTodos.push(new InactiveTodo(val[1].label, val[1].todo, val[0]));
+                todos.inActiveTodos.push(new InactiveTodo(val[1].label, val[1].todo, val[1].name));
             })
 
             return todos;
@@ -105,13 +105,13 @@ export class DataStorageService {
 
     deleteInActiveTodo(todoId: string){
         return this.http.delete<null>(
-            `https://todoapp-1b1f3-default-rtdb.europe-west1.firebasedatabase.app/fitriaman@gmail/activeTodos/${todoId}.json`
+            `https://todoapp-1b1f3-default-rtdb.europe-west1.firebasedatabase.app/fitriaman@gmail/inActiveTodos/${todoId}.json`
         );
     }
 
-    setToActive(todo: Todo, todoId: string) {
+    setToActive(activeTodo: Record<string, ActiveTodo>, todoId: string) {
         return this.http.patch<any>(
-            `https://todoapp-1b1f3-default-rtdb.europe-west1.firebasedatabase.app/fitriaman@gmail/activeTodos/${todoId}/items.json`, todo
+            `https://todoapp-1b1f3-default-rtdb.europe-west1.firebasedatabase.app/fitriaman@gmail/activeTodos.json`, activeTodo
         )
     }
 } 

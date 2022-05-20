@@ -38,6 +38,7 @@ export class TodoItemComponent implements OnInit, AfterViewInit, CanComponentDea
     public subscriptionSetToInactive: Subscription = new Observable().subscribe();
     public window: Window | null = this.document.defaultView;
     @ViewChildren('contentTodo') contentTodoRef: QueryList<ElementRef> | undefined;
+    // reference https://stackoverflow.com/questions/4215737/convert-array-to-object
     private arrayToObject = <T extends Record<K, any>, K extends keyof any>(array: T[] = [], getKey: (item: T) => K) => array.reduce((obj, cur) => {
         const key = getKey(cur)
         return ({...obj, [key]: cur})
@@ -122,7 +123,7 @@ export class TodoItemComponent implements OnInit, AfterViewInit, CanComponentDea
                 let inActiveTodo = this.todoService.getInActiveTodos();
                 
                 let inActiveTodoObj = this.arrayToObject(inActiveTodo, target =>  (target.todo.name) ? target.todo.name : '');
-
+                console.log('inActiveTodoObj', inActiveTodoObj);
                 this.dataStorage.setToInactive(inActiveTodoObj).subscribe(payload => {
                     console.log('arg---->', payload);
 
