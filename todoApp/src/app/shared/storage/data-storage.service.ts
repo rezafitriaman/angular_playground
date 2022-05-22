@@ -8,6 +8,10 @@ import { TodoService } from 'src/app/todo.service';
     providedIn: 'root',
 })
 export class DataStorageService {
+    private arrayToObject = <T extends Record<K, any>, K extends keyof any>(array: T[] = [], getKey: (item: T) => K) => array.reduce((obj, cur) => {
+        const key = getKey(cur)
+        return ({...obj, [key]: cur})
+      }, {} as Record<K, T>)
     constructor(private http: HttpClient, private todoService: TodoService) {}
 
     storeTodos() {
@@ -19,39 +23,49 @@ export class DataStorageService {
     }
     
     fetchTodos() {
-        return this.http.get<Todos>(
-            'https://todoapp-1b1f3-default-rtdb.europe-west1.firebasedatabase.app/fitriaman@gmail.json'
-        ).pipe(map(todosFromFireBase => {
+        return this.http.get<Todos>('https://todoapp-1b1f3-default-rtdb.europe-west1.firebasedatabase.app/fitriaman@gmail.json')
+        .pipe(map(todosFromFireBase => {
             const todos: Todos = {
                 activeTodos: [],
                 inActiveTodos: [],
             }
+
+            if(!todosFromFireBase){
+                return todos;
+            }
+
             const activeTodosList = Object.values(todosFromFireBase)[0] as Array<ActiveTodo>;
             const inActiveTodosList = Object.values(todosFromFireBase)[1] as Array<InactiveTodo> ? Object.values(todosFromFireBase)[1] as Array<InactiveTodo> : [];
 
             Object.entries(activeTodosList).forEach((val: [string, ActiveTodo]) => {
-                const name = val[0]; 
-                const label = val[1].label
-                const items = () => {
-                    const target: Array<Todo> = [];
-                    
-                    if(val[1].items) {
-                        const targetItems = Object.entries(val[1].items);
+                const activeTodo = {
+                    get name() {
+                        return val[0]; 
+                    },
+                    get label() {
+                        return val[1].label;
+                    },
+                    get items() {
+                        const target: Array<Todo> = [];
+                        
+                        if(val[1].items) {
+                            const targetItems = Object.entries(val[1].items);
+    
+                            targetItems.forEach((val: [string, Todo]) => {
+                                const name = val[0];
+                                const content = val[1].content;
+                                const completed = val[1].completed;
+                                const editable = val[1].editable;
 
-                        targetItems.forEach((val: [string, Todo]) => {
-                            const name = val[0];
-                            const content = val[1].content;
-                            const completed = val[1].completed;
-                            const editable = val[1].editable;
+                                target.push(new Todo(content, completed, editable, name));
+                            })
+                        }
 
-                            target.push(new Todo(content, completed, editable, name));
-                        })
-                    }
-                    
-                    return target;
+                        return target;
+                    }    
                 }
 
-                todos.activeTodos.push(new ActiveTodo(label, items(), name))
+                todos.activeTodos.push(new ActiveTodo(activeTodo.label, activeTodo.items, activeTodo.name))
             })
             
             Object.entries(inActiveTodosList).forEach((val: [string, InactiveTodo]) => {
@@ -63,23 +77,18 @@ export class DataStorageService {
     }
 
     postTodoItem(todo: Todo, todoId: string) {
-        console.log('postTodos : ',todo);
         return this.http.post<Todo>(
             `https://todoapp-1b1f3-default-rtdb.europe-west1.firebasedatabase.app/fitriaman@gmail/activeTodos/${todoId}/items.json`, todo
         );
     }
 
-    postTodoList(todoMode: ActiveTodo | InactiveTodo, mode: string){
-        console.log('postTodo list', );
-        
+    postTodoList(todoMode: ActiveTodo | InactiveTodo, mode: string){        
         return this.http.post<ActiveTodo>(
             `https://todoapp-1b1f3-default-rtdb.europe-west1.firebasedatabase.app/fitriaman@gmail/${mode}.json`, todoMode
         )
     }
 
     updateTodoContent(todoId: string, itemId:string, content: string) {
-        console.log('updateTodoProp value');
-
         return this.http.patch<Todo>(
             `https://todoapp-1b1f3-default-rtdb.europe-west1.firebasedatabase.app/fitriaman@gmail/activeTodos/${todoId}/items/${itemId}.json`, {'content': content}
         )
@@ -109,7 +118,7 @@ export class DataStorageService {
         );
     }
 
-    setToActive(activeTodo: Record<string, ActiveTodo>, todoId: string) {
+    setToActive(activeTodo: Record<string, ActiveTodo>) {    
         return this.http.patch<any>(
             `https://todoapp-1b1f3-default-rtdb.europe-west1.firebasedatabase.app/fitriaman@gmail/activeTodos.json`, activeTodo
         )

@@ -11,7 +11,7 @@ import {
     ViewChildren,
 } from '@angular/core';
 import { ActivatedRoute, Data, Params, UrlTree } from '@angular/router';
-import { ActiveTodo, InactiveTodo, Todo } from '../../models/Todo';
+import { ActiveTodo, InactiveTodo, Todo, Todos } from '../../models/Todo';
 import { TodoService } from '../../todo.service';
 import { CanComponentDeactivate } from '../can-deactivate-guard.service';
 import { of, Observable, Subscription } from 'rxjs';
@@ -56,10 +56,10 @@ export class TodoItemComponent implements OnInit, AfterViewInit, CanComponentDea
     ngOnInit(): void {
         console.log('todo item component');
         // it load via a resolver : example - 152
-        this.route.data.subscribe((data: Data) => {
-            console.log('todo item resolver', data);
-            this.todos = data['activeTodoItem']; // the name: activeTodoItem - it is a custom name from route module
-        });
+        // this.route.data.subscribe((data: Data) => {
+        //     console.log('todo item resolver', data);
+        //     this.todos = data['activeTodoItem']; // the name: activeTodoItem - it is a custom name from route module
+        // });
 
         //it load via a normal route
         this.route.params.subscribe((params: Params) => {
@@ -68,8 +68,7 @@ export class TodoItemComponent implements OnInit, AfterViewInit, CanComponentDea
         });
 
         this.subscription = this.todoService.activeTodosItemUpdate.subscribe( (todos: Array<Todo>) => {
-            console.log('on list todo component------', todos);
-            this.todos = todos
+            this.todos = todos;
         });
 
         this.subscriptionLoading = this.todoService.loading.subscribe((loading: boolean) => {
@@ -85,13 +84,13 @@ export class TodoItemComponent implements OnInit, AfterViewInit, CanComponentDea
         this.inputFillUp = inputFillUp;
     }
 
-    onAddNewTodoItem(newItem: string) {
-        if (newItem === '') return;
+    onAddNewTodoItem(newItem: string | null) {
+        if (newItem === '' || newItem === null) return;
 
         this.newItem = newItem;
 
-        this.dataStorage.postTodoItem(new Todo(newItem, false, false), this.id).subscribe(todo =>{
-            this.todoService.addTodoItem(new Todo(newItem, false, false, todo.name), this.id);
+        this.dataStorage.postTodoItem(new Todo(newItem, false, false), this.id).subscribe((payload: unknown ) =>{            
+            this.todoService.addTodoItem(new Todo(newItem, false, false, (payload as {name: string}).name), this.id);
         })
 
         this.inputFillUp = false;
@@ -101,7 +100,7 @@ export class TodoItemComponent implements OnInit, AfterViewInit, CanComponentDea
         if (!itemId) return;
 
         let targetItemId = this.todos.find(todo => {
-            return todo.name === itemId
+            return todo.id === itemId
         })
         
         let isCompleted = targetItemId?.completed ? false : true;
@@ -119,15 +118,18 @@ export class TodoItemComponent implements OnInit, AfterViewInit, CanComponentDea
         .subscribe((payload: null) => {
             if(!payload) {
                 this.todoService.onSetToInactive(this.id, itemId);
-
-                let inActiveTodo = this.todoService.getInActiveTodos();
+                let inActiveTodo = this.todoService.getInActiveTodos();                
+                let inActiveTodoObj = this.arrayToObject(inActiveTodo, target =>  (target.todo.id) ? target.todo.id : '');
                 
-                let inActiveTodoObj = this.arrayToObject(inActiveTodo, target =>  (target.todo.name) ? target.todo.name : '');
-                console.log('inActiveTodoObj', inActiveTodoObj);
                 this.dataStorage.setToInactive(inActiveTodoObj).subscribe(payload => {
-                    console.log('arg---->', payload);
-
-                    //TODO create an info or redo function
+                    let inActiveTodos: Array<InactiveTodo> = [];                              
+                    const inActiveTodosList = Object.values(payload) as Array<InactiveTodo>;
+                    Object.entries(inActiveTodosList).forEach((val: [string, InactiveTodo]) => {
+                        inActiveTodos.push(new InactiveTodo(val[1].label, val[1].todo, val[1].name));
+                    });
+                    
+                    this.todoService.setInActiveTodo(inActiveTodos);
+                    //TODO create an info and redo function
                 })
             }
         });
@@ -162,7 +164,6 @@ export class TodoItemComponent implements OnInit, AfterViewInit, CanComponentDea
     setCaret(indexItem: number) {
         // example http://jsfiddle.net/timdown/vXnCM/
         let el = this.contentTodoRef?.toArray()[indexItem].nativeElement;
-        console.log('ellll', el);
         const range = this.document.createRange();
         const sel = this.window?.getSelection()!;
         range.setStart(el as Node, 0);

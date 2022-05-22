@@ -18,8 +18,8 @@
                 #contentTodo
                 class="todo-text flex cursor-pointer capitalize ml-1 text-gray-700"
                 [contentEditable]="todo.editable"
-                (click)="onSetToComplete(todo.name)"
-                (keydown)="onEnterDown($event, i, todo.name)"
+                (click)="onSetToComplete(todo.id)"
+                (keydown)="onEnterDown($event, i, todo.id)"
                 [ngClass]="{
                     'italic line-through text-red-400': todo.completed,
                     'underline italic border-0 outline-none text-sky-500': todo.editable
@@ -27,7 +27,7 @@
                 {{ todo.content }}
             </span>
             <span class="flex items-center ml-auto pl-2 text-gray-400 cursor-pointer">
-                <span class="px-2" (click)="onSetToEditable(i, todo.name)">
+                <span class="px-2" (click)="onSetToEditable(i, todo.id)">
                     <svg
                         *ngIf="!todo.editable; else notEditable"
                         aria-hidden="true"
@@ -45,7 +45,7 @@
                 </span>
                 <ng-template #notEditable> save </ng-template>
 
-                <span class="border-l-2 border-gray-200 px-2" (click)="onSetToInactive(todo.name)">
+                <span class="border-l-2 border-gray-200 px-2" (click)="onSetToInactive(todo.id)">
                     <svg
                         aria-hidden="true"
                         focusable="false"

@@ -3,11 +3,11 @@ export interface Todos {
     inActiveTodos: Array<InactiveTodo>;
 }
 export class Todo {
-    constructor(public content: string, public completed: boolean, public editable: boolean, public name?: string) {}
+    constructor(public content: string, public completed: boolean, public editable: boolean, public id?: string) {}
 }
 
 export class ActiveTodo {
-    constructor(public label: string, public items: Array<Todo>, public name?: string) {}
+    constructor(public label: string, public items: Array<Todo>, public name?: string, public test?: string) {}
 }
 
 export class InactiveTodo {

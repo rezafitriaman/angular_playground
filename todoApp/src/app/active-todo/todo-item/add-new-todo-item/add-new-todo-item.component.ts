@@ -26,6 +26,7 @@ export class AddNewTodoItemComponent implements OnInit {
         this.subscription = this.todoService.resetPlaceHolder.subscribe((value: string) => {
             this.inputValue = value;
         });
+        
         this.subscription2 = this.todoService.loading.subscribe((loading: boolean) => {
             this.loading = loading;
         });
@@ -40,7 +41,6 @@ export class AddNewTodoItemComponent implements OnInit {
     }
 
     onKeyDown() {
-        console.log('key down', this.form?.valid);
         this.inputFillUp.emit(this.form?.valid);
     }
 

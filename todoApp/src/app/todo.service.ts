@@ -1,8 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ActiveTodo, InactiveTodo, Todo, Todos } from './models/Todo';
 import { of, Subject } from 'rxjs';
-import { DataStorageService } from './shared/storage/data-storage.service';
-
 @Injectable({
     providedIn: 'root',
 })
@@ -21,9 +19,19 @@ export class TodoService {
     
     setTodos(todos: Todos) {
         this.todos = todos;
-        this.activeTodosAdd.next(this.todos.activeTodos.slice());
     }
- 
+
+    setActiveTodo(activeTodos: Array<ActiveTodo>) {
+        console.log('object origin active todos', this.todos);
+        this.todos.activeTodos = activeTodos;
+        this.activeTodosAdd.next(this.todos.activeTodos.slice());
+        console.log('setIn active todo', this.todos);
+    }
+
+    setInActiveTodo(inActiveTodo: Array<InactiveTodo>) {
+        this.todos.inActiveTodos = inActiveTodo;
+        this.updateInActiveTodo.next(this.todos.inActiveTodos);
+    }
     
     getTodos() {
         return this.todos;
@@ -42,13 +50,13 @@ export class TodoService {
     }
 
     getInActiveTodos(): Array<InactiveTodo> {
-        console.log('getInActiveTodos', this.todos);
         return this.todos.inActiveTodos.slice();
     }
 
     onSetToActive(labelId: string, todoId: string) {
+        console.log('set to active1', this.todos.activeTodos);
         let inActiveTodoIndex = this.todos.inActiveTodos.findIndex(inActiveTodo => {
-            return inActiveTodo.todo.name === todoId;
+            return inActiveTodo.todo.id === todoId;
         });
 
         let activeTodoIndex = this.todos.activeTodos.findIndex(activeTodo => {
@@ -58,29 +66,24 @@ export class TodoService {
         let content = this.todos.inActiveTodos[inActiveTodoIndex].todo.content;
         let completed = false;
         let editable = this.todos.inActiveTodos[inActiveTodoIndex].todo.editable;
-        let name = this.todos.inActiveTodos[inActiveTodoIndex].todo.name;
-        
-        this.todos.activeTodos[activeTodoIndex].items.push(new Todo(content, completed, editable, name));
-
+        let id = this.todos.inActiveTodos[inActiveTodoIndex].todo.id;
+        console.log('set to active', this.todos.activeTodos[activeTodoIndex]);
+        this.todos.activeTodos[activeTodoIndex].items.push(new Todo(content, completed, editable, id));
         this.todos.inActiveTodos.splice(inActiveTodoIndex, 1);
-        
         this.updateInActiveTodo.next(this.todos.inActiveTodos);
     }
 
     onSetToInactive(todoListIdName: string, itemIdName: string) {
-        console.log('on set to inactive');
         let todoIndex = this.todos.activeTodos.findIndex(activeTodo => {
             return activeTodo.name === todoListIdName;
         })
         
         let itemIndex = this.todos.activeTodos[todoIndex].items.findIndex(item => {
-            return item.name === itemIdName;
+            return item.id === itemIdName;
         })
 
         let label = this.todos.activeTodos[todoIndex].label;
-
         let todo = this.todos.activeTodos[todoIndex].items[itemIndex];
-
         let activeTodoId = this.todos.activeTodos[todoIndex].name;
 
         this.todos.activeTodos[todoIndex].items.splice(itemIndex, 1);
@@ -90,13 +93,13 @@ export class TodoService {
         this.activeTodosItemUpdate.next(this.todos.activeTodos[todoIndex].items.slice());
     }
 
-    onSetToComplete(todoListIdName: string, itemIdName: string, isCompleted: boolean) {
+    onSetToComplete(todoListIdName: string, itemId: string, isCompleted: boolean) {
         let todoIndex = this.todos.activeTodos.findIndex(activeTodo => {
             return activeTodo.name === todoListIdName;
         })
 
         let itemIndex = this.todos.activeTodos[todoIndex].items.findIndex(item => {
-            return item.name === itemIdName;
+            return item.id === itemId;
         })
 
         this.todos.activeTodos[todoIndex].items[itemIndex].completed = isCompleted
@@ -104,7 +107,7 @@ export class TodoService {
         this.activeTodosItemUpdate.next(this.todos.activeTodos[todoIndex].items.slice());
     }
 
-    onSetToEditable(todoListIdName: string, itemIdName: string, contentText: string) {
+    onSetToEditable(todoListIdName: string, itemId: string, contentText: string) {
         let todo = this.todos.activeTodos.find(activeTodo => {
             return activeTodo.name === todoListIdName;
         })
@@ -112,7 +115,7 @@ export class TodoService {
         if (!todo) return false;
         
         let targetItemId = todo.items.findIndex(item => {
-            return item.name === itemIdName
+            return item.id === itemId
         })
         
         if (todo.items[targetItemId].editable) {
@@ -136,7 +139,6 @@ export class TodoService {
         })
 
         this.todos.activeTodos[activeTodoIndex].items.push(todoItem);
-
         this.activeTodosItemUpdate.next(this.todos.activeTodos[activeTodoIndex].items.slice());
     }
 }

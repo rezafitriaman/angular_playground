@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { TodoService } from '../todo.service';
-import { InactiveTodo, Todo } from '../models/Todo';
+import { ActiveTodo, InactiveTodo, Todo, Todos } from '../models/Todo';
 import { DataStorageService } from '../shared/storage/data-storage.service';
 import { Observable, Subscription } from 'rxjs';
 
@@ -9,7 +9,7 @@ import { Observable, Subscription } from 'rxjs';
     templateUrl: './inactive-todo.component.html',
     styleUrls: ['./inactive-todo.component.css'],
 })
-export class InactiveTodoComponent implements OnInit {
+export class InactiveTodoComponent implements OnInit, OnDestroy {
     public todos: Array<InactiveTodo> = [];
     public subscriptionSetToActive: Subscription = new Observable().subscribe();
     // reference https://stackoverflow.com/questions/4215737/convert-array-to-object
@@ -25,7 +25,6 @@ export class InactiveTodoComponent implements OnInit {
 
     ngOnInit(): void {
         this.todos = this.todoService.getInActiveTodos();
-        console.log('this.todos--->', this.todos);
         this.todoService.updateInActiveTodo.subscribe((inActiveTodos) => {
             this.todos = inActiveTodos;
         });
@@ -37,19 +36,63 @@ export class InactiveTodoComponent implements OnInit {
         this.subscriptionSetToActive = this.dataStorage.deleteInActiveTodo(todoId)
         .subscribe((payload: null) => {
             if (!payload) {
-                console.log('deleted from firebase inActiveTodo');
                 this.todoService.onSetToActive(labelId, todoId);
+                
+                let activeTodos = this.todoService.getActiveTodos();
 
-                let activeTodo = this.todoService.getActiveTodos();
-                let activeTodoObj = this.arrayToObject(activeTodo, target =>  (target.name) ? target.name : '');
+                //convert todo array to a todo object - fire base need an Object
+                let activeTodoObj = this.arrayToObject(activeTodos, target =>  (target.name) ? target.name : '');
+                
+                //convert todo array to a todo object - fire base need an Object
+                for (const key of Object.keys(activeTodoObj)) {
+                    if(activeTodoObj[key].items) {
+                        (activeTodoObj[key].items as unknown) = this.arrayToObject(activeTodoObj[key].items, target => (target.id) ? target.id : '') as {[key:string]: Todo};
+                    }
+                }
 
-                this.dataStorage.setToActive(activeTodoObj, labelId).subscribe(payload => {
-                    console.log('arg---->', payload);
+                this.dataStorage.setToActive(activeTodoObj).subscribe(payload => {
+                    let activeTodos: Array<ActiveTodo> = [];                                    
+                    const activeTodosList = Object.values(payload) as Array<ActiveTodo>;
 
-                    //TODO create an info or redo function
+                    Object.entries(activeTodosList).forEach((val: [string, ActiveTodo]) => {
+                        const activeTodo = {
+                            get name() {
+                                return val[1].name; 
+                            },
+                            get label() {
+                                return val[1].label;
+                            },
+                            get items() {
+                                const target: Array<Todo> = [];
+                                
+                                if(val[1].items) {
+                                    const targetItems = Object.entries(val[1].items);
+            
+                                    targetItems.forEach((val: [string, Todo]) => {
+                                        const name = val[0];
+                                        const content = val[1].content;
+                                        const completed = val[1].completed;
+                                        const editable = val[1].editable;
+
+                                        target.push(new Todo(content, completed, editable, name));
+                                    })
+                                }
+    
+                                return target;
+                            }    
+                        }
+
+                        activeTodos.push(new ActiveTodo(activeTodo.label, activeTodo.items, activeTodo.name));
+                    })
+        
+                    this.todoService.setActiveTodo(activeTodos);
+                    //TODO create an info and redo function
                 })
-
             }
         })
+    }
+
+    ngOnDestroy(): void {
+        this.subscriptionSetToActive.unsubscribe();
     }
 }
