@@ -118,12 +118,15 @@ export class TodoItemComponent implements OnInit, AfterViewInit, CanComponentDea
         .subscribe((payload: null) => {
             if(!payload) {
                 this.todoService.onSetToInactive(this.id, itemId);
-                let inActiveTodo = this.todoService.getInActiveTodos();                
+                let inActiveTodo = this.todoService.getInActiveTodos();
+
+                //convert todo array to a todo object - fire base need an Object              
                 let inActiveTodoObj = this.arrayToObject(inActiveTodo, target =>  (target.todo.id) ? target.todo.id : '');
                 
                 this.dataStorage.setToInactive(inActiveTodoObj).subscribe(payload => {
                     let inActiveTodos: Array<InactiveTodo> = [];                              
                     const inActiveTodosList = Object.values(payload) as Array<InactiveTodo>;
+                
                     Object.entries(inActiveTodosList).forEach((val: [string, InactiveTodo]) => {
                         inActiveTodos.push(new InactiveTodo(val[1].label, val[1].todo, val[1].name));
                     });
@@ -139,6 +142,7 @@ export class TodoItemComponent implements OnInit, AfterViewInit, CanComponentDea
         if (!itemId) return;
         
         let contentText = this.contentTodoRef?.toArray()[indexItem].nativeElement.innerText;
+        
         this.subscriptionEditable = this.dataStorage.updateTodoContent(this.id, itemId, contentText)
         .subscribe((payrol: { content: string })=> {
             

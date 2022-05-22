@@ -16,7 +16,7 @@
             <span class="mr-1 text-gray-700">{{ i + 1 }} -</span>
             <span
                 #contentTodo
-                class="todo-text flex cursor-pointer capitalize ml-1 text-gray-700"
+                class="todo-text flex cursor-pointer capitalize ml-1 text-gray-700 select-none"
                 [contentEditable]="todo.editable"
                 (click)="onSetToComplete(todo.id)"
                 (keydown)="onEnterDown($event, i, todo.id)"
