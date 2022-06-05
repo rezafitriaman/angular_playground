@@ -18,7 +18,9 @@ export class SignInComponent implements OnInit {
         private todoService: TodoService
     ) {}
 
-    ngOnInit(): void {}
+    ngOnInit(): void {
+        console.log('sign in');
+    }
 
     onSubmit() {
         let initUrl = this.accountService.initUrl();

@@ -12,7 +12,7 @@ import { TodoService } from '../todo.service';
 })
 export class HeaderComponent implements OnInit, OnDestroy {
     @Input() brand: string = '';
-    public loggedIn: boolean = false; // set to 'false' if u need to log in;
+    public loggedIn: boolean = true; // set to 'false' if u need to log in;
     public subscription: Subscription = new Observable().subscribe();
     public subscription2: Subscription = new Observable().subscribe();
     public brandUrl = '/';
@@ -24,7 +24,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
     ) {}
 
     ngOnInit(): void {
-        this.subscription = this.accountService.loggedInInfo.subscribe((loggedInInfo: boolean) => {
+        this.subscription = this.accountService.loggedInInfo
+            .subscribe((loggedInInfo: boolean) => {
             this.loggedIn = loggedInInfo;
         });
 

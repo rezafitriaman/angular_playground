@@ -3,9 +3,10 @@
     <div class="mt-4">
         <div>
             <label class="block text-gray-600" for="email">Email</label>
-            <input
-                id="email"
-                class="px-3 py-3 mt-2 placeholder-blueGray-300 text-gray-600 relative bg-white rounded text-base border border-gray-300 outline-none focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent w-full"
+            <input id="email"
+                class="px-3 py-3 mt-2 placeholder-blueGray-300 text-gray-600 relative 
+                    bg-white rounded text-base border border-gray-300 outline-none 
+                    focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent w-full"
                 type="email"
                 placeholder="Email"
                 name="email"
@@ -14,8 +15,7 @@
                 email
                 #email="ngModel" />
         </div>
-        <span
-            *ngIf="email.invalid && email.touched"
+        <span *ngIf="email.invalid && email.touched"
             class="text-xs tracking-wide text-red-600">
             Email field is required
         </span>
@@ -31,8 +31,7 @@
                 ngModel
                 #password="ngModel" />
         </div>
-        <span
-            *ngIf="password.invalid && password.touched"
+        <span *ngIf="password.invalid && password.touched"
             class="text-xs tracking-wide text-red-600">
             Password field is required
         </span>
@@ -40,24 +39,21 @@
             <span class="flex justify-between">
                 <button
                     [disabled]="loginForm.form.invalid"
-                    [ngClass]="{
-                        'hover:bg-blue-400': !loginForm.form.invalid,
-                        'cursor-not-allowed': loginForm.form.invalid
-                    }"
-                    class="px-6 py-2 mt-4 text-white bg-blue-500 rounded-lg disabled:opacity-50 cursor-not-allowed"
+                    [ngClass]="{'hover:bg-blue-400': !loginForm.form.invalid, 'cursor-not-allowed': loginForm.form.invalid}"
+                    class="px-6 py-2 mt-4 text-white bg-blue-500 rounded-md disabled:opacity-50 cursor-not-allowed"
                     type="submit">
                     Login
                 </button>
                 <button
-                    class="px-6 py-2 mt-4 text-gray-600 rounded-lg hover:text-gray-400"
+                    class="px-6 py-2 mt-4 text-gray-600 rounded-md hover:text-gray-400"
                     type="button"
                     (click)="onSignup()">
                     Account maken
                 </button>
             </span>
-            <a href="#" class="mt-3 text-sm text-blue-500 hover:underline"
-                >Forgot password?</a
-            >
+            <a href="#" class="mt-3 text-sm text-blue-500 hover:underline">
+                Forgot password?
+            </a>
         </div>
     </div>
 </form>

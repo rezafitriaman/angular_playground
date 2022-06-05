@@ -9,5 +9,7 @@ import { AccountService } from './account.service';
 export class AccountComponent implements OnInit {
     constructor(private accountService: AccountService) {}
 
-    ngOnInit(): void {}
+    ngOnInit(): void {
+        console.log('account component');
+    }
 }

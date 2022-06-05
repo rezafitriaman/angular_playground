@@ -17,7 +17,7 @@ import { TodoService } from './todo.service';
     templateUrl: './app.component.html',
     styleUrls: ['./app.component.css'],
 })
-export class AppComponent implements AfterViewInit, OnInit {
+export class AppComponent implements OnInit {
     title = 'Easy-List';
     //@ViewChild(HeaderComponent, {static: false}) hello: HeaderComponent | undefined;
     //@ViewChild('myElm', {static: false}) myElm: ElementRef | undefined;
@@ -31,9 +31,5 @@ export class AppComponent implements AfterViewInit, OnInit {
         this.dataStorageService.fetchTodos().subscribe((todos: Todos) => {
             this.todoService.setTodos(todos);
         });
-    }
-    
-    ngAfterViewInit() {
-        //console.log("Hello ", this.myValue?.toArray());
     }
 }

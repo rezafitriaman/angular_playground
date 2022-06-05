@@ -17,6 +17,17 @@ export class DataStorageService {
             'https://todoapp-1b1f3-default-rtdb.europe-west1.firebasedatabase.app/fitriaman@gmail.json', todos
         );
     }
+
+    createAccount(accountName: string) {
+        const todos: Todos = {
+            activeTodos: [{'items': [], 'label': 'test', 'name': 'test'}],
+            inActiveTodos: []
+        }
+
+        return this.http.put<Todos>(
+            'https://todoapp-1b1f3-default-rtdb.europe-west1.firebasedatabase.app/master@gmail.json', todos
+        );        
+    }
     
     fetchTodos() {
         return this.http.get<Todos>('https://todoapp-1b1f3-default-rtdb.europe-west1.firebasedatabase.app/fitriaman@gmail.json')

@@ -11,11 +11,15 @@ import { DataStorageService } from '../shared/storage/data-storage.service';
 export class AccountService {
     public loggedIn: boolean = false; // if u need to loggin set this to 'false'
     public loggedInInfo: Subject<boolean> = new Subject<boolean>();
-    constructor(private todoService: TodoService, private dataStorageService: DataStorageService) {}
+    constructor(
+        private todoService: TodoService, 
+        private dataStorageService: DataStorageService
+    ) {}
 
     isAuthenticated(): Promise<boolean | UrlTree> {
         const promise = new Promise((resolve, reject) => {
-            this.dataStorageService.fetchTodos().subscribe((todos: Todos) => {
+            this.dataStorageService.fetchTodos()
+            .subscribe((todos: Todos) => {
                 this.todoService.setTodos(todos);
                 resolve(this.loggedIn);
             });
@@ -33,11 +37,11 @@ export class AccountService {
     onLogin(formValue: LoginOrJoinForm) {
         console.log('submit', formValue);
         this.loggedIn = true;
-        this.loggedInInfo.next(this.loggedIn);
+        this.loggedInInfo.next(this.loggedIn); // this code tell the header what to display
     }
 
     onLogout() {
         this.loggedIn = false;
-        this.loggedInInfo.next(this.loggedIn);
+        this.loggedInInfo.next(this.loggedIn); // this code tell the header what to display
     }
 }
