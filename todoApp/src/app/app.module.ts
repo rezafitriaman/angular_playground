@@ -19,6 +19,7 @@ import { AccountComponent } from './account/account.component';
 import { SignInComponent } from './account/sign-in/sign-in.component';
 import { SignUpComponent } from './account/sign-up/sign-up.component';
 import {HttpClientModule} from "@angular/common/http";
+import { ClickOutsideDirective } from './shared/click-outside.directive';
 
 @NgModule({
   declarations: [
@@ -35,6 +36,7 @@ import {HttpClientModule} from "@angular/common/http";
     AccountComponent,
     SignInComponent,
     SignUpComponent,
+    ClickOutsideDirective,
   ],
   imports: [
     BrowserModule,

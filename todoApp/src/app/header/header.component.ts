@@ -16,6 +16,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     public subscription: Subscription = new Observable().subscribe();
     public subscription2: Subscription = new Observable().subscribe();
     public brandUrl = '/';
+    public isMenuOpened: boolean = false;
 
     constructor(
         private router: Router,
@@ -36,6 +37,14 @@ export class HeaderComponent implements OnInit, OnDestroy {
                 this.brandUrl = url;
             }
         );
+    }
+
+    toggleMenu() {
+        this.isMenuOpened = !this.isMenuOpened;
+    }
+
+    clickedOutside(toggle: boolean) {
+        this.isMenuOpened = toggle;
     }
 
     onLogout() {
