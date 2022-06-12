@@ -1,77 +1,42 @@
-<!-- <nav class="relative flex flex-wrap items-center justify-between px-2 py-3 bg-gray-300 mb-6">
-    <div class="container px-4 mx-auto flex flex-wrap items-center justify-between">
-        <div
-            class="w-full relative flex justify-between lg:w-auto px-4 lg:static lg:block lg:justify-start">
-            <a
-                class="text-xl font-bold leading-relaxed inline-block mr-4 py-2 whitespace-nowrap uppercase text-white"
-                [routerLink]="brandUrl">
-                {{ brand }}
-            </a>
-            <button
-                class="cursor-pointer text-xl leading-none px-3 py-1 border border-solid border-transparent rounded bg-transparent block lg:hidden outline-none focus:outline-none"
-                type="button">
-                <span class="block relative w-6 h-px rounded-sm bg-white"></span>
-                <span class="block relative w-6 h-px rounded-sm bg-white mt-1"></span>
-                <span class="block relative w-6 h-px rounded-sm bg-white mt-1"></span>
-            </button>
-        </div>
-        <div class="lg:flex flex-grow items-center" id="example-navbar-warning">
-            <ul class="flex flex-col lg:flex-row list-none ml-auto">
-                <li class="nav-item" *ngIf="loggedIn">
-                    <a
-                        class="px-3 py-2 flex items-center text-base uppercase font-bold leading-snug text-white hover:opacity-75"
-                        routerLinkActive="hover:opacity-100">
-                        <span
-                            class="ml-2 border-white cursor-pointer"
-                            routerLinkActive="border-b-2 border-white pointer-events-none"
-                            routerLink="/activeTodo">
-                            Active Todo
-                        </span>
-                    </a>
-                </li>
-                <li class="nav-item" *ngIf="loggedIn">
-                    <a
-                        class="px-3 py-2 flex items-center text-base uppercase font-bold leading-snug text-white hover:opacity-75"
-                        routerLinkActive="hover:opacity-100">
-                        <span
-                            class="ml-2 cursor-pointer"
-                            routerLinkActive="border-b-2 border-white pointer-events-none"
-                            routerLink="/deletedTodo">
-                            Deleted todo
-                        </span>
-                    </a>
-                </li>
-                <li class="nav-item" *ngIf="loggedIn">
-                    <a
-                        class="flex items-center text-base uppercase font-bold leading-snug text-white hover:opacity-75"
-                        routerLinkActive="hover:opacity-100">
-                        <span
-                            class="ml-2 cursor-pointer border border-white px-4 py-2"
-                            (click)="onLogout()">Logout</span>
-                    </a>
-                </li>
-            </ul>
-        </div>
-    </div>
-</nav> -->
-
 <div class="border-b-2 border-gray-100">
     <nav class="container flex items-center mx-auto px-4 h-16">
         <div class="w-full relative">
-            <a class="flex items-center justify-start text-base font-bold leading-relaxed mr-4 py-2 whitespace-nowrap uppercase text-rose-400" [routerLink]="brandUrl">
-                <span class="flex text-rose-400">
-                    <svg class="fill-current block h-8 w-8" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
-                        <path d="M323.5 51.25C302.8 70.5 284 90.75 267.4 111.1C240.1 73.62 206.2 35.5 168 0C69.75 91.12 0 210 0 281.6C0 408.9 100.2 512 224 512s224-103.1 224-230.4C448 228.4 396 118.5 323.5 51.25zM304.1 391.9C282.4 407 255.8 416 226.9 
-                        416c-72.13 0-130.9-47.73-130.9-125.2c0-38.63 24.24-72.64 72.74-130.8c7 8 98.88 125.4 98.88 125.4l58.63-66.88c4.125 6.75 7.867 13.52 11.24 19.9C364.9 290.6 353.4 357.4 304.1 391.9z"/></svg>
-                </span>
-                <span class="ml-2">
-                    {{ brand }}
-                </span>
-            </a>
+            <div class="flex items-center justify-start text-base font-bold leading-relaxed mr-4 py-2 whitespace-nowrap uppercase text-rose-400">
+                <a [routerLink]="brandUrl" class="flex items-center justify-start p-1">
+                    <span class="flex text-rose-400">
+                        <svg class="fill-current block h-8 w-8" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                            <path d="M323.5 51.25C302.8 70.5 284 90.75 267.4 111.1C240.1 73.62 206.2 35.5 168 0C69.75 91.12 0 210 0 281.6C0 408.9 100.2 512 224 512s224-103.1 224-230.4C448 228.4 396 118.5 323.5 51.25zM304.1 391.9C282.4 407 255.8 416 226.9 
+                            416c-72.13 0-130.9-47.73-130.9-125.2c0-38.63 24.24-72.64 72.74-130.8c7 8 98.88 125.4 98.88 125.4l58.63-66.88c4.125 6.75 7.867 13.52 11.24 19.9C364.9 290.6 353.4 357.4 304.1 391.9z"/></svg>
+                    </span>
+                    <span class="ml-2" routerLink="/activeTodo">
+                        {{ brand }}
+                    </span>    
+                </a>
+            </div>
         </div>
-        <div class="w-full relative flex justify-end">
-            <a href="#" class="px-3 py-2 flex items-center text-sm leading-snug text-gray-400 hover:opacity-75">
-                Active Todo
+        <div class="w-full relative flex justify-end" *ngIf="loggedIn">
+            <a class="border-white cursor-pointer px-3 py-2 flex items-center text-sm leading-snug text-gray-400 z-30 hover:opacity-75">
+                <a class="relative py-2 text-sm leading-snug text-gray-400 hover:opacity-75" [routerLink]="['/activeTodo', 'new']">
+                    <span class="border-white cursor-pointer pb-1"
+                        routerLinkActive="border-b-2 border-gray-300 pointer-events-none" [routerLinkActiveOptions]="{exact: true}">
+                        New Todo
+                    </span>
+                    <span class="absolute -left-3 top-1 text-emerald-500">
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            aria-hidden="true"
+                            focusable="false"
+                            data-prefix="fas"
+                            data-icon="plus"
+                            class="svg-inline--fa fa-plus w-3 h-3 block fill-current"
+                            role="img"
+                            viewBox="0 0 448 512">
+                            <path
+                                fill="currentColor"
+                                d="M432 256c0 17.69-14.33 32.01-32 32.01H256v144c0 17.69-14.33 31.99-32 31.99s-32-14.3-32-31.99v-144H48c-17.67 0-32-14.32-32-32.01s14.33-31.99 32-31.99H192v-144c0-17.69 14.33-32.01 32-32.01s32 14.32 32 32.01v144h144C417.7 224 432 238.3 432 256z" />
+                        </svg>
+                    </span>
+                </a>
             </a>
             <button class="relative border rounded-md" type="button" appClickOutside (clickOutside)="clickedOutside($event)" (click)="toggleMenu()">
                 <div class="flex justify-center items-center p-2 hover:opacity-75">
@@ -82,15 +47,28 @@
                         <svg class="fill-current block h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Pro 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. --><path d="M256 0C114.6 0 0 114.6 0 256s114.6 256 256 256s256-114.6 256-256S397.4 0 256 0zM256 128c39.77 0 72 32.24 72 72S295.8 272 256 272c-39.76 0-72-32.24-72-72S216.2 128 256 128zM256 448c-52.93 0-100.9-21.53-135.7-56.29C136.5 349.9 176.5 320 224 320h64c47.54 0 87.54 29.88 103.7 71.71C356.9 426.5 308.9 448 256 448z"/></svg>
                     </span>    
                 </div>
-                <ul class="absolute flex flex-col items-start p-2 z-30 min-w-[10rem] right-0 top-12 bg-white shadow-md" aria-labelledby="navbarDropdown" *ngIf="isMenuOpened">
-                    <li>
-                        <a class="py-2 text-sm leading-snug text-gray-400 hover:opacity-75" href="#">Deleted todo</a>
+                <ul class="absolute flex flex-col items-start p-2 z-30 min-w-[10rem] right-0 top-14 bg-white shadow-md" aria-labelledby="navbarDropdown" *ngIf="isMenuOpened">
+                    <li class="mb-4" routerLink="/activeTodo">
+                        <a class="py-2 text-sm leading-snug text-gray-400 hover:opacity-75">
+                            <span class="pb-1 border-white border-b-2" routerLinkActive="border-gray-300" [routerLinkActiveOptions]="{exact: true}">
+                                Active Todo
+                            </span>
+                        </a>
+                    </li>
+                    <li routerLink="/deletedTodo">
+                        <a class="py-2 text-sm leading-snug text-gray-400 hover:opacity-75">
+                            <span class="pb-1 border-white border-b-2" routerLinkActive="border-gray-300">
+                                Deleted todo
+                            </span>
+                        </a>
                     </li>
                     <li class="w-full">
                         <hr class="border-t-2 border-gray-100 my-2">
                     </li>
-                    <li>
-                        <a class="py-2 text-sm leading-snug text-gray-400 hover:opacity-75" href="#">Logout</a>
+                    <li (click)="onLogout()">
+                        <a class="py-2 text-sm leading-snug text-gray-400 hover:opacity-75">
+                            Logout
+                        </a>
                     </li>
                 </ul>
             </button>
