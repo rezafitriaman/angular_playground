@@ -48,25 +48,25 @@
                     </span>    
                 </div>
                 <ul class="absolute flex flex-col items-start p-2 z-30 min-w-[10rem] right-0 top-14 bg-white shadow-md" aria-labelledby="navbarDropdown" *ngIf="isMenuOpened">
-                    <li class="mb-4" routerLink="/activeTodo">
-                        <a class="py-2 text-sm leading-snug text-gray-400 hover:opacity-75">
+                    <li class="w-full flex justify-start" routerLink="/activeTodo">
+                        <a class="flex w-full justify-start py-2 text-sm leading-snug text-gray-400 hover:opacity-75">
                             <span class="pb-1 border-white border-b-2" routerLinkActive="border-gray-300" [routerLinkActiveOptions]="{exact: true}">
                                 Active Todo
                             </span>
                         </a>
                     </li>
-                    <li routerLink="/deletedTodo">
-                        <a class="py-2 text-sm leading-snug text-gray-400 hover:opacity-75">
+                    <li class="w-full flex justify-start" routerLink="/deletedTodo">
+                        <a class="flex w-full justify-start py-2 text-sm leading-snug text-gray-400 hover:opacity-75">
                             <span class="pb-1 border-white border-b-2" routerLinkActive="border-gray-300">
                                 Deleted todo
                             </span>
                         </a>
                     </li>
                     <li class="w-full">
-                        <hr class="border-t-2 border-gray-100 my-2">
+                        <hr class="border-t-2 border-gray-100">
                     </li>
-                    <li (click)="onLogout()">
-                        <a class="py-2 text-sm leading-snug text-gray-400 hover:opacity-75">
+                    <li class="w-full flex justify-start" (click)="onLogout()">
+                        <a class="flex justify-start w-full py-2 text-sm leading-snug text-gray-400 hover:opacity-75">
                             Logout
                         </a>
                     </li>
