@@ -13,6 +13,7 @@ export class ListTodoComponent implements OnInit, OnDestroy {
     public todos: Array<ActiveTodo> = [];
     public newItem: boolean = false;
     public subscription: Subscription = new Observable().subscribe();
+    public subscriptionDelete: Subscription = new Observable().subscribe();
 
     constructor(
         private todoService: TodoService,
@@ -34,9 +35,14 @@ export class ListTodoComponent implements OnInit, OnDestroy {
                 this.newItem = false;
             }, 4000);
         });
+
+        this.subscriptionDelete = this.todoService.activeTodoDelete.subscribe((activeTodos: Array<ActiveTodo>) => {
+            this.todos = activeTodos;
+        });
     }
 
     ngOnDestroy() {
         this.subscription.unsubscribe();
+        this.subscriptionDelete.unsubscribe();
     }
 }

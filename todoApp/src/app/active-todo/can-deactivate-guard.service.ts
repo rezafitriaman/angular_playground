@@ -17,21 +17,15 @@ export interface CanComponentDeactivate {
 @Injectable({
     providedIn: 'root',
 })
-export class CanDeactivateGuardService
-    implements CanDeactivate<CanComponentDeactivate>
-{
+export class CanDeactivateGuardService implements CanDeactivate<CanComponentDeactivate> {
     constructor() {}
 
-    canDeactivate(
+    canDeactivate (
         component: CanComponentDeactivate,
         currentRoute: ActivatedRouteSnapshot,
         currentState: RouterStateSnapshot,
         nextState?: RouterStateSnapshot
-    ):
-        | Observable<boolean | UrlTree>
-        | Promise<boolean | UrlTree>
-        | boolean
-        | UrlTree {
+    ): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
         return component.canDeactivate();
     }
 }

@@ -10,6 +10,7 @@ export class TodoService {
         inActiveTodos: [],
     };
     public activeTodosAdd: Subject<Array<ActiveTodo>> = new Subject<Array<ActiveTodo>>();
+    public activeTodoDelete: Subject<Array<ActiveTodo>> = new Subject<Array<ActiveTodo>>();
     public activeTodosItemUpdate: Subject<Array<Todo>> = new Subject<Array<Todo>>();
     public resetPlaceHolder: Subject<string> = new Subject<string>();
     public updateInActiveTodo: Subject<Array<InactiveTodo>> = new Subject<Array<InactiveTodo>>();
@@ -24,7 +25,7 @@ export class TodoService {
     setActiveTodo(activeTodos: Array<ActiveTodo>) {
         console.log('object origin active todos', this.todos);
         this.todos.activeTodos = activeTodos;
-        this.activeTodosAdd.next(this.todos.activeTodos.slice());
+        this.activeTodosAdd.next(this.todos.activeTodos.slice()); // misschien hoef dit niet
         console.log('setIn active todo', this.todos);
     }
 
@@ -33,6 +34,15 @@ export class TodoService {
         this.updateInActiveTodo.next(this.todos.inActiveTodos);
     }
     
+    deleteActiveTodo(id: string) {
+        const activeTodoIndex = this.todos.activeTodos.findIndex((value)=>{
+            return value.name === id;
+        })
+        
+        this.todos.activeTodos.splice(activeTodoIndex, 1);
+        this.activeTodoDelete.next(this.todos.activeTodos.slice());        
+    }
+
     getTodos() {
         return this.todos;
     }
@@ -67,7 +77,7 @@ export class TodoService {
         let completed = false;
         let editable = this.todos.inActiveTodos[inActiveTodoIndex].todo.editable;
         let id = this.todos.inActiveTodos[inActiveTodoIndex].todo.id;
-        console.log('set to active', this.todos.activeTodos[activeTodoIndex]);
+
         this.todos.activeTodos[activeTodoIndex].items.push(new Todo(content, completed, editable, id));
         this.todos.inActiveTodos.splice(inActiveTodoIndex, 1);
         this.updateInActiveTodo.next(this.todos.inActiveTodos);

@@ -10,7 +10,7 @@ import {
     ViewChild,
     ViewChildren,
 } from '@angular/core';
-import { ActivatedRoute, Data, Params, UrlTree } from '@angular/router';
+import { ActivatedRoute, Data, Params, Router, UrlTree } from '@angular/router';
 import { ActiveTodo, InactiveTodo, Todo, Todos } from '../../models/Todo';
 import { TodoService } from '../../todo.service';
 import { CanComponentDeactivate } from '../can-deactivate-guard.service';
@@ -50,6 +50,7 @@ export class TodoItemComponent implements OnInit, AfterViewInit, CanComponentDea
         private dataStorage: DataStorageService,
         private renderer: Renderer2,
         private ref: ElementRef,
+        private router: Router,
         @Inject(DOCUMENT) private document: Document
     ) {}
 
@@ -77,7 +78,7 @@ export class TodoItemComponent implements OnInit, AfterViewInit, CanComponentDea
     }
 
     ngAfterViewInit() {
-        //console.log(this.contentTodoRef);
+        console.log(this.contentTodoRef);
     }
 
     onInputFillUp(inputFillUp: boolean | null | undefined) {
@@ -188,6 +189,13 @@ export class TodoItemComponent implements OnInit, AfterViewInit, CanComponentDea
         } else {
             return true;
         }
+    }
+
+    deleteItem() {
+        console.log('delete todo', this.todoService.getTodos());
+        //TODO add yes or no dialog please ! create firebase function to delete
+        this.todoService.deleteActiveTodo(this.id);
+        this.router.navigate(['/activeTodo']);
     }
 
     ngOnDestroy() {

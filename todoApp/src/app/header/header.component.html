@@ -15,8 +15,8 @@
             </div>
         </div>
         <div class="w-full relative flex justify-end" *ngIf="loggedIn">
-            <a class="border-white cursor-pointer px-3 py-2 flex items-center text-sm leading-snug text-gray-400 z-30 hover:opacity-75">
-                <a class="relative py-2 text-sm leading-snug text-gray-400 hover:opacity-75" [routerLink]="['/activeTodo', 'new']">
+            <a class="border-white cursor-pointer px-3 py-2 flex items-center text-sm leading-snug z-30 text-gray-600 hover:text-gray-400">
+                <span class="relative py-2 text-sm leading-snug text-gray-400 hover:opacity-75" [routerLink]="['/activeTodo', 'new']">
                     <span class="border-white cursor-pointer pb-1"
                         routerLinkActive="border-b-2 border-gray-300 pointer-events-none" [routerLinkActiveOptions]="{exact: true}">
                         New Todo
@@ -36,7 +36,7 @@
                                 d="M432 256c0 17.69-14.33 32.01-32 32.01H256v144c0 17.69-14.33 31.99-32 31.99s-32-14.3-32-31.99v-144H48c-17.67 0-32-14.32-32-32.01s14.33-31.99 32-31.99H192v-144c0-17.69 14.33-32.01 32-32.01s32 14.32 32 32.01v144h144C417.7 224 432 238.3 432 256z" />
                         </svg>
                     </span>
-                </a>
+                </span>
             </a>
             <button class="relative border rounded-md" type="button" appClickOutside (clickOutside)="clickedOutside($event)" (click)="toggleMenu()">
                 <div class="flex justify-center items-center p-2 hover:opacity-75">
@@ -49,14 +49,14 @@
                 </div>
                 <ul class="absolute flex flex-col items-start p-2 z-30 min-w-[10rem] right-0 top-14 bg-white shadow-md" aria-labelledby="navbarDropdown" *ngIf="isMenuOpened">
                     <li class="w-full flex justify-start" routerLink="/activeTodo">
-                        <a class="flex w-full justify-start py-2 text-sm leading-snug text-gray-400 hover:opacity-75">
+                        <a class="flex w-full justify-start py-2 text-sm leading-snug text-gray-600 hover:text-gray-400">
                             <span class="pb-1 border-white border-b-2" routerLinkActive="border-gray-300" [routerLinkActiveOptions]="{exact: true}">
                                 Active Todo
                             </span>
                         </a>
                     </li>
                     <li class="w-full flex justify-start" routerLink="/deletedTodo">
-                        <a class="flex w-full justify-start py-2 text-sm leading-snug text-gray-400 hover:opacity-75">
+                        <a class="flex w-full justify-start py-2 text-sm leading-snug text-gray-600 hover:text-gray-400">
                             <span class="pb-1 border-white border-b-2" routerLinkActive="border-gray-300">
                                 Deleted todo
                             </span>
@@ -66,7 +66,7 @@
                         <hr class="border-t-2 border-gray-100">
                     </li>
                     <li class="w-full flex justify-start" (click)="onLogout()">
-                        <a class="flex justify-start w-full py-2 text-sm leading-snug text-gray-400 hover:opacity-75">
+                        <a class="flex justify-start w-full py-2 text-sm leading-snug text-gray-600 hover:text-gray-400">
                             Logout
                         </a>
                     </li>
