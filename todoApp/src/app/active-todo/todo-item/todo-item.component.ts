@@ -28,6 +28,7 @@ export class TodoItemComponent implements OnInit, AfterViewInit, CanComponentDea
     public inputFillUp: boolean | null | undefined = false;
     public id: string = '';
     public todos: Todo[] = [];
+    public todoList: string | undefined = '';
     public newItem: string = '';
     public placeHolder: string = '';
     public loading: boolean = false;
@@ -36,6 +37,7 @@ export class TodoItemComponent implements OnInit, AfterViewInit, CanComponentDea
     public subscriptionEditable: Subscription = new Observable().subscribe();
     public subscriptionCompleted: Subscription = new Observable().subscribe();
     public subscriptionSetToInactive: Subscription = new Observable().subscribe();
+    public subscriptionDeleteTodoList: Subscription = new Observable().subscribe();
     public window: Window | null = this.document.defaultView;
     @ViewChildren('contentTodo') contentTodoRef: QueryList<ElementRef> | undefined;
     // reference https://stackoverflow.com/questions/4215737/convert-array-to-object
@@ -65,7 +67,10 @@ export class TodoItemComponent implements OnInit, AfterViewInit, CanComponentDea
         //it load via a normal route
         this.route.params.subscribe((params: Params) => {
             this.id = params['id'];
-            this.todos = this.todoService.getActiveTodoItem(this.id);
+            const activeTodo = this.todoService.getActiveTodo(this.id);
+
+            this.todoList = activeTodo ? activeTodo.label : '';
+            this.todos = activeTodo ? activeTodo.items : [];
         });
 
         this.subscription = this.todoService.activeTodosItemUpdate.subscribe( (todos: Array<Todo>) => {
@@ -192,10 +197,14 @@ export class TodoItemComponent implements OnInit, AfterViewInit, CanComponentDea
     }
 
     deleteItem() {
-        console.log('delete todo', this.todoService.getTodos());
-        //TODO add yes or no dialog please ! create firebase function to delete
-        this.todoService.deleteActiveTodo(this.id);
-        this.router.navigate(['/activeTodo']);
+        //TODO add yes or no dialog please !
+        this.subscriptionDeleteTodoList = this.dataStorage.deleteTodoList(this.id)
+        .subscribe((payrol: null) => {
+            if(!payrol) {
+                this.todoService.deleteActiveTodo(this.id);
+                this.router.navigate(['/activeTodo']);
+            }
+        })
     }
 
     ngOnDestroy() {
@@ -203,5 +212,6 @@ export class TodoItemComponent implements OnInit, AfterViewInit, CanComponentDea
         this.subscriptionEditable.unsubscribe();
         this.subscriptionCompleted.unsubscribe();
         this.subscriptionSetToInactive.unsubscribe();
+        this.subscriptionDeleteTodoList.unsubscribe();
     }
 }

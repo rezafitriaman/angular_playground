@@ -51,12 +51,12 @@ export class TodoService {
         return this.todos.activeTodos.slice();
     }
 
-    getActiveTodoItem(id: string) {
-        const activeTodo: ActiveTodo | undefined = this.todos.activeTodos.find((value)=>{
+    getActiveTodo(id: string) {
+        const activeTodo: ActiveTodo | undefined = this.todos.activeTodos.find((value) => {
             return value.name === id;
         })
-        
-        return activeTodo ? activeTodo.items : [];
+
+        return activeTodo;
     }
 
     getInActiveTodos(): Array<InactiveTodo> {

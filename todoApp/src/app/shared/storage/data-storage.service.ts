@@ -89,9 +89,15 @@ export class DataStorageService {
         );
     }
 
-    postTodoList(todoMode: ActiveTodo | InactiveTodo, mode: string){        
+    postTodoList(todoMode: ActiveTodo | InactiveTodo, mode: string) {
         return this.http.post<ActiveTodo>(
             `https://todoapp-1b1f3-default-rtdb.europe-west1.firebasedatabase.app/fitriaman@gmail/${mode}.json`, todoMode
+        )
+    }
+
+    deleteTodoList(todoId: string) {
+        return this.http.delete<null>(
+            `https://todoapp-1b1f3-default-rtdb.europe-west1.firebasedatabase.app/fitriaman@gmail/activeTodos/${todoId}.json`
         )
     }
 
