@@ -30,16 +30,18 @@ export class InactiveTodoComponent implements OnInit, OnDestroy {
         });
     }
 
-     onSetToActive(labelId: string | undefined, todoId: string | undefined) {
-        if (!labelId || !todoId) return;
-
+     onSetToActive(inActiveId: string | undefined, todoId: string | undefined, inActiveLabel: string) {
+        // hij moet labelId of todoId hebben
+        if (!inActiveId || !todoId) return;
+        // probeer item te deleten vanuit inActive tabel op firebase
         this.subscriptionSetToActive = this.dataStorage.deleteInActiveTodo(todoId)
         .subscribe((payload: null) => {
             if (!payload) {
-                this.todoService.onSetToActive(labelId, todoId);
-                
+                // set de item to active if the item allready deleted from firebase
+                this.todoService.onSetToActive(inActiveId, todoId, inActiveLabel);
+                // get all active todos
                 let activeTodos = this.todoService.getActiveTodos();
-
+                console.log('get active todos', activeTodos);
                 //convert todo array to a todo object - fire base need an Object
                 let activeTodoObj = this.arrayToObject(activeTodos, target =>  (target.name) ? target.name : '');
                 
@@ -49,9 +51,9 @@ export class InactiveTodoComponent implements OnInit, OnDestroy {
                         (activeTodoObj[key].items as unknown) = this.arrayToObject(activeTodoObj[key].items, target => (target.id) ? target.id : '') as {[key:string]: Todo};
                     }
                 }
-
+                // if deleted set de todo obj to active todo-section
                 this.dataStorage.setToActive(activeTodoObj).subscribe(payload => {
-                    let activeTodos: Array<ActiveTodo> = [];                                    
+                    let activeTodos: Array<ActiveTodo> = [];                            
                     const activeTodosList = Object.values(payload) as Array<ActiveTodo>;
 
                     Object.entries(activeTodosList).forEach((val: [string, ActiveTodo]) => {

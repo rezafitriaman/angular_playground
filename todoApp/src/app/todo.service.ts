@@ -23,10 +23,8 @@ export class TodoService {
     }
 
     setActiveTodo(activeTodos: Array<ActiveTodo>) {
-        console.log('object origin active todos', this.todos);
         this.todos.activeTodos = activeTodos;
         this.activeTodosAdd.next(this.todos.activeTodos.slice()); // misschien hoef dit niet
-        console.log('setIn active todo', this.todos);
     }
 
     setInActiveTodo(inActiveTodo: Array<InactiveTodo>) {
@@ -63,20 +61,36 @@ export class TodoService {
         return this.todos.inActiveTodos.slice();
     }
 
-    onSetToActive(labelId: string, todoId: string) {
+    onSetToActive(inActiveName: string, todoId: string, label: string) {
         console.log('set to active1', this.todos.activeTodos);
+
         let inActiveTodoIndex = this.todos.inActiveTodos.findIndex(inActiveTodo => {
             return inActiveTodo.todo.id === todoId;
         });
 
+        console.log('inActiveTodoIndex',inActiveTodoIndex);
+
         let activeTodoIndex = this.todos.activeTodos.findIndex(activeTodo => {
-            return activeTodo.name === labelId;
+            return activeTodo.name === inActiveName;
         });
+        //hij kan de index niet finden
+
+        console.log('activeTodoIndex', activeTodoIndex);
+        console.log('all active Todo', this.todos.activeTodos);
 
         let content = this.todos.inActiveTodos[inActiveTodoIndex].todo.content;
         let completed = false;
         let editable = this.todos.inActiveTodos[inActiveTodoIndex].todo.editable;
         let id = this.todos.inActiveTodos[inActiveTodoIndex].todo.id;
+        // hij kan de active Todo niet vinden omdat hij al eerder is verwijderd 
+        // this.todos.activeTodos[activeTodoIndex] geeft dan error.. 
+
+        if (activeTodoIndex === -1) {
+            this.todos.activeTodos.push(new ActiveTodo(label, [new Todo(content, completed, editable, id)], inActiveName ));
+            this.todos.inActiveTodos.splice(inActiveTodoIndex, 1);
+            this.updateInActiveTodo.next(this.todos.inActiveTodos);
+            return;
+        }
 
         this.todos.activeTodos[activeTodoIndex].items.push(new Todo(content, completed, editable, id));
         this.todos.inActiveTodos.splice(inActiveTodoIndex, 1);
