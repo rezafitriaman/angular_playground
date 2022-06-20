@@ -72,7 +72,7 @@ export class DataStorageService {
                     }    
                 }
 
-                todos.activeTodos.push(new ActiveTodo(activeTodo.label, activeTodo.items, activeTodo.name))
+                todos.activeTodos.push(new ActiveTodo(activeTodo.label, activeTodo.items, activeTodo.name));
             })
             
             Object.entries(inActiveTodosList).forEach((val: [string, InactiveTodo]) => {

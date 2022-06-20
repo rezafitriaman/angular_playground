@@ -15,8 +15,8 @@ import { SignInComponent } from './account/sign-in/sign-in.component';
 import { SignUpComponent } from './account/sign-up/sign-up.component';
 
 const routes: Routes = [
-    { path: '', redirectTo: 'account/login', pathMatch: 'full' }, // set this if u need to login
-    //{ path: '', redirectTo: 'activeTodo/0', pathMatch: 'full' }, // redirect to login
+    // { path: '', redirectTo: 'account/login', pathMatch: 'full' }, // set this if u need to login
+    { path: '', redirectTo: 'activeTodo/0', pathMatch: 'full' }, // redirect to login
     {
         path: 'account',
         component: AccountComponent,

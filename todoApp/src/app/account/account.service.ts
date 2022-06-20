@@ -9,7 +9,7 @@ import { DataStorageService } from '../shared/storage/data-storage.service';
     providedIn: 'root',
 })
 export class AccountService {
-    public loggedIn: boolean = false; // if u need to loggin set this to 'false'
+    public loggedIn: boolean = true; // if u need to loggin set this to 'false'
     public loggedInInfo: Subject<boolean> = new Subject<boolean>();
     constructor(
         private todoService: TodoService, 

@@ -62,37 +62,26 @@ export class TodoService {
     }
 
     onSetToActive(inActiveName: string, todoId: string, label: string) {
-        console.log('set to active1', this.todos.activeTodos);
-
         let inActiveTodoIndex = this.todos.inActiveTodos.findIndex(inActiveTodo => {
             return inActiveTodo.todo.id === todoId;
         });
 
-        console.log('inActiveTodoIndex',inActiveTodoIndex);
-
         let activeTodoIndex = this.todos.activeTodos.findIndex(activeTodo => {
             return activeTodo.name === inActiveName;
         });
-        //hij kan de index niet finden
-
-        console.log('activeTodoIndex', activeTodoIndex);
-        console.log('all active Todo', this.todos.activeTodos);
 
         let content = this.todos.inActiveTodos[inActiveTodoIndex].todo.content;
         let completed = false;
         let editable = this.todos.inActiveTodos[inActiveTodoIndex].todo.editable;
         let id = this.todos.inActiveTodos[inActiveTodoIndex].todo.id;
-        // hij kan de active Todo niet vinden omdat hij al eerder is verwijderd 
-        // this.todos.activeTodos[activeTodoIndex] geeft dan error.. 
 
+        //if the active todo item does not exest, create it first and and the todo
         if (activeTodoIndex === -1) {
-            this.todos.activeTodos.push(new ActiveTodo(label, [new Todo(content, completed, editable, id)], inActiveName ));
-            this.todos.inActiveTodos.splice(inActiveTodoIndex, 1);
-            this.updateInActiveTodo.next(this.todos.inActiveTodos);
-            return;
+            this.todos.activeTodos.push(new ActiveTodo(label, [new Todo(content, completed, editable, id)], inActiveName ));        
+        } else {
+            this.todos.activeTodos[activeTodoIndex].items.push(new Todo(content, completed, editable, id));
         }
 
-        this.todos.activeTodos[activeTodoIndex].items.push(new Todo(content, completed, editable, id));
         this.todos.inActiveTodos.splice(inActiveTodoIndex, 1);
         this.updateInActiveTodo.next(this.todos.inActiveTodos);
     }
@@ -111,9 +100,7 @@ export class TodoService {
         let activeTodoId = this.todos.activeTodos[todoIndex].name;
 
         this.todos.activeTodos[todoIndex].items.splice(itemIndex, 1);
-
         this.todos.inActiveTodos.push(new InactiveTodo(label, todo, activeTodoId));
-
         this.activeTodosItemUpdate.next(this.todos.activeTodos[todoIndex].items.slice());
     }
 
@@ -127,7 +114,6 @@ export class TodoService {
         })
 
         this.todos.activeTodos[todoIndex].items[itemIndex].completed = isCompleted
-
         this.activeTodosItemUpdate.next(this.todos.activeTodos[todoIndex].items.slice());
     }
 
