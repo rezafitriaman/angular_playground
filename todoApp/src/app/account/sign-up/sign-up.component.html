@@ -4,10 +4,8 @@
 <div *ngIf="error">
     <p>{{error}}</p>
 </div>
-<div *ngIf="isLoading">
-    <app-loading-spinner></app-loading-spinner>
-</div>
-<form (ngSubmit)="onSubmit()" #signInForm="ngForm" *ngIf="!isLoading">
+
+<form (ngSubmit)="onSubmit()" #signInForm="ngForm">
     <div class="mt-4">
         <div class="flex flex-wrap -mx-2 space-y-4 md:space-y-0">
             <div class="w-full px-2 md:w-1/2">
@@ -72,11 +70,14 @@
         </span>
         <div class="flex items-baseline justify-between flex-wrap">
             <span class="flex justify-between">
-                <button [disabled]="signInForm.form.invalid"
+                <button [disabled]="signInForm.form.invalid || isLoading"
                     [ngClass]="{'hover:bg-blue-400 cursor-pointer': !signInForm.form.invalid, 'cursor-not-allowed': signInForm.form.invalid}"
-                    class="px-6 py-2 mt-4 text-white bg-blue-500 rounded-md disabled:opacity-50"
+                    class="relative px-6 py-2 mt-4 text-white bg-blue-500 rounded-md disabled:opacity-50"
                     type="submit">
-                    Account maken
+                    <span [ngClass]="{'invisible ': isLoading}">Account maken</span>
+                    <span *ngIf="isLoading">
+                        <app-loading-spinner></app-loading-spinner>
+                    </span>
                 </button>
                 <button class="px-6 py-2 mt-4 text-gray-600 rounded-md hover:text-gray-400"
                     type="button"
@@ -87,3 +88,19 @@
         </div>
     </div>
 </form>
+
+<!-- todo create snackbar if an error accrour -->
+<!-- <div
+      class="mx-2 sm:mx-auto max-w-sm  flex flex-row items-center justify-between bg-blue-200 p-3 text-sm leading-none font-medium rounded-xl whitespace-no-wrap">
+      <div class="inline-flex items-center text-blue-500">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" viewBox="0 0 20 20" fill="currentColor">
+          <path fill-rule="evenodd"
+            d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
+            clip-rule="evenodd" />
+        </svg>
+        This is an info message!
+      </div>
+      <div class="text-blue-700 cursor-pointer hover:text-blue-800">
+        Action(3s)
+      </div>
+    </div> -->
