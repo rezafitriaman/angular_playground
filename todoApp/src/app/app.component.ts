@@ -28,8 +28,10 @@ export class AppComponent implements OnInit {
         //     console.log('todo stored', arg);
         // });
         console.log('app component', this.todoService.todos);
-        this.dataStorageService.fetchTodos().subscribe((todos: Todos) => {
-            this.todoService.setTodos(todos);
-        });
+
+        //test
+        // this.dataStorageService.fetchTodos().subscribe((todos: Todos) => {
+        //     this.todoService.setTodos(todos);
+        // });
     }
 }

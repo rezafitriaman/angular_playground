@@ -11,6 +11,8 @@ import { AccountService } from '../account.service';
 })
 export class SignUpComponent implements OnInit {
     @ViewChild('signInForm') form: NgForm | undefined;
+    public isLoading = false;
+    public error: string | null = null; // TODO 296
     constructor(
         private accountService: AccountService, 
         private router: Router,
@@ -22,16 +24,38 @@ export class SignUpComponent implements OnInit {
     }
 
     onSubmit() {
-        let initUrl = this.accountService.initUrl();
+        if(this.form?.invalid) return; 
+        console.log('form', this.form);
 
-        this.accountService.onLogin(this.form?.value);
-        this.router.navigate([initUrl]);
-        console.log('form',this.form?.value.email);
+        const email = this.form?.value.email;
+        const password = this.form?.value.password;
+        const name = this.form?.value.name;
+        const lastName = this.form?.value.lastName;
 
-        this.dataStorageService.createAccount(this.form?.value.email).subscribe((arg) =>{
-            console.log('account succesfully created', arg);
-        });
+        this.isLoading = true;
+        this.accountService.signUp(email, password).subscribe(
+            restData => {
+                console.log('restData',restData);
+                this.isLoading = false;
+            },
+            error => {
+                console.log('error', error);
+                this.error = 'An error occurred!'
+                this.isLoading = false;
+            }
+        );
+        this.form?.reset();
 
+        
+        //let initUrl = this.accountService.initUrl();
+        // this.accountService.onLogin(this.form?.value);
+        // this.router.navigate([initUrl]);
+        // console.log('form',this.form);
+
+        // this.dataStorageService.createAccount(this.form?.value.email).subscribe((arg) =>{
+        //     console.log('account succesfully created', arg);
+        //     this.form?.reset()
+        // });
     }
 
     onSignIn() {

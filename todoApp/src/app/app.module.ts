@@ -20,6 +20,7 @@ import { SignInComponent } from './account/sign-in/sign-in.component';
 import { SignUpComponent } from './account/sign-up/sign-up.component';
 import {HttpClientModule} from "@angular/common/http";
 import { ClickOutsideDirective } from './shared/click-outside.directive';
+import { LoadingSpinnerComponent } from './shared/loading-spinner/loading-spinner.component';
 
 @NgModule({
   declarations: [
@@ -37,6 +38,7 @@ import { ClickOutsideDirective } from './shared/click-outside.directive';
     SignInComponent,
     SignUpComponent,
     ClickOutsideDirective,
+    LoadingSpinnerComponent
   ],
   imports: [
     BrowserModule,

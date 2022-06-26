@@ -1,7 +1,13 @@
 <h3 class="text-2xl font-bold text-center text-gray-400">
     Signup to use EASY-LIST
 </h3>
-<form (ngSubmit)="onSubmit()" #signInForm="ngForm">
+<div *ngIf="error">
+    <p>{{error}}</p>
+</div>
+<div *ngIf="isLoading">
+    <app-loading-spinner></app-loading-spinner>
+</div>
+<form (ngSubmit)="onSubmit()" #signInForm="ngForm" *ngIf="!isLoading">
     <div class="mt-4">
         <div class="flex flex-wrap -mx-2 space-y-4 md:space-y-0">
             <div class="w-full px-2 md:w-1/2">
@@ -17,9 +23,7 @@
                     #name="ngModel" />
             </div>
             <div class="w-full px-2 md:w-1/2">
-                <label class="block text-gray-600" for="lastName"
-                    >Last name</label
-                >
+                <label class="block text-gray-600" for="lastName">Last name</label>
                 <input
                     class="px-3 py-3 mt-2 placeholder-blueGray-300 text-gray-600 relative bg-white rounded text-base border border-gray-300 outline-none focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent w-full"
                     type="text"
@@ -31,12 +35,7 @@
                     #lastName="ngModel" />
             </div>
         </div>
-        <span
-            *ngIf="
-                (name.invalid && name.touched) ||
-                (lastName.invalid && lastName.touched)
-            "
-            class="text-xs tracking-wide text-red-600">
+        <span *ngIf="(name.invalid && name.touched) || (lastName.invalid && lastName.touched)" class="text-xs tracking-wide text-red-600">
             First name field and Last name field are required
         </span>
         <div class="mt-4">
@@ -52,9 +51,7 @@
                 email
                 #email="ngModel" />
         </div>
-        <span
-            *ngIf="email.invalid && email.touched"
-            class="text-xs tracking-wide text-red-600">
+        <span *ngIf="email.invalid && email.touched" class="text-xs tracking-wide text-red-600">
             Email field is required
         </span>
         <div class="mt-4">
@@ -67,28 +64,21 @@
                 name="password"
                 required
                 ngModel
+                minlength="6"
                 #password="ngModel" />
         </div>
-        <span
-            *ngIf="password.invalid && password.touched"
-            class="text-xs tracking-wide text-red-600">
+        <span *ngIf="password.invalid && password.touched" class="text-xs tracking-wide text-red-600">
             Password field is required
         </span>
         <div class="flex items-baseline justify-between flex-wrap">
             <span class="flex justify-between">
-                <button
-                    [disabled]="signInForm.form.invalid"
-                    [ngClass]="{
-                        'hover:bg-blue-400 cursor-pointer':
-                            !signInForm.form.invalid,
-                        'cursor-not-allowed': signInForm.form.invalid
-                    }"
+                <button [disabled]="signInForm.form.invalid"
+                    [ngClass]="{'hover:bg-blue-400 cursor-pointer': !signInForm.form.invalid, 'cursor-not-allowed': signInForm.form.invalid}"
                     class="px-6 py-2 mt-4 text-white bg-blue-500 rounded-md disabled:opacity-50"
                     type="submit">
                     Account maken
                 </button>
-                <button
-                    class="px-6 py-2 mt-4 text-gray-600 rounded-md hover:text-gray-400"
+                <button class="px-6 py-2 mt-4 text-gray-600 rounded-md hover:text-gray-400"
                     type="button"
                     (click)="onSignIn()">
                     Login
