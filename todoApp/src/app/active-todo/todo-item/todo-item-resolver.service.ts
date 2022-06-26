@@ -19,6 +19,8 @@ export class TodoItemResolverService implements Resolve<Todo[]> {
         return new Promise((resolve, reject) => {
 
             this.dataStorageService.fetchTodos().subscribe((todos: Todos)=>{
+                console.log('state', state);
+                console.log('route', route);
                 const name = todos.activeTodos.find(activeTodo => activeTodo.name === route.params['id']);
                 
                 this.todoService.loading.next(false);
