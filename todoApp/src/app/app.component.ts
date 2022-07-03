@@ -2,11 +2,13 @@ import {
     AfterViewInit,
     Component,
     ElementRef,
+    OnDestroy,
     OnInit,
     QueryList,
     ViewChild,
     ViewChildren,
 } from '@angular/core';
+import { Observable, Subscription } from 'rxjs';
 import { AccountService } from './account/account.service';
 import { HeaderComponent } from './header/header.component';
 import { Todos } from './models/Todo';
@@ -18,9 +20,10 @@ import { TodoService } from './todo.service';
     templateUrl: './app.component.html',
     styleUrls: ['./app.component.css'],
 })
-export class AppComponent implements OnInit {
-    title = 'Easy-List';
+export class AppComponent implements OnInit, OnDestroy {
+    public title = 'Easy-List';
     public error: string | null = null; // TODO 296
+    public subscription: Subscription = new Observable().subscribe();
     //@ViewChild(HeaderComponent, {static: false}) hello: HeaderComponent | undefined;
     //@ViewChild('myElm', {static: false}) myElm: ElementRef | undefined;
     //@ViewChildren(HeaderComponent) myValue: QueryList<HeaderComponent> | undefined
@@ -36,7 +39,7 @@ export class AppComponent implements OnInit {
         //     this.todoService.setTodos(todos);
         // });
 
-        this.accountService.thereIsError.subscribe((error) => {
+        this.subscription = this.accountService.thereIsError.subscribe((error) => {
             console.log('on error', error);
             this.error = 'An error has occurred!';
             setTimeout(() => {
@@ -47,5 +50,9 @@ export class AppComponent implements OnInit {
     
     onDismissSnackbar() {
         this.error = null;
+    }
+
+    ngOnDestroy(): void {
+        this.subscription.unsubscribe();
     }
 }

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { TodoService } from '../../../todo.service';
 import { ActivatedRoute, UrlTree } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
@@ -9,7 +9,7 @@ import { NgForm } from '@angular/forms';
     templateUrl: './add-new-todo-item.component.html',
     styleUrls: ['./add-new-todo-item.component.css'],
 })
-export class AddNewTodoItemComponent implements OnInit {
+export class AddNewTodoItemComponent implements OnInit, OnDestroy {
     @ViewChild('addItemForm') form: NgForm | undefined;
     @Output() newItem: EventEmitter<string> = new EventEmitter<string>();
     @Output() inputFillUp: EventEmitter<boolean | null | undefined> = new EventEmitter<
