@@ -21,6 +21,7 @@ interface AuthResponseData {
 export class AccountService {
     public loggedIn: boolean = false; // if u need to loggin set this to 'false'
     public loggedInInfo: Subject<boolean> = new Subject<boolean>();
+    public thereIsError: Subject<string | null> = new Subject<string | null>();
     constructor(
         private todoService: TodoService, 
         private dataStorageService: DataStorageService,
@@ -64,5 +65,9 @@ export class AccountService {
                 returnSecureToken: true
             }
         );
+    }
+
+    onError(errorValue: string | null){
+        this.thereIsError.next(errorValue);
     }
 }

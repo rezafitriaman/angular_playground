@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import { DataStorageService } from 'src/app/shared/storage/data-storage.service';
@@ -12,7 +12,6 @@ import { AccountService } from '../account.service';
 export class SignUpComponent implements OnInit {
     @ViewChild('signInForm') form: NgForm | undefined;
     public isLoading = false;
-    public error: string | null = null; // TODO 296
     constructor(
         private accountService: AccountService, 
         private router: Router,
@@ -40,7 +39,7 @@ export class SignUpComponent implements OnInit {
             },
             error => {
                 console.log('error', error);
-                this.error = 'An error occurred!'
+                this.accountService.onError(error);
                 this.isLoading = false;
             }
         );

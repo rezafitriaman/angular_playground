@@ -1,9 +1,7 @@
 <h3 class="text-2xl font-bold text-center text-gray-400">
     Signup to use EASY-LIST
 </h3>
-<div *ngIf="error">
-    <p>{{error}}</p>
-</div>
+
 
 <form (ngSubmit)="onSubmit()" #signInForm="ngForm">
     <div class="mt-4">
@@ -88,19 +86,3 @@
         </div>
     </div>
 </form>
-
-<!-- todo create snackbar if an error accrour -->
-<!-- <div
-      class="mx-2 sm:mx-auto max-w-sm  flex flex-row items-center justify-between bg-blue-200 p-3 text-sm leading-none font-medium rounded-xl whitespace-no-wrap">
-      <div class="inline-flex items-center text-blue-500">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" viewBox="0 0 20 20" fill="currentColor">
-          <path fill-rule="evenodd"
-            d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
-            clip-rule="evenodd" />
-        </svg>
-        This is an info message!
-      </div>
-      <div class="text-blue-700 cursor-pointer hover:text-blue-800">
-        Action(3s)
-      </div>
-    </div> -->
