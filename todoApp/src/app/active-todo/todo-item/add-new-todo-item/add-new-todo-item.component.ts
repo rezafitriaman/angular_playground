@@ -12,9 +12,7 @@ import { NgForm } from '@angular/forms';
 export class AddNewTodoItemComponent implements OnInit, OnDestroy {
     @ViewChild('addItemForm') form: NgForm | undefined;
     @Output() newItem: EventEmitter<string> = new EventEmitter<string>();
-    @Output() inputFillUp: EventEmitter<boolean | null | undefined> = new EventEmitter<
-        boolean | null | undefined
-    >();
+    @Output() inputFillUp: EventEmitter<boolean | null | undefined> = new EventEmitter<boolean | null | undefined>();
     public inputValue: string = '';
     public subscription: Subscription = new Observable().subscribe();
     public subscription2: Subscription = new Observable().subscribe();
@@ -48,9 +46,4 @@ export class AddNewTodoItemComponent implements OnInit, OnDestroy {
         this.subscription.unsubscribe();
         this.subscription2.unsubscribe();
     }
-    /*  addTodo(newItem: string) {
-    this.newItem.emit(newItem);
-    this.inputValue = '';
-    this.inputFillUp.emit(false);
-  }*/
 }

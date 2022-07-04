@@ -15,16 +15,13 @@
         </li>
         <li class="item my-3 px-3 py-3 odd:bg-sky-50 even:bg-white flex rounded-md" *ngFor="let todo of todos; let i = index">
             <span class="mr-1 text-gray-700">{{ i + 1 }} -</span>
-            <span
-                #contentTodo
-                class="todo-text flex cursor-pointer capitalize ml-1 text-gray-700 select-none"
-                [contentEditable]="todo.editable"
-                (click)="onSetToComplete(todo.id)"
-                (keydown)="onEnterDown($event, i, todo.id)"
-                [ngClass]="{
-                    'italic line-through text-red-400': todo.completed,
-                    'underline italic border-0 outline-none text-sky-500': todo.editable
-                }">
+            <span 
+            #contentTodo 
+            class="todo-text flex cursor-pointer capitalize ml-1 text-gray-700 select-none"
+            [contentEditable]="todo.editable"
+            (click)="onSetToComplete(todo.id)"
+            (keydown)="onEnterDown($event, i, todo.id)"
+            [ngClass]="{'italic line-through text-red-400': todo.completed, 'underline italic border-0 outline-none text-sky-500': todo.editable}">
                 {{ todo.content }}
             </span>
             <span class="flex items-center ml-auto pl-2 text-gray-400 cursor-pointer">

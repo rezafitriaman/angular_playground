@@ -22,7 +22,7 @@ import { TodoService } from './todo.service';
 })
 export class AppComponent implements OnInit, OnDestroy {
     public title = 'Easy-List';
-    public error: string | null = null; // TODO 296
+    public error: string | null = null;
     public subscription: Subscription = new Observable().subscribe();
     //@ViewChild(HeaderComponent, {static: false}) hello: HeaderComponent | undefined;
     //@ViewChild('myElm', {static: false}) myElm: ElementRef | undefined;
@@ -39,9 +39,9 @@ export class AppComponent implements OnInit, OnDestroy {
         //     this.todoService.setTodos(todos);
         // });
 
-        this.subscription = this.accountService.thereIsError.subscribe((error) => {
+        this.subscription = this.accountService.thereIsError.subscribe((error: string | null) => { // TODO 297
             console.log('on error', error);
-            this.error = 'An error has occurred!';
+            this.error = error;
             setTimeout(() => {
                 this.error = null;
             }, 6000);

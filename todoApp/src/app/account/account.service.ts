@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
-import { Subject } from 'rxjs';
+import { Subject, throwError } from 'rxjs';
 import { UrlTree } from '@angular/router';
 import { LoginOrJoinForm, Todos } from '../models/Todo';
 import { TodoService } from '../todo.service';
 import { DataStorageService } from '../shared/storage/data-storage.service';
 import { HttpClient } from '@angular/common/http';
+import { catchError } from 'rxjs/operators';
 
 interface AuthResponseData {
     kind: string;
@@ -64,7 +65,30 @@ export class AccountService {
                 password: password,
                 returnSecureToken: true
             }
-        );
+        ).pipe(catchError((errorRes: any) => {
+            let errorMessage = 'An unknown error occurred!';
+            console.log(errorRes);
+            if (!errorRes.error || !errorRes.error.error) {
+                return throwError(errorMessage);    
+            }
+
+            switch (errorRes.error.error.message) {
+                case 'EMAIL_EXISTS':
+                    errorMessage = 'The email address is already in use by another account.';
+                    break;
+                case 'OPERATION_NOT_ALLOWED':
+                    errorMessage = 'Password isgn-in is disabled for this project.';
+                    break;
+                case 'TOO_MANY_ATTEMPTS_TRY_LATER':
+                    errorMessage = 'We have blocked all requests from this device due to unusual activity. Try again later.';
+                    break;
+                default:
+                    errorMessage = 'An unknown error occurred!';
+                    break;
+            }
+
+            return throwError(errorMessage);
+        }));
     }
 
     onError(errorValue: string | null){
