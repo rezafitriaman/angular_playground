@@ -66,13 +66,13 @@ export class AccountService {
 
             switch (errorRes.error.error.message) {
                 case 'EMAIL_NOT_FOUND':
-                    errorMessage = 'The email address is already in use by another account.';
+                    errorMessage = 'There is no user record corresponding to this identifier';
                     break;
                 case 'INVALID_PASSWORD':
-                    errorMessage = 'Password isgn-in is disabled for this project.';
+                    errorMessage = 'The password is invalid or the user does not have a password.';
                     break;
                 case 'USER_DISABLED':
-                    errorMessage = 'We have blocked all requests from this device due to unusual activity. Try again later.';
+                    errorMessage = 'The user account has been disabled by an administrator.';
                     break;
                 default:
                     errorMessage = 'An unknown error occurred!';
