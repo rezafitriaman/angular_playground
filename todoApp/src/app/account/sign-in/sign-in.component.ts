@@ -12,6 +12,7 @@ import { TodoService } from '../../todo.service';
 export class SignInComponent implements OnInit {
     @ViewChild('loginForm') form: NgForm | undefined;
     public signInTitle: string = '';
+    public isLoading = false;
     constructor(
         private accountService: AccountService,
         private router: Router,
@@ -24,12 +25,25 @@ export class SignInComponent implements OnInit {
 
     onSubmit() {
         let initUrl = this.accountService.initUrl();
+        let email = this.form?.value.email;
+        let password = this.form?.value.password;
 
-        this.accountService.onLogin(this.form?.value);
+        this.accountService.onLogin(this.form?.value).subscribe(
+            restData => {
+                console.log('restData',restData);
+                this.accountService.loggedInInfo.next(true);
+                this.isLoading = false;
+            },
+            errorMessage => {
+                this.accountService.onError(errorMessage);
+                this.isLoading = false;
+            }
+        );
+        this.form?.reset();
         this.router.navigate([initUrl]);
     }
 
-    onSignup() {
+    signupBtn() {
         //TODO create signup screen, maybe rewrite the component that have one parent component
 
         console.log('login');

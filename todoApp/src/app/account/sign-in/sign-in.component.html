@@ -40,14 +40,17 @@
                 <button
                     [disabled]="loginForm.form.invalid"
                     [ngClass]="{'hover:bg-blue-400': !loginForm.form.invalid, 'cursor-not-allowed': loginForm.form.invalid}"
-                    class="px-6 py-2 mt-4 text-white bg-blue-500 rounded-md disabled:opacity-50 cursor-not-allowed"
+                    class="relative px-6 py-2 mt-4 text-white bg-blue-500 rounded-md disabled:opacity-50 cursor-not-allowed"
                     type="submit">
-                    Login
+                    <span [ngClass]="{'invisible ': isLoading}">Login</span>
+                    <span *ngIf="isLoading" class="absolute left-1/2 top-1/2 -translate-y-1/2 -translate-x-1/2">
+                        <app-loading-spinner></app-loading-spinner>
+                    </span>
                 </button>
                 <button
                     class="px-6 py-2 mt-4 text-gray-600 rounded-md hover:text-gray-400"
                     type="button"
-                    (click)="onSignup()">
+                    (click)="signupBtn()">
                     Account maken
                 </button>
             </span>

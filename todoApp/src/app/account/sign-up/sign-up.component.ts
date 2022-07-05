@@ -24,6 +24,8 @@ export class SignUpComponent implements OnInit {
 
     onSubmit() {
         if(this.form?.invalid) return; 
+        let initUrl = this.accountService.initUrl();
+
         console.log('form', this.form);
 
         const email = this.form?.value.email;
@@ -32,9 +34,10 @@ export class SignUpComponent implements OnInit {
         const lastName = this.form?.value.lastName;
 
         this.isLoading = true;
-        this.accountService.signUp(email, password).subscribe(
+        this.accountService.onSignUp(email, password).subscribe(
             restData => {
                 console.log('restData',restData);
+                this.accountService.loggedInInfo.next(true);
                 this.isLoading = false;
             },
             errorMessage => {
@@ -43,6 +46,7 @@ export class SignUpComponent implements OnInit {
             }
         );
         this.form?.reset();
+        this.router.navigate([initUrl]);
 
         
         //let initUrl = this.accountService.initUrl();

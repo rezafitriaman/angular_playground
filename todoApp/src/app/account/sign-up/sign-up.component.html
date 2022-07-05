@@ -73,7 +73,7 @@
                     class="relative px-6 py-2 mt-4 text-white bg-blue-500 rounded-md disabled:opacity-50"
                     type="submit">
                     <span [ngClass]="{'invisible ': isLoading}">Account maken</span>
-                    <span *ngIf="isLoading">
+                    <span *ngIf="isLoading" class="absolute left-1/2 top-1/2 -translate-y-1/2 -translate-x-1/2">
                         <app-loading-spinner></app-loading-spinner>
                     </span>
                 </button>

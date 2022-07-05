@@ -14,6 +14,7 @@ interface AuthResponseData {
     refreshToken: string;
     expiresIn: string;
     localId: string;
+    registered?: boolean;
 }
 
 @Injectable({
@@ -49,8 +50,39 @@ export class AccountService {
 
     onLogin(formValue: LoginOrJoinForm) {
         console.log('submit', formValue);
-        this.loggedIn = true;
-        this.loggedInInfo.next(this.loggedIn); // this code tell the header what to display
+
+        return this.http.post<AuthResponseData>('https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyAmfRwM7wb9RulolvYQraAVEmiwsh-Wi0A',
+            {
+                email: formValue.email,
+                password: formValue.password,
+                returnSecureToken: true
+            }        
+        ).pipe(catchError((errorRes: any) => {
+            let errorMessage = 'An unknown error occurred!';
+            console.log(errorRes);
+            if (!errorRes.error || !errorRes.error.error) {
+                return throwError(errorMessage);    
+            }
+
+            switch (errorRes.error.error.message) {
+                case 'EMAIL_NOT_FOUND':
+                    errorMessage = 'The email address is already in use by another account.';
+                    break;
+                case 'INVALID_PASSWORD':
+                    errorMessage = 'Password isgn-in is disabled for this project.';
+                    break;
+                case 'USER_DISABLED':
+                    errorMessage = 'We have blocked all requests from this device due to unusual activity. Try again later.';
+                    break;
+                default:
+                    errorMessage = 'An unknown error occurred!';
+                    break;
+            }
+
+            return throwError(errorMessage);
+        }));
+        // this.loggedIn = true;
+        // this.loggedInInfo.next(this.loggedIn); // this code tell the header what to display
     }
 
     onLogout() {
@@ -58,7 +90,7 @@ export class AccountService {
         this.loggedInInfo.next(this.loggedIn); // this code tell the header what to display
     }
 
-    signUp(email: string, password: string) {
+    onSignUp(email: string, password: string) {
         return this.http.post<AuthResponseData>('https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyAmfRwM7wb9RulolvYQraAVEmiwsh-Wi0A',
             {    
                 email: email,
