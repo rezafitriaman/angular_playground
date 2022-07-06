@@ -26,7 +26,7 @@ export class DataStorageService {
 
         return this.http.put<Todos>(
             'https://todoapp-1b1f3-default-rtdb.europe-west1.firebasedatabase.app/master@gmail.json', todos
-        );        
+        );
     }
     
     fetchTodos() {

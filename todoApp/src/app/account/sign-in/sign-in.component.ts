@@ -24,18 +24,17 @@ export class SignInComponent implements OnInit {
     }
 
     onSubmit() {
+        if(this.form?.invalid) return; 
         let initUrl = this.accountService.initUrl();
-        let email = this.form?.value.email;
-        let password = this.form?.value.password;
-
+        
         this.accountService.onLogin(this.form?.value).subscribe(
             restData => {
                 console.log('restData',restData);
-                this.accountService.loggedInInfo.next(true);
+                this.accountService.loggedInInfo.next(true); // this code tell the header what to display
                 this.isLoading = false;
             },
             errorMessage => {
-                this.accountService.onError(errorMessage);
+                this.accountService.thereIsError.next(errorMessage);
                 this.isLoading = false;
             }
         );

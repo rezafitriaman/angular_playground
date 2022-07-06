@@ -26,22 +26,15 @@ export class SignUpComponent implements OnInit {
         if(this.form?.invalid) return; 
         let initUrl = this.accountService.initUrl();
 
-        console.log('form', this.form);
-
-        const email = this.form?.value.email;
-        const password = this.form?.value.password;
-        const name = this.form?.value.name;
-        const lastName = this.form?.value.lastName;
-
         this.isLoading = true;
-        this.accountService.onSignUp(email, password).subscribe(
+        this.accountService.onSignUp(this.form?.value).subscribe(
             restData => {
                 console.log('restData',restData);
                 this.accountService.loggedInInfo.next(true);
                 this.isLoading = false;
             },
             errorMessage => {
-                this.accountService.onError(errorMessage);
+                this.accountService.thereIsError.next(errorMessage);
                 this.isLoading = false;
             }
         );

@@ -29,6 +29,7 @@
                 name="password"
                 required
                 ngModel
+                minlength="6"
                 #password="ngModel" />
         </div>
         <span *ngIf="password.invalid && password.touched"

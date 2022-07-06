@@ -39,7 +39,7 @@ export class AppComponent implements OnInit, OnDestroy {
         //     this.todoService.setTodos(todos);
         // });
 
-        this.subscription = this.accountService.thereIsError.subscribe((error: string | null) => { // TODO 297
+        this.subscription = this.accountService.thereIsError.subscribe((error: string | null) => {
             console.log('on error', error);
             this.error = error;
             setTimeout(() => {
