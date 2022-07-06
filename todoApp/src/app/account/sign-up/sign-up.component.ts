@@ -41,12 +41,6 @@ export class SignUpComponent implements OnInit {
         this.form?.reset();
         this.router.navigate([initUrl]);
 
-        
-        //let initUrl = this.accountService.initUrl();
-        // this.accountService.onLogin(this.form?.value);
-        // this.router.navigate([initUrl]);
-        // console.log('form',this.form);
-
         // this.dataStorageService.createAccount(this.form?.value.email).subscribe((arg) =>{
         //     console.log('account succesfully created', arg);
         //     this.form?.reset()
