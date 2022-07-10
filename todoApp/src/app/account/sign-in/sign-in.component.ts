@@ -29,8 +29,8 @@ export class SignInComponent implements OnInit {
         
         this.accountService.onLogin(this.form?.value).subscribe(
             restData => {
-                console.log('restData',restData);
-                this.accountService.loggedInInfo.next(true); // this code tell the header what to display
+                // u dont use rest data - becouse it is a pure resdata 
+                // this.accountService.loggedInInfo.next(true); // this code tell the header what to display
                 this.isLoading = false;
             },
             errorMessage => {
