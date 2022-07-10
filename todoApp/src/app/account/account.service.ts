@@ -5,7 +5,8 @@ import { LoginOrJoinForm, Todos } from '../models/Todo';
 import { TodoService } from '../todo.service';
 import { DataStorageService } from '../shared/storage/data-storage.service';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { catchError } from 'rxjs/operators';
+import { catchError, tap } from 'rxjs/operators';
+import { User } from '../models/User';
 
 interface AuthResponseData {
     kind: string;
@@ -23,6 +24,7 @@ interface AuthResponseData {
 export class AccountService {
     public loggedInInfo: Subject<boolean> = new Subject<boolean>();
     public thereIsError: Subject<string | null> = new Subject<string | null>();
+    public user = new Subject<User>();
     constructor(
         private todoService: TodoService, 
         private dataStorageService: DataStorageService,
@@ -56,7 +58,13 @@ export class AccountService {
                 password: formValue.password,
                 returnSecureToken: true
             }        
-        ).pipe(catchError(this.handleError));
+        ).pipe(
+            catchError(this.handleError),
+            tap(resData => {
+                console.log('object resData', resData);
+                this.handleAuthentication(resData.email, resData.localId, resData.idToken, +resData.expiresIn);
+            })    
+        );
     }
 
     onLogout() {
@@ -70,7 +78,20 @@ export class AccountService {
                 password: formValue.password,
                 returnSecureToken: true
             }
-        ).pipe(catchError(this.handleError));
+        ).pipe(
+            catchError(this.handleError),
+            tap(resData => {
+                console.log('object resData', resData);
+                this.handleAuthentication(resData.email, resData.localId, resData.idToken, +resData.expiresIn);
+            })
+        );
+    }
+
+    private handleAuthentication(email: string, userId: string, token: string, expiresIn: number) {
+        const expirationDate = new Date(new Date().getTime() + expiresIn * 1000);
+        const user = new User(email, userId, token, expirationDate);
+
+        this.user.next(user);
     }
 
     private handleError(errorRes: HttpErrorResponse) {
