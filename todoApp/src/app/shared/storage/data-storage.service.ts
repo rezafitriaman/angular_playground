@@ -1,14 +1,64 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { map } from 'rxjs/operators';
+import { map, switchMap, take } from 'rxjs/operators';
 import { ActiveTodo, InactiveTodo, Todo, Todos } from 'src/app/models/Todo';
 import { TodoService } from 'src/app/todo.service';
+import { catchError, tap } from 'rxjs/operators';
+import { BehaviorSubject, Subject, throwError } from 'rxjs';
+import { LoginOrJoinForm } from 'src/app/models/Todo';
+import { HttpErrorResponse } from '@angular/common/http';
+import { User } from 'src/app/models/User';
+
+interface AuthResponseData {
+    kind: string;
+    idToken: string;
+    email: string;
+    refreshToken: string;
+    expiresIn: string;
+    localId: string;
+    registered?: boolean;
+}
 
 @Injectable({
     providedIn: 'root',
 })
 export class DataStorageService {
-    constructor(private http: HttpClient, private todoService: TodoService) {}
+    public loggedInInfo: Subject<boolean> = new Subject<boolean>();
+    public thereIsError: Subject<string | null> = new Subject<string | null> ();
+    public user = new BehaviorSubject<User | null>(null);
+    constructor(private http: HttpClient, private todoService: TodoService) {};
+
+    signInWithPassword(formValue: LoginOrJoinForm) {
+        return this.http.post<AuthResponseData>('https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyAmfRwM7wb9RulolvYQraAVEmiwsh-Wi0A',
+            {
+                email: formValue.email,
+                password: formValue.password,
+                returnSecureToken: true
+            }
+        ).pipe(
+            catchError(this.handleError),
+            tap(resData => {
+                console.log('object resData', resData);
+                this.handleAuthentication(resData.email, resData.localId, resData.idToken, +resData.expiresIn);
+            })    
+        );
+    }
+
+    signUpWithPassword(formValue: LoginOrJoinForm) {
+        return this.http.post<AuthResponseData>('https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyAmfRwM7wb9RulolvYQraAVEmiwsh-Wi0A',
+            {
+                email: formValue.email,
+                password: formValue.password,
+                returnSecureToken: true
+            }
+        ).pipe(
+            catchError(this.handleError),
+            tap(resData => {
+                console.log('object resData', resData);
+                this.handleAuthentication(resData.email, resData.localId, resData.idToken, +resData.expiresIn);
+            })
+        );
+    }
 
     storeTodos() {
         const todos = this.todoService.getTodos();
@@ -30,118 +80,68 @@ export class DataStorageService {
     }
     
     fetchTodos() {
-        // return this.accountService.user.pipe(
-        //     take(1),
-        //     switchMap((user: User | null) => {
-        //         let userToken = user?.token ? user.token : 'tokenIsinvallid';
-
-        //         return this.http.get<Todos>('https://todoapp-1b1f3-default-rtdb.europe-west1.firebasedatabase.app/fitriaman@gmail.json', 
-        //         {
-        //             params: new HttpParams().set('auth', userToken)
-        //         })        
-        //     }),
-        //     map(todosFromFireBase => {
-        //         const todos: Todos = {
-        //             activeTodos: [],
-        //             inActiveTodos: [],
-        //         }
-    
-        //         if(!todosFromFireBase){
-        //             return todos;
-        //         }
-    
-        //         const activeTodosList = Object.values(todosFromFireBase)[0] as Array<ActiveTodo>;
-        //         const inActiveTodosList = Object.values(todosFromFireBase)[1] as Array<InactiveTodo> ? Object.values(todosFromFireBase)[1] as Array<InactiveTodo> : [];
-    
-        //         Object.entries(activeTodosList).forEach((val: [string, ActiveTodo]) => {
-        //             const activeTodo = {
-        //                 get name() {
-        //                     return val[0]; 
-        //                 },
-        //                 get label() {
-        //                     return val[1].label;
-        //                 },
-        //                 get items() {
-        //                     const target: Array<Todo> = [];
-                            
-        //                     if(val[1].items) {
-        //                         const targetItems = Object.entries(val[1].items);
-        
-        //                         targetItems.forEach((val: [string, Todo]) => {
-        //                             const name = val[0];
-        //                             const content = val[1].content;
-        //                             const completed = val[1].completed;
-        //                             const editable = val[1].editable;
-    
-        //                             target.push(new Todo(content, completed, editable, name));
-        //                         })
-        //                     }
-    
-        //                     return target;
-        //                 }    
-        //             }
-    
-        //             todos.activeTodos.push(new ActiveTodo(activeTodo.label, activeTodo.items, activeTodo.name));
-        //         })
+        return this.user.pipe(
+            take(1),
+            switchMap((user: User | null) => {
+                let userToken = user?.token ? user.token : 'tokenIsinvallid';
                 
-        //         Object.entries(inActiveTodosList).forEach((val: [string, InactiveTodo]) => {
-        //             todos.inActiveTodos.push(new InactiveTodo(val[1].label, val[1].todo, val[1].name));
-        //         })
-    
-        //         return todos;
-        //     })
-        // );
-        return this.http.get<Todos>('https://todoapp-1b1f3-default-rtdb.europe-west1.firebasedatabase.app/fitriaman@gmail.json')
-        .pipe(map(todosFromFireBase => {
-            const todos: Todos = {
-                activeTodos: [],
-                inActiveTodos: [],
-            }
-
-            if(!todosFromFireBase){
-                return todos;
-            }
-
-            const activeTodosList = Object.values(todosFromFireBase)[0] as Array<ActiveTodo>;
-            const inActiveTodosList = Object.values(todosFromFireBase)[1] as Array<InactiveTodo> ? Object.values(todosFromFireBase)[1] as Array<InactiveTodo> : [];
-
-            Object.entries(activeTodosList).forEach((val: [string, ActiveTodo]) => {
-                const activeTodo = {
-                    get name() {
-                        return val[0]; 
-                    },
-                    get label() {
-                        return val[1].label;
-                    },
-                    get items() {
-                        const target: Array<Todo> = [];
-                        
-                        if(val[1].items) {
-                            const targetItems = Object.entries(val[1].items);
-    
-                            targetItems.forEach((val: [string, Todo]) => {
-                                const name = val[0];
-                                const content = val[1].content;
-                                const completed = val[1].completed;
-                                const editable = val[1].editable;
-
-                                target.push(new Todo(content, completed, editable, name));
-                            })
-                        }
-
-                        return target;
-                    }    
+                console.log('data storage - user', user);
+                return this.http.get<Todos>('https://todoapp-1b1f3-default-rtdb.europe-west1.firebasedatabase.app/fitriaman@gmail.json', 
+                {
+                    params: new HttpParams().set('auth', userToken)
+                })
+            }),
+            map(todosFromFireBase => {
+                const todos: Todos = {
+                    activeTodos: [],
+                    inActiveTodos: [],
                 }
-
-                todos.activeTodos.push(new ActiveTodo(activeTodo.label, activeTodo.items, activeTodo.name));
+    
+                if(!todosFromFireBase){
+                    return todos;
+                }
+    
+                const activeTodosList = Object.values(todosFromFireBase)[0] as Array<ActiveTodo>;
+                const inActiveTodosList = Object.values(todosFromFireBase)[1] as Array<InactiveTodo> ? Object.values(todosFromFireBase)[1] as Array<InactiveTodo> : [];
+    
+                Object.entries(activeTodosList).forEach((val: [string, ActiveTodo]) => {
+                    const activeTodo = {
+                        get name() {
+                            return val[0]; 
+                        },
+                        get label() {
+                            return val[1].label;
+                        },
+                        get items() {
+                            const target: Array<Todo> = [];
+                            
+                            if(val[1].items) {
+                                const targetItems = Object.entries(val[1].items);
+        
+                                targetItems.forEach((val: [string, Todo]) => {
+                                    const name = val[0];
+                                    const content = val[1].content;
+                                    const completed = val[1].completed;
+                                    const editable = val[1].editable;
+    
+                                    target.push(new Todo(content, completed, editable, name));
+                                })
+                            }
+    
+                            return target;
+                        }
+                    }
+    
+                    todos.activeTodos.push(new ActiveTodo(activeTodo.label, activeTodo.items, activeTodo.name));
+                })
+                
+                Object.entries(inActiveTodosList).forEach((val: [string, InactiveTodo]) => {
+                    todos.inActiveTodos.push(new InactiveTodo(val[1].label, val[1].todo, val[1].name));
+                })
+    
+                return todos;
             })
-            
-            Object.entries(inActiveTodosList).forEach((val: [string, InactiveTodo]) => {
-                todos.inActiveTodos.push(new InactiveTodo(val[1].label, val[1].todo, val[1].name));
-            })
-
-            return todos;
-        }));
+        );
     }
 
     postTodoItem(todo: Todo, todoId: string) {
@@ -197,7 +197,49 @@ export class DataStorageService {
             `https://todoapp-1b1f3-default-rtdb.europe-west1.firebasedatabase.app/fitriaman@gmail/activeTodos.json`, activeTodo
         )
     }
-} 
+
+    private handleAuthentication(email: string, userId: string, token: string, expiresIn: number) {
+        const expirationDate = new Date(new Date().getTime() + expiresIn * 1000);
+        const user = new User(email, userId, token, expirationDate);
+        console.log('data storage - user', user );
+        this.user.next(user);
+    }
+
+    private handleError(errorRes: HttpErrorResponse) {
+        let errorMessage = 'An unknown error occurred!';
+        console.log('errorRes', errorRes);
+
+        if (!errorRes.error || !errorRes.error.error) {
+            return throwError(errorMessage);    
+        }
+
+        switch (errorRes.error.error.message) { //TODO 299
+            case 'EMAIL_EXISTS':
+                errorMessage = 'The email address is already in use by another account.';
+                break;
+            case 'OPERATION_NOT_ALLOWED':
+                errorMessage = 'Password isgn-in is disabled for this project.';
+                break;
+            case 'TOO_MANY_ATTEMPTS_TRY_LATER':
+                errorMessage = 'We have blocked all requests from this device due to unusual activity. Try again later.';
+                break;
+            case 'EMAIL_NOT_FOUND':
+                errorMessage = 'There is no user record corresponding to this identifier';
+                break;
+            case 'INVALID_PASSWORD':
+                errorMessage = 'The password is invalid or the user does not have a password.';
+                break;
+            case 'USER_DISABLED':
+                errorMessage = 'The user account has been disabled by an administrator.';
+                break;
+            default:
+                errorMessage = 'An unknown error occurred!';
+                break;
+        }
+
+        return throwError(errorMessage);
+    }
+}
 
 // Firebase:
 // GET - Reading Data

@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
 import { AccountService } from '../account/account.service';
 import { User } from '../models/User';
+import { DataStorageService } from '../shared/storage/data-storage.service';
 
 @Component({
     selector: 'app-header',
@@ -14,13 +15,13 @@ export class HeaderComponent implements OnInit, OnDestroy {
     //public loggedIn: boolean = false; // set to 'false' if u need to log in;
     public isAuthenticatedAndHasUser: boolean = false
     public subscription: Subscription = new Observable().subscribe();
-    //public subscription2: Subscription = new Observable().subscribe();
     public brandUrl = '/';
     public isMenuOpened: boolean = false;
 
     constructor(
         private router: Router,
         private accountService: AccountService,
+        private dataStorageService: DataStorageService
     ) {}
 
     ngOnInit(): void {
@@ -30,7 +31,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
         //     this.brandUrl = loggedInInfo ? '/activeTodo' : '/';
         // });
 
-        this.subscription = this.accountService.user.subscribe((user: User | null) => {
+        this.subscription = this.dataStorageService.user.subscribe((user: User | null) => {
             this.isAuthenticatedAndHasUser = user ? true : false;
             this.brandUrl = user ? '/activeTodo' : '/';
         });
@@ -56,6 +57,5 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
     ngOnDestroy() {
         this.subscription.unsubscribe();
-        //this.subscription2.unsubscribe();
     }
 }

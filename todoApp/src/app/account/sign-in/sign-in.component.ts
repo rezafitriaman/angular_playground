@@ -2,7 +2,6 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AccountService } from '../account.service';
-import { TodoService } from '../../todo.service';
 
 @Component({
     selector: 'app-sign-in',
@@ -15,36 +14,26 @@ export class SignInComponent implements OnInit {
     public isLoading = false;
     constructor(
         private accountService: AccountService,
-        private router: Router,
-        private todoService: TodoService
+        private router: Router
     ) {}
 
     ngOnInit(): void {
         console.log('sign in');
+        this.accountService.isLoading.subscribe((isLoading: boolean)=> {
+            this.isLoading = isLoading;
+        });
     }
 
     onSubmit() {
         if(this.form?.invalid) return; 
-        let initUrl = this.accountService.initUrl();
         
-        this.accountService.onLogin(this.form?.value).subscribe(
-            restData => {
-                // u dont use rest data - becouse it is a pure resdata 
-                // this.accountService.loggedInInfo.next(true); // this code tell the header what to display
-                this.isLoading = false;
-            },
-            errorMessage => {
-                this.accountService.thereIsError.next(errorMessage);
-                this.isLoading = false;
-            }
-        );
+        this.isLoading = true;
+        this.accountService.onLogin(this.form?.value);
         this.form?.reset();
-        this.router.navigate([initUrl]);
     }
 
     signupBtn() {
         //TODO create signup screen, maybe rewrite the component that have one parent component
-
         console.log('login');
         this.router.navigate(['/account/signup']);
     }
