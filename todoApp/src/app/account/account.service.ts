@@ -1,10 +1,9 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Subject, throwError } from 'rxjs';
+import { Subject } from 'rxjs';
 import { Router, UrlTree } from '@angular/router';
 import { LoginOrJoinForm, Todos } from '../models/Todo';
 import { TodoService } from '../todo.service';
 import { DataStorageService } from '../shared/storage/data-storage.service';
-import { User } from '../models/User';
 
 
 @Injectable({
@@ -13,7 +12,6 @@ import { User } from '../models/User';
 export class AccountService {
     public loggedInInfo: Subject<boolean> = new Subject<boolean>();
     public thereIsError: Subject<string | null> = new Subject<string | null>();
-    public user = new BehaviorSubject<User | null>(null);
     public isLoading: Subject<boolean> = new Subject<boolean>();
     constructor(
         private todoService: TodoService, 

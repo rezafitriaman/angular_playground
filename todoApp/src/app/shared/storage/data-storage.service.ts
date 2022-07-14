@@ -68,16 +68,16 @@ export class DataStorageService {
         );
     }
 
-    createAccount(accountName: string) {
-        const todos: Todos = {
-            activeTodos: [{'items': [], 'label': 'test', 'name': 'test'}],
-            inActiveTodos: []
-        }
+    // createAccount(accountName: string) {
+    //     const todos: Todos = {
+    //         activeTodos: [{'items': [], 'label': 'test', 'name': 'test'}],
+    //         inActiveTodos: []
+    //     }
 
-        return this.http.put<Todos>(
-            'https://todoapp-1b1f3-default-rtdb.europe-west1.firebasedatabase.app/master@gmail.json', todos
-        );
-    }
+    //     return this.http.put<Todos>(
+    //         'https://todoapp-1b1f3-default-rtdb.europe-west1.firebasedatabase.app/master@gmail.json', todos
+    //     );
+    // }
     
     fetchTodos() {
         return this.user.pipe(
@@ -145,57 +145,149 @@ export class DataStorageService {
     }
 
     postTodoItem(todo: Todo, todoId: string) {
-        return this.http.post<Todo>(
-            `https://todoapp-1b1f3-default-rtdb.europe-west1.firebasedatabase.app/fitriaman@gmail/activeTodos/${todoId}/items.json`, todo
+        return this.user.pipe(
+            take(1),
+            switchMap((user: User | null) => {
+                let userToken = user?.token ? user.token : 'tokenIsinvallid'
+
+                console.log('data storrage - user', user);
+                return this.http.post<Todo>(
+                    `https://todoapp-1b1f3-default-rtdb.europe-west1.firebasedatabase.app/fitriaman@gmail/activeTodos/${todoId}/items.json`, todo, 
+                    {
+                        params: new HttpParams().set('auth', userToken)
+                    }
+                );
+            }),
         );
     }
 
     postTodoList(todoMode: ActiveTodo | InactiveTodo, mode: string) {
-        return this.http.post<ActiveTodo>(
-            `https://todoapp-1b1f3-default-rtdb.europe-west1.firebasedatabase.app/fitriaman@gmail/${mode}.json`, todoMode
-        )
+        return this.user.pipe(
+            take(1),
+            switchMap((user: User | null) => {
+                let userToken = user?.token ? user.token : 'tokenIsinvallid'
+
+                console.log('data storrage - user', user);
+                return this.http.post<ActiveTodo>(
+                    `https://todoapp-1b1f3-default-rtdb.europe-west1.firebasedatabase.app/fitriaman@gmail/${mode}.json`, todoMode, 
+                    {
+                        params: new HttpParams().set('auth', userToken)
+                    }
+                )        
+            })
+        );        
     }
 
     deleteTodoList(todoId: string) {
-        return this.http.delete<null>(
-            `https://todoapp-1b1f3-default-rtdb.europe-west1.firebasedatabase.app/fitriaman@gmail/activeTodos/${todoId}.json`
-        )
+        return this.user.pipe(
+            take(1),
+            switchMap((user: User | null) => {
+                let userToken = user?.token ? user.token : 'tokenIsinvallid'
+
+                return this.http.delete<null>(
+                    `https://todoapp-1b1f3-default-rtdb.europe-west1.firebasedatabase.app/fitriaman@gmail/activeTodos/${todoId}.json`,
+                    {
+                        params: new HttpParams().set('auth', userToken)
+                    }
+                )        
+            })
+        );
     }
 
     updateTodoContent(todoId: string, itemId:string, content: string) {
-        return this.http.patch<Todo>(
-            `https://todoapp-1b1f3-default-rtdb.europe-west1.firebasedatabase.app/fitriaman@gmail/activeTodos/${todoId}/items/${itemId}.json`, {'content': content}
-        )
+        return this.user.pipe(
+            take(1),
+            switchMap((user: User | null) => {
+                let userToken = user?.token ? user.token : 'tokenIsinvallid'
+
+                return this.http.patch<Todo>(
+                    `https://todoapp-1b1f3-default-rtdb.europe-west1.firebasedatabase.app/fitriaman@gmail/activeTodos/${todoId}/items/${itemId}.json`, {'content': content},
+                    {
+                        params: new HttpParams().set('auth', userToken)
+                    }
+                )        
+            })
+        )        
     }
 
     updateTodoOnComplete(todoId: string, itemId:string, value: boolean) {
-        return this.http.patch<Todo>(
-            `https://todoapp-1b1f3-default-rtdb.europe-west1.firebasedatabase.app/fitriaman@gmail/activeTodos/${todoId}/items/${itemId}.json`, {'completed': value}
-        )
+        return this.user.pipe(
+            take(1),
+            switchMap((user: User | null) => {
+                let userToken = user?.token ? user.token : 'tokenIsinvallid'
+
+                return this.http.patch<Todo>(
+                    `https://todoapp-1b1f3-default-rtdb.europe-west1.firebasedatabase.app/fitriaman@gmail/activeTodos/${todoId}/items/${itemId}.json`, {'completed': value},
+                    {
+                        params: new HttpParams().set('auth', userToken)
+                    }
+                )
+            })
+        );
     }
 
     deleteActiveTodo(todoId: string, itemId:string){
-        return this.http.delete<null>(
-            `https://todoapp-1b1f3-default-rtdb.europe-west1.firebasedatabase.app/fitriaman@gmail/activeTodos/${todoId}/items/${itemId}.json`
+        return this.user.pipe(
+            take(1),
+            switchMap((user: User | null) => {
+                let userToken = user?.token ? user.token : 'tokenIsinvallid'
+
+                return this.http.delete<null>(
+                    `https://todoapp-1b1f3-default-rtdb.europe-west1.firebasedatabase.app/fitriaman@gmail/activeTodos/${todoId}/items/${itemId}.json`,
+                    {
+                        params: new HttpParams().set('auth', userToken)
+                    }
+                );
+            })
         );
     }
 
     setToInactive(inActiveTodo: Record<string, InactiveTodo>){
-        return this.http.patch<{string: InactiveTodo}>(
-            `https://todoapp-1b1f3-default-rtdb.europe-west1.firebasedatabase.app/fitriaman@gmail/inActiveTodos.json`, inActiveTodo
-        )
+        return this.user.pipe(
+            take(1),
+            switchMap((user: User | null) => {
+                let userToken = user?.token ? user.token : 'tokenIsinvallid'
+
+                return this.http.patch<{string: InactiveTodo}>(
+                    `https://todoapp-1b1f3-default-rtdb.europe-west1.firebasedatabase.app/fitriaman@gmail/inActiveTodos.json`, inActiveTodo,
+                    {
+                        params: new HttpParams().set('auth', userToken)
+                    }
+                )
+            })
+        );        
     }
 
     deleteInActiveTodo(todoId: string){
-        return this.http.delete<null>(
-            `https://todoapp-1b1f3-default-rtdb.europe-west1.firebasedatabase.app/fitriaman@gmail/inActiveTodos/${todoId}.json`
-        );
+        return this.user.pipe(
+            take(1),
+            switchMap((user: User | null) => {
+                let userToken = user?.token ? user.token : 'tokenIsinvallid'
+
+                return this.http.delete<null>(
+                    `https://todoapp-1b1f3-default-rtdb.europe-west1.firebasedatabase.app/fitriaman@gmail/inActiveTodos/${todoId}.json`,
+                    {
+                        params: new HttpParams().set('auth', userToken)
+                    }
+                );
+            })
+        );        
     }
 
     setToActive(activeTodo: Record<string, ActiveTodo>) {    
-        return this.http.patch<any>(
-            `https://todoapp-1b1f3-default-rtdb.europe-west1.firebasedatabase.app/fitriaman@gmail/activeTodos.json`, activeTodo
-        )
+        return this.user.pipe(
+            take(1),
+            switchMap((user: User | null) => {
+                let userToken = user?.token ? user.token : 'tokenIsinvallid'
+
+                return this.http.patch<any>(
+                    `https://todoapp-1b1f3-default-rtdb.europe-west1.firebasedatabase.app/fitriaman@gmail/activeTodos.json`, activeTodo,
+                    {
+                        params: new HttpParams().set('auth', userToken)
+                    }
+                )
+            })
+        );                
     }
 
     private handleAuthentication(email: string, userId: string, token: string, expiresIn: number) {
