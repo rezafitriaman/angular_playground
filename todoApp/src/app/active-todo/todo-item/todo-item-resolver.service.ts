@@ -24,12 +24,10 @@ export class TodoItemResolverService implements Resolve<ActiveTodo> {
                     console.log('state', state);
                     console.log('route', route);
                     const activeTodos = todos.activeTodos.find(activeTodo => activeTodo.name === route.params['id']);
-                    const items = activeTodos ? activeTodos.items : [];
-                    const label = activeTodos ? activeTodos.label : '';
                     this.todoService.loading.next(false);
                     
-                    console.log('todo item resolver', {items: items, label: label});
-                    resolve({items: items, label: label})
+                    console.log('todo item resolver', activeTodos);
+                    resolve(activeTodos ? activeTodos : {items: [], label: '', name: ''})
                 },
                 error => {
                     reject(error);

@@ -60,7 +60,8 @@ export class TodoItemComponent implements OnInit, AfterViewInit, CanComponentDea
         console.log('todo item component');
         // it load via a resolver : example - 152
         this.route.data.subscribe((data: Data) => {
-            console.log('todo item resolver', data);
+            console.log('todo item resolver', data['activeTodoItem']);
+            this.id = data['activeTodoItem'].name;
             this.todos = data['activeTodoItem'].items; // the name: activeTodoItem - it is a custom name from route module
             this.todoList = data['activeTodoItem'].label;
         });
@@ -69,7 +70,7 @@ export class TodoItemComponent implements OnInit, AfterViewInit, CanComponentDea
         // this.route.params.subscribe((params: Params) => {
         //     this.id = params['id'];
         //     const activeTodo = this.todoService.getActiveTodo(this.id);
-
+        //     console.log('activeTodo',activeTodo);
         //     this.todoList = activeTodo ? activeTodo.label : '';
         //     this.todos = activeTodo ? activeTodo.items : [];
         // });
@@ -147,7 +148,8 @@ export class TodoItemComponent implements OnInit, AfterViewInit, CanComponentDea
 
     onSetToEditable(indexItem: number, itemId: string | undefined) {
         if (!itemId) return;
-        
+        console.log('index item', indexItem);
+        console.log('index item', itemId);
         let contentText = this.contentTodoRef?.toArray()[indexItem].nativeElement.innerText;
         
         this.subscriptionEditable = this.dataStorage.updateTodoContent(this.id, itemId, contentText)
