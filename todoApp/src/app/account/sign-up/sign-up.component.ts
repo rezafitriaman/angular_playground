@@ -31,7 +31,7 @@ export class SignUpComponent implements OnInit {
         this.form?.reset();
     }
 
-    onSignIn() {
+    onSwichToSignIn() {
         //TODO create signup screen, maybe rewrite the component that have one parent component
         console.log('signup');
         this.router.navigate(['/account/login']);
