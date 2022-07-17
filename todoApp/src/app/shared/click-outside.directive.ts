@@ -9,7 +9,7 @@ import { map } from 'rxjs/operators';
 })
 export class ClickOutsideDirective implements AfterViewInit, OnDestroy{
     @Output() clickOutside = new EventEmitter<boolean>();
-    documentClickSubscription: Subscription | undefined
+    public documentClickSubscription: Subscription | undefined;
 
     constructor (
         private element: ElementRef, 
@@ -17,11 +17,10 @@ export class ClickOutsideDirective implements AfterViewInit, OnDestroy{
     ) { }
 
     ngAfterViewInit() {
-        this.documentClickSubscription = fromEvent(this.document, 'click')
-        .pipe(map(elm => {
+        this.documentClickSubscription = fromEvent(this.document, 'click').pipe(
+            map(elm => {
             return this.isInside(elm.target as HTMLElement);
-        }))
-        .subscribe((target)=> {
+        })).subscribe((target)=> {
             if (target) return;
             this.clickOutside.emit(target);
         });

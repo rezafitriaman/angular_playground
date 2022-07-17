@@ -6,12 +6,7 @@ import { of, Subject } from 'rxjs';
 })
 export class TodoService {
     public todos: Todos = {
-        activeTodos: [
-            {
-                "label": "Welcome",
-                "items": [],
-            }
-        ],
+        activeTodos: [],
         inActiveTodos: [],
     };
     public activeTodosAdd: Subject<Array<ActiveTodo>> = new Subject<Array<ActiveTodo>>();

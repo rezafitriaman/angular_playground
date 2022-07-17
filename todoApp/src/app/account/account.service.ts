@@ -5,7 +5,6 @@ import { LoginOrJoinForm, Todos } from '../models/Todo';
 import { TodoService } from '../todo.service';
 import { DataStorageService } from '../shared/storage/data-storage.service';
 
-
 @Injectable({
     providedIn: 'root',
 })
@@ -34,7 +33,7 @@ export class AccountService {
     initUrl() {
         //console.log('account service', this.todoService.todos);
         //return this.todoService.todos.activeTodos.length > 0 ? '/activeTodo/0' : '/activeTodo';
-        return '/activeTodo/0';
+        return '/activeTodo/';
     }
 
     onLogin(formValue: LoginOrJoinForm) {
@@ -46,7 +45,6 @@ export class AccountService {
                 //this.accountService.loggedInInfo.next(true); // this code tell the header what to display
                 console.log('account.service-restData', restData);
                 this.isLoading.next(false);
-                console.log('url ', this.initUrl());
                 this.router.navigate([this.initUrl()]);
             },
             errorMessage => {
@@ -67,7 +65,11 @@ export class AccountService {
                         console.log('account.service-restData 2', restData);
                         this.isLoading.next(false);
                         this.router.navigate([this.initUrl()]);        
-                    }
+                    },
+                    errorMessage => {
+                        this.thereIsError.next(errorMessage);
+                        this.isLoading.next(false);
+                    }        
                 );
             },
             errorMessage => {

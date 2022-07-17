@@ -1,8 +1,7 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
-import { AppRoutingModule }
- from './app-routing.module';
+import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { ActiveTodoComponent } from './active-todo/active-todo.component';
 import { InactiveTodoComponent } from './inactive-todo/inactive-todo.component';
@@ -18,7 +17,7 @@ import { HighlightDirective } from './shared/highlight.directive';
 import { AccountComponent } from './account/account.component';
 import { SignInComponent } from './account/sign-in/sign-in.component';
 import { SignUpComponent } from './account/sign-up/sign-up.component';
-import {HttpClientModule} from "@angular/common/http";
+import { HttpClientModule } from "@angular/common/http";
 import { ClickOutsideDirective } from './shared/click-outside.directive';
 import { LoadingSpinnerComponent } from './shared/loading-spinner/loading-spinner.component';
 

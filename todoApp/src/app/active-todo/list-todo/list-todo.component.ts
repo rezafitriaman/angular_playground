@@ -1,8 +1,8 @@
-import { AfterViewInit, Component, Input, OnChanges, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActiveTodo } from '../../models/Todo';
 import { TodoService } from '../../todo.service';
-import { ActivatedRoute, NavigationEnd, Params, Route, Router } from '@angular/router';
-import { Observable, Subscription } from 'rxjs';
+import { of, Subscription } from 'rxjs';
+import { delay } from 'rxjs/operators';
 
 @Component({
     selector: 'app-list-todo',
@@ -12,28 +12,25 @@ import { Observable, Subscription } from 'rxjs';
 export class ListTodoComponent implements OnInit, OnDestroy {
     public todos: Array<ActiveTodo> = [];
     public newItem: boolean = false;
-    public subscription: Subscription = new Observable().subscribe();
-    public subscriptionDelete: Subscription = new Observable().subscribe();
+    public subscription: Subscription | undefined;
+    public subscriptionDelete: Subscription | undefined;
 
     constructor(
-        private todoService: TodoService,
-        private router: Router,
-        private route: ActivatedRoute
-    ) {}
+        private todoService: TodoService) {}
 
     ngOnInit(): void {
-        // const urlTarget =
-        //     this.todoService.todos.activeTodos.length > 0 ? '/activeTodo/0' : '/activeTodo';
-        
-        //this.router.navigate([urlTarget]);
         this.todos = this.todoService.getActiveTodos();
         this.subscription = this.todoService.activeTodosAdd.subscribe((activeTodos: Array<ActiveTodo>) => {
             this.todos = activeTodos;
             this.newItem = true;
 
-            setTimeout(() => {
-                this.newItem = false;
-            }, 4000);
+            of(null).pipe(
+                delay(4000)
+            ).subscribe(value => {
+                if(!value){
+                    this.newItem = false;
+                }
+            })
         });
 
         this.subscriptionDelete = this.todoService.activeTodoDelete.subscribe((activeTodos: Array<ActiveTodo>) => {
@@ -42,7 +39,7 @@ export class ListTodoComponent implements OnInit, OnDestroy {
     }
 
     ngOnDestroy() {
-        this.subscription.unsubscribe();
-        this.subscriptionDelete.unsubscribe();
+        this.subscription?.unsubscribe();
+        this.subscriptionDelete?.unsubscribe();
     }
 }

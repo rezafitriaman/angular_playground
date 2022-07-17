@@ -25,14 +25,11 @@ export class TodoItemResolverService implements Resolve<ActiveTodo> {
                     console.log('route', route);
                     const activeTodos = todos.activeTodos.find(activeTodo => activeTodo.name === route.params['id']);
                     this.todoService.loading.next(false);
-                    
-                    console.log('todo item resolver', activeTodos);
                     resolve(activeTodos ? activeTodos : {items: [], label: '', name: ''})
                 },
                 error => {
                     reject(error);
-                    console.log('error from todo item resolver', error );
-                    this.accountService.thereIsError.next('There is unkown error')
+                    this.accountService.thereIsError.next(error)
                 }
             )
         });

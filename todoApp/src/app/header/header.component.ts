@@ -14,7 +14,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     @Input() brand: string = '';
     //public loggedIn: boolean = false; // set to 'false' if u need to log in;
     public isAuthenticatedAndHasUser: boolean = false
-    public subscription: Subscription = new Observable().subscribe();
+    public subscription: Subscription | undefined;
     public brandUrl = '/';
     public isMenuOpened: boolean = false;
 
@@ -25,12 +25,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
     ) {}
 
     ngOnInit(): void {
-        // this.subscription = this.accountService.loggedInInfo
-        //     .subscribe((loggedInInfo: boolean) => {
-        //     this.loggedIn = loggedInInfo;
-        //     this.brandUrl = loggedInInfo ? '/activeTodo' : '/';
-        // });
-
         this.subscription = this.dataStorageService.user.subscribe((user: User | null) => {
             this.isAuthenticatedAndHasUser = user ? true : false;
             this.brandUrl = user ? '/activeTodo' : '/';
@@ -56,6 +50,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
     }
 
     ngOnDestroy() {
-        this.subscription.unsubscribe();
+        this.subscription?.unsubscribe();
     }
 }

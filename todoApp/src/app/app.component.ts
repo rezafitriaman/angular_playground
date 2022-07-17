@@ -1,18 +1,11 @@
 import {
-    AfterViewInit,
     Component,
-    ElementRef,
     OnDestroy,
     OnInit,
-    QueryList,
-    ViewChild,
-    ViewChildren,
 } from '@angular/core';
-import { Observable, Subscription } from 'rxjs';
+import { Observable, of, Subscription } from 'rxjs';
+import { delay } from 'rxjs/operators';
 import { AccountService } from './account/account.service';
-import { HeaderComponent } from './header/header.component';
-import { Todos } from './models/Todo';
-import { DataStorageService } from './shared/storage/data-storage.service';
 import { TodoService } from './todo.service';
 
 @Component({
@@ -23,28 +16,22 @@ import { TodoService } from './todo.service';
 export class AppComponent implements OnInit, OnDestroy {
     public title = 'Easy-List';
     public error: string | null = null;
-    public subscription: Subscription = new Observable().subscribe();
-    //@ViewChild(HeaderComponent, {static: false}) hello: HeaderComponent | undefined;
-    //@ViewChild('myElm', {static: false}) myElm: ElementRef | undefined;
-    //@ViewChildren(HeaderComponent) myValue: QueryList<HeaderComponent> | undefined
-    constructor(private dataStorageService: DataStorageService, private todoService: TodoService, private accountService: AccountService) {}
+    public subscription: Subscription | undefined;
+    
+    constructor(
+        private accountService: AccountService
+    ) {}
+    
     ngOnInit(): void {
-        // this.dataStorageService.storeTodos().subscribe((arg) => {
-        //     console.log('todo stored', arg);
-        // });
-        console.log('app component', this.todoService.todos);
-
-        //test
-        // this.dataStorageService.fetchTodos().subscribe((todos: Todos) => {
-        //     this.todoService.setTodos(todos);
-        // });
-
         this.subscription = this.accountService.thereIsError.subscribe((error: string | null) => {
             console.log('on error', error);
             this.error = error;
-            setTimeout(() => {
-                this.error = null;
-            }, 6000);
+
+            of(null).pipe(
+                delay(6000)
+            ).subscribe(value => {
+                this.error = value;
+            })
         });
     }
     
@@ -53,6 +40,6 @@ export class AppComponent implements OnInit, OnDestroy {
     }
 
     ngOnDestroy(): void {
-        this.subscription.unsubscribe();
+        this.subscription?.unsubscribe();
     }
 }
