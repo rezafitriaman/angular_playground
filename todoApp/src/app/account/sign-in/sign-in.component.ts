@@ -19,7 +19,7 @@ export class SignInComponent implements OnInit {
 
     ngOnInit(): void {
         console.log('sign in');
-        this.accountService.isLoadingAccount.subscribe((isLoading: boolean)=> {
+        this.accountService.isLoadingAccount.subscribe((isLoading: boolean)=> { 
             this.isLoading = isLoading;
         });
     }
@@ -29,7 +29,7 @@ export class SignInComponent implements OnInit {
         
         this.isLoading = true;
         this.accountService.onLogin(this.form?.value);
-        this.form?.reset();
+        //this.form?.reset();
     }
 
     signupBtn() {

@@ -16,7 +16,7 @@ import { AccountService } from 'src/app/account/account.service';
 export class EditTodoComponent implements OnInit, CanComponentDeactivate, OnDestroy {
     @ViewChild('addTodoForm') form: NgForm | undefined;
     public changesSaved: boolean = false;
-    public loading: boolean = true;
+    public loading: boolean = false;
     public subscription: Subscription | undefined;
     public subscriptionSetTodoListOnFireBase: Subscription | undefined;
 
@@ -44,9 +44,7 @@ export class EditTodoComponent implements OnInit, CanComponentDeactivate, OnDest
         this.subscriptionSetTodoListOnFireBase = this.dataStorage.setTodoListOnFireBase(new ActiveTodo(newTodo, []), 'activeTodos', 'post').subscribe(
             id => {
                 this.todoService.addTodo(new ActiveTodo(newTodo, [], (id as {name: string}).name));
-                this.router.navigate(['../', (id as {name: string}).name], {
-                    relativeTo: this.route,
-                });
+                this.router.navigate(['../', (id as {name: string}).name], {relativeTo: this.route});
                 this.todoService.isLoadingTodo.next(false);
             },
             errorMessage => {

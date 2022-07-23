@@ -15,7 +15,7 @@ export class AddNewTodoItemComponent implements OnInit, OnDestroy {
     public inputValue: string = '';
     public subscription: Subscription | undefined;
     public subscriptionLoading: Subscription | undefined;
-    public loading: boolean = true;
+    public loading: boolean = false;
 
     constructor(private todoService: TodoService) {}
 

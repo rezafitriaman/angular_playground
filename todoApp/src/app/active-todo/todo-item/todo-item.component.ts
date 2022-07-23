@@ -32,7 +32,7 @@ export class TodoItemComponent implements OnInit, AfterViewInit, CanComponentDea
     public todoList: string | undefined = '';
     public newItem: string = '';
     public placeHolder: string = '';
-    public loading: boolean = true;
+    public loading: boolean = false;
     public subscription: Subscription | undefined;
     public subscriptionLoading: Subscription | undefined;
     public subscriptionEditable: Subscription | undefined;

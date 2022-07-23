@@ -27,8 +27,9 @@ export class AccountService {
                 },
                 error => {
                     console.log('error isAuthenticated---', error);
-                    //reject(error);
-                    //this.thereIsError.next(error);
+                    reject(error);
+                    this.thereIsError.next(error);
+                    this.router.navigate(['/']);
                 }
             );
         });
