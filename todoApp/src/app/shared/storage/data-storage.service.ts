@@ -17,7 +17,7 @@ export class DataStorageService {
     public loggedInInfo: Subject<boolean> = new Subject<boolean>();
     public thereIsError: Subject<string | null> = new Subject<string | null> ();
     public user: BehaviorSubject<User | null> = new BehaviorSubject<User | null>(null);
-    constructor(private http: HttpClient, private todoService: TodoService) {};
+    constructor(private http: HttpClient) {};
 
     signInWithPassword(formValue: LoginOrJoinForm) {
         return this.http.post<AuthResponseData>('https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyAmfRwM7wb9RulolvYQraAVEmiwsh-Wi0A',
@@ -53,7 +53,6 @@ export class DataStorageService {
 
     storeTodos() {
         return this.user.pipe(
-            catchError(this.handleError),
             take(1),
             switchMap((user: User | null) => {
                 let userToken = user?.token ? user.token : 'tokenIsInvallid'
@@ -76,12 +75,13 @@ export class DataStorageService {
                     }
                 );
             }),
+            catchError(this.handleError)
         );
     }
     
     fetchTodos() {
+        console.log('fetch');
         return this.user.pipe(
-            catchError(this.handleError),
             take(1),
             switchMap((user: User | null) => {
                 let userToken = user?.token ? user.token : 'tokenIsInvallid';
@@ -143,13 +143,13 @@ export class DataStorageService {
                 })
     
                 return todos;
-            })
+            }),
+            catchError(this.handleError)
         );
     }
 
     postTodoItem(todo: Todo, todoId: string) {
         return this.user.pipe(
-            catchError(this.handleError),
             take(1),
             switchMap((user: User | null) => {
                 let userToken = user?.token ? user.token : 'tokenIsInvallid'
@@ -162,12 +162,12 @@ export class DataStorageService {
                     }
                 );
             }),
+            catchError(this.handleError)
         );
     }
 
     setTodoListOnFireBase(todoMode: ActiveTodo | Record<string, ActiveTodo> | Record<string, InactiveTodo>, mode: 'activeTodos' | 'inActiveTodos', firebaseAPI: 'post' | 'patch' = 'post') {
         return this.user.pipe(
-            catchError(this.handleError),
             take(1),
             switchMap((user: User | null) => {
                 let userToken = user?.token ? user.token : 'tokenIsInvallid'
@@ -188,13 +188,13 @@ export class DataStorageService {
                         params: new HttpParams().set('auth', userToken)
                     }
                 )
-            })
+            }),
+            catchError(this.handleError),
         );
     }
 
     deleteTodoList(todoId: string) {
         return this.user.pipe(
-            catchError(this.handleError),
             take(1),
             switchMap((user: User | null) => {
                 let userToken = user?.token ? user.token : 'tokenIsInvallid'
@@ -206,13 +206,13 @@ export class DataStorageService {
                         params: new HttpParams().set('auth', userToken)
                     }
                 )        
-            })
+            }),
+            catchError(this.handleError)
         );
     }
 
     updateTodoContent(todoId: string, itemId:string, content: string) {
         return this.user.pipe(
-            catchError(this.handleError),
             take(1),
             switchMap((user: User | null) => {
                 let userToken = user?.token ? user.token : 'tokenIsInvallid';
@@ -224,13 +224,13 @@ export class DataStorageService {
                         params: new HttpParams().set('auth', userToken)
                     }
                 )        
-            })
+            }),
+            catchError(this.handleError)
         )  
     }
 
     updateTodoOnComplete(todoId: string, itemId:string, value: boolean) {
         return this.user.pipe(
-            catchError(this.handleError),
             take(1),
             switchMap((user: User | null) => {
                 let userToken = user?.token ? user.token : 'tokenIsInvallid'
@@ -242,13 +242,13 @@ export class DataStorageService {
                         params: new HttpParams().set('auth', userToken)
                     }
                 )
-            })
+            }),
+            catchError(this.handleError)
         );
     }
 
     deleteActiveTodo(todoId: string, itemId:string) {
         return this.user.pipe(
-            catchError(this.handleError),
             take(1),
             switchMap((user: User | null) => {
                 let userToken = user?.token ? user.token : 'tokenIsInvallid';
@@ -260,13 +260,13 @@ export class DataStorageService {
                         params: new HttpParams().set('auth', userToken)
                     }
                 );
-            })
+            }),
+            catchError(this.handleError)
         );
     }
 
     deleteInActiveTodo(todoId: string) {
         return this.user.pipe(
-            catchError(this.handleError),
             take(1),
             switchMap((user: User | null) => {
                 let userToken = user?.token ? user.token : 'tokenIsInvallid';
@@ -278,7 +278,8 @@ export class DataStorageService {
                         params: new HttpParams().set('auth', userToken)
                     }
                 );
-            })
+            }),
+            catchError(this.handleError)
         );        
     }
 

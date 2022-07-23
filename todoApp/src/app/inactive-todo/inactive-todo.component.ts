@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { TodoService } from '../todo.service';
 import { ActiveTodo, InactiveTodo, Todo, Todos } from '../models/Todo';
 import { DataStorageService } from '../shared/storage/data-storage.service';
-import { Observable, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { AccountService } from '../account/account.service';
 
 @Component({

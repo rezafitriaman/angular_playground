@@ -1,5 +1,4 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { InactiveTodoComponent } from './inactive-todo.component';
 
 describe('InActiveTodoComponent', () => {

@@ -16,7 +16,8 @@ export class TodoItemResolverService implements Resolve<ActiveTodo> {
         route: ActivatedRouteSnapshot,
         state: RouterStateSnapshot
     ): Observable<ActiveTodo> | Promise<ActiveTodo> | ActiveTodo {
-        this.todoService.loading.next(true);
+        this.todoService.isLoadingTodo.next(true);
+        console.log('TodoItemResolverService');
         return new Promise((resolve, reject) => {
 
             this.dataStorageService.fetchTodos().subscribe(
@@ -24,7 +25,7 @@ export class TodoItemResolverService implements Resolve<ActiveTodo> {
                     console.log('state', state);
                     console.log('route', route);
                     const activeTodos = todos.activeTodos.find(activeTodo => activeTodo.name === route.params['id']);
-                    this.todoService.loading.next(false);
+                    this.todoService.isLoadingTodo.next(false);
                     resolve(activeTodos ? activeTodos : {items: [], label: '', name: ''})
                 },
                 error => {

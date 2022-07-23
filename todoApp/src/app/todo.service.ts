@@ -14,7 +14,7 @@ export class TodoService {
     public activeTodosItemUpdate: Subject<Array<Todo>> = new Subject<Array<Todo>>();
     public resetPlaceHolder: Subject<string> = new Subject<string>();
     public updateInActiveTodo: Subject<Array<InactiveTodo>> = new Subject<Array<InactiveTodo>>();
-    public loading: Subject<boolean> = new Subject<boolean>();
+    public isLoadingTodo: Subject<boolean> = new Subject<boolean>();
 
     constructor() {}
     

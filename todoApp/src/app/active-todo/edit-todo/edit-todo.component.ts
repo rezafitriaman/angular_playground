@@ -16,7 +16,7 @@ import { AccountService } from 'src/app/account/account.service';
 export class EditTodoComponent implements OnInit, CanComponentDeactivate, OnDestroy {
     @ViewChild('addTodoForm') form: NgForm | undefined;
     public changesSaved: boolean = false;
-    public loading: boolean = false;
+    public loading: boolean = true;
     public subscription: Subscription | undefined;
     public subscriptionSetTodoListOnFireBase: Subscription | undefined;
 
@@ -29,7 +29,8 @@ export class EditTodoComponent implements OnInit, CanComponentDeactivate, OnDest
     ) {}
 
     ngOnInit(): void {
-        this.subscription = this.todoService.loading.subscribe((loading: boolean) => {
+        console.log('edit-todo component');
+        this.subscription = this.todoService.isLoadingTodo.subscribe((loading: boolean) => {
             this.loading = loading;
         });
     }
@@ -38,7 +39,7 @@ export class EditTodoComponent implements OnInit, CanComponentDeactivate, OnDest
         // ? push the item to firebase
         const newTodo = this.form?.value.newTodo;
         if (newTodo === '') return;
-        
+        this.todoService.isLoadingTodo.next(true);
         console.log('on add new label todo,');
         this.subscriptionSetTodoListOnFireBase = this.dataStorage.setTodoListOnFireBase(new ActiveTodo(newTodo, []), 'activeTodos', 'post').subscribe(
             id => {
@@ -46,6 +47,7 @@ export class EditTodoComponent implements OnInit, CanComponentDeactivate, OnDest
                 this.router.navigate(['../', (id as {name: string}).name], {
                     relativeTo: this.route,
                 });
+                this.todoService.isLoadingTodo.next(false);
             },
             errorMessage => {
                 this.accountService.thereIsError.next(errorMessage);
@@ -53,14 +55,9 @@ export class EditTodoComponent implements OnInit, CanComponentDeactivate, OnDest
         );
         this.form?.reset();
         this.changesSaved = true;
-        this.todoService.loading.next(true);
     }
 
-    canDeactivate():
-        | Observable<boolean | UrlTree>
-        | Promise<boolean | UrlTree>
-        | boolean
-        | UrlTree {
+    canDeactivate(): | Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
         if (this.form?.value.newTodo !== '' && !this.changesSaved) {
             return confirm('Do you want to discard the changes?');
         } else {

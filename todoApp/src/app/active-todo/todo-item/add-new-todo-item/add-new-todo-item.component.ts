@@ -15,7 +15,7 @@ export class AddNewTodoItemComponent implements OnInit, OnDestroy {
     public inputValue: string = '';
     public subscription: Subscription | undefined;
     public subscriptionLoading: Subscription | undefined;
-    public loading: boolean = false;
+    public loading: boolean = true;
 
     constructor(private todoService: TodoService) {}
 
@@ -24,7 +24,7 @@ export class AddNewTodoItemComponent implements OnInit, OnDestroy {
             this.inputValue = value;
         });
         
-        this.subscriptionLoading = this.todoService.loading.subscribe((loading: boolean) => {
+        this.subscriptionLoading = this.todoService.isLoadingTodo.subscribe((loading: boolean) => {
             this.loading = loading;
         });
     }

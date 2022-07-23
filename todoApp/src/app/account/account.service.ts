@@ -11,7 +11,7 @@ import { DataStorageService } from '../shared/storage/data-storage.service';
 export class AccountService {
     public loggedInInfo: Subject<boolean> = new Subject<boolean>();
     public thereIsError: Subject<string | null> = new Subject<string | null>();
-    public isLoading: Subject<boolean> = new Subject<boolean>();
+    public isLoadingAccount: Subject<boolean> = new Subject<boolean>();
     constructor(
         private todoService: TodoService, 
         private dataStorageService: DataStorageService,
@@ -20,11 +20,17 @@ export class AccountService {
 
     isAuthenticated(): Promise<boolean | UrlTree> {
         const promise = new Promise((resolve, reject) => {
-            this.dataStorageService.fetchTodos()
-            .subscribe((todos: Todos) => {
-                this.todoService.setTodos(todos);
-                resolve(true);
-            });
+            this.dataStorageService.fetchTodos().subscribe(
+                (todos: Todos) => {
+                    this.todoService.setTodos(todos);
+                    resolve(true);
+                },
+                error => {
+                    console.log('error isAuthenticated---', error);
+                    //reject(error);
+                    //this.thereIsError.next(error);
+                }
+            );
         });
 
         return promise as Promise<boolean | UrlTree>;
@@ -44,12 +50,12 @@ export class AccountService {
                 // u dont use rest data - becouse it is a pure resdata 
                 //this.accountService.loggedInInfo.next(true); // this code tell the header what to display
                 console.log('account.service-restData', restData);
-                this.isLoading.next(false);
+                this.isLoadingAccount.next(false);
                 this.router.navigate([this.initUrl()]);
             },
             errorMessage => {
                 this.thereIsError.next(errorMessage);
-                this.isLoading.next(false);
+                this.isLoadingAccount.next(false);
             }
         );
     };
@@ -63,18 +69,18 @@ export class AccountService {
                 this.dataStorageService.storeTodos().subscribe(
                     restData => {
                         console.log('account.service-restData 2', restData);
-                        this.isLoading.next(false);
+                        this.isLoadingAccount.next(false);
                         this.router.navigate([this.initUrl()]);        
                     },
                     errorMessage => {
                         this.thereIsError.next(errorMessage);
-                        this.isLoading.next(false);
+                        this.isLoadingAccount.next(false);
                     }        
                 );
             },
             errorMessage => {
                 this.thereIsError.next(errorMessage);
-                this.isLoading.next(false);
+                this.isLoadingAccount.next(false);
             }
         );
     }

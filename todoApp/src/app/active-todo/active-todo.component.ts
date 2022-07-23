@@ -16,7 +16,7 @@ export class ActiveTodoComponent implements OnInit, OnDestroy {
     ) {}
 
     ngOnInit(): void {
-        this.subscription = this.todoService.loading.subscribe((loading: boolean) => {
+        this.subscription = this.todoService.isLoadingTodo.subscribe((loading: boolean) => {
             this.loading = loading;
         });
     }

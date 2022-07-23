@@ -32,7 +32,7 @@ export class TodoItemComponent implements OnInit, AfterViewInit, CanComponentDea
     public todoList: string | undefined = '';
     public newItem: string = '';
     public placeHolder: string = '';
-    public loading: boolean = false;
+    public loading: boolean = true;
     public subscription: Subscription | undefined;
     public subscriptionLoading: Subscription | undefined;
     public subscriptionEditable: Subscription | undefined;
@@ -81,7 +81,7 @@ export class TodoItemComponent implements OnInit, AfterViewInit, CanComponentDea
             this.todos = todos;
         });
 
-        this.subscriptionLoading = this.todoService.loading.subscribe((loading: boolean) => {
+        this.subscriptionLoading = this.todoService.isLoadingTodo.subscribe((loading: boolean) => {
             this.loading = loading;
         });
     }

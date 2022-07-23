@@ -19,7 +19,7 @@ export class SignInComponent implements OnInit {
 
     ngOnInit(): void {
         console.log('sign in');
-        this.accountService.isLoading.subscribe((isLoading: boolean)=> {
+        this.accountService.isLoadingAccount.subscribe((isLoading: boolean)=> {
             this.isLoading = isLoading;
         });
     }
