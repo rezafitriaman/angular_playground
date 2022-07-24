@@ -11,11 +11,8 @@ import { AccountService } from '../account.service';
 export class SignUpComponent implements OnInit {
     @ViewChild('signInForm') form: NgForm | undefined;
     public isLoading = false;
-    constructor(
-        private accountService: AccountService, 
-        private router: Router,
-    ) {}
-
+    
+    constructor(private accountService: AccountService, private router: Router) {}
     ngOnInit(): void {
         console.log('sign up');
         this.accountService.isLoadingAccount.subscribe((isLoading: boolean)=> {
@@ -28,7 +25,7 @@ export class SignUpComponent implements OnInit {
 
         this.isLoading = true;
         this.accountService.onSignUp(this.form?.value);
-        this.form?.reset();
+        //this.form?.reset();
     }
 
     onSwichToSignIn() {

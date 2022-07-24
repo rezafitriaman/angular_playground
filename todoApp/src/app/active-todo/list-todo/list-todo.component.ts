@@ -15,8 +15,7 @@ export class ListTodoComponent implements OnInit, OnDestroy {
     public subscription: Subscription | undefined;
     public subscriptionDelete: Subscription | undefined;
 
-    constructor(
-        private todoService: TodoService) {}
+    constructor(private todoService: TodoService) {}
 
     ngOnInit(): void {
         this.todos = this.todoService.getActiveTodos();

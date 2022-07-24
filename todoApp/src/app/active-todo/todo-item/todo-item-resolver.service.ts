@@ -12,10 +12,8 @@ import { AccountService } from 'src/app/account/account.service';
 })
 export class TodoItemResolverService implements Resolve<ActiveTodo> {
     constructor(private todoService: TodoService, private dataStorageService: DataStorageService, private accountService: AccountService) {}
-    resolve(
-        route: ActivatedRouteSnapshot,
-        state: RouterStateSnapshot
-    ): Observable<ActiveTodo> | Promise<ActiveTodo> | ActiveTodo {
+    
+    resolve(route: ActivatedRouteSnapshot,state: RouterStateSnapshot): Observable<ActiveTodo> | Promise<ActiveTodo> | ActiveTodo {
         this.todoService.isLoadingTodo.next(true);
         console.log('TodoItemResolverService');
         return new Promise((resolve, reject) => {

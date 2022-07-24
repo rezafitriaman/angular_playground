@@ -18,11 +18,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     public brandUrl = '/';
     public isMenuOpened: boolean = false;
 
-    constructor(
-        private router: Router,
-        private accountService: AccountService,
-        private dataStorageService: DataStorageService
-    ) {}
+    constructor(private accountService: AccountService, private dataStorageService: DataStorageService) {}
 
     ngOnInit(): void {
         this.subscription = this.dataStorageService.user.subscribe((user: User | null) => {
@@ -41,7 +37,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
     onLogout() {
         this.accountService.onLogout();
-        this.router.navigate(['/account/login']);
         this.isMenuOpened = false;
     }
 

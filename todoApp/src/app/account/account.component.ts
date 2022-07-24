@@ -7,7 +7,7 @@ import { AccountService } from './account.service';
     styleUrls: ['./account.component.css'],
 })
 export class AccountComponent implements OnInit {
-    constructor(private accountService: AccountService) {}
+    constructor() {}
 
     ngOnInit(): void {
         console.log('account component');

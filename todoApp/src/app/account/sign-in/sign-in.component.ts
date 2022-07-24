@@ -12,14 +12,11 @@ export class SignInComponent implements OnInit {
     @ViewChild('loginForm') form: NgForm | undefined;
     public signInTitle: string = '';
     public isLoading = false;
-    constructor(
-        private accountService: AccountService,
-        private router: Router
-    ) {}
+    constructor (private accountService: AccountService, private router: Router) {}
 
     ngOnInit(): void {
         console.log('sign in');
-        this.accountService.isLoadingAccount.subscribe((isLoading: boolean)=> { 
+        this.accountService.isLoadingAccount.subscribe((isLoading: boolean)=> {
             this.isLoading = isLoading;
         });
     }

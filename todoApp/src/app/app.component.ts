@@ -3,10 +3,10 @@ import {
     OnDestroy,
     OnInit,
 } from '@angular/core';
-import { Observable, of, Subscription } from 'rxjs';
+import { of, Subscription } from 'rxjs';
 import { delay } from 'rxjs/operators';
 import { AccountService } from './account/account.service';
-import { TodoService } from './todo.service';
+import { DataStorageService } from './shared/storage/data-storage.service';
 
 @Component({
     selector: 'app-root',
@@ -19,12 +19,13 @@ export class AppComponent implements OnInit, OnDestroy {
     public subscription: Subscription | undefined;
     
     constructor(
-        private accountService: AccountService
+        private accountService: AccountService,
+        private dataStorage: DataStorageService
     ) {}
     
     ngOnInit(): void {
+        this.dataStorage.autoLogin();
         this.subscription = this.accountService.thereIsError.subscribe((error: string | null) => {
-            console.log('on error', error);
             this.error = error;
 
             of(null).pipe(

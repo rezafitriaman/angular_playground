@@ -9,14 +9,9 @@ import { DataStorageService } from '../shared/storage/data-storage.service';
     providedIn: 'root',
 })
 export class AccountService {
-    public loggedInInfo: Subject<boolean> = new Subject<boolean>();
     public thereIsError: Subject<string | null> = new Subject<string | null>();
     public isLoadingAccount: Subject<boolean> = new Subject<boolean>();
-    constructor(
-        private todoService: TodoService, 
-        private dataStorageService: DataStorageService,
-        private router: Router
-    ) {}
+    constructor(private todoService: TodoService, private dataStorageService: DataStorageService,private router: Router) {}
 
     isAuthenticated(): Promise<boolean | UrlTree> {
         const promise = new Promise((resolve, reject) => {
@@ -49,7 +44,6 @@ export class AccountService {
         this.dataStorageService.signInWithPassword(formValue).subscribe(
             restData => {
                 // u dont use rest data - becouse it is a pure resdata 
-                //this.accountService.loggedInInfo.next(true); // this code tell the header what to display
                 console.log('account.service-restData', restData);
                 this.isLoadingAccount.next(false);
                 this.router.navigate([this.initUrl()]);
@@ -65,7 +59,6 @@ export class AccountService {
         this.dataStorageService.signUpWithPassword(formValue).subscribe(
             restData => {
                 // u dont use rest data - becouse it is a pure resdata 
-                //this.accountService.loggedInInfo.next(true); // this code tell the header what to display
                 console.log('account.service-restData 1', restData);
                 this.dataStorageService.storeTodos().subscribe(
                     restData => {
@@ -87,6 +80,8 @@ export class AccountService {
     }
 
     onLogout() {
-        this.loggedInInfo.next(false); // this code tell the header what to display
+        this.dataStorageService.user.next(null); // this code tell the header what to display
+        this.router.navigate(['/account/login']);
+        localStorage.removeItem('userData')
     }
 }

@@ -2,7 +2,6 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { map, switchMap, take } from 'rxjs/operators';
 import { ActiveTodo, InactiveTodo, Todo, Todos } from 'src/app/models/Todo';
-import { TodoService } from 'src/app/todo.service';
 import { catchError, tap } from 'rxjs/operators';
 import { BehaviorSubject, Subject, throwError } from 'rxjs';
 import { LoginOrJoinForm } from 'src/app/models/Todo';
@@ -14,7 +13,6 @@ import { AuthResponseData } from 'src/app/models/Auth';
     providedIn: 'root',
 })
 export class DataStorageService {
-    public loggedInInfo: Subject<boolean> = new Subject<boolean>();
     public thereIsError: Subject<string | null> = new Subject<string | null> ();
     public user: BehaviorSubject<User | null> = new BehaviorSubject<User | null>(null);
     constructor(private http: HttpClient) {};
@@ -55,7 +53,6 @@ export class DataStorageService {
         return this.user.pipe(
             take(1),
             switchMap((user: User | null) => {
-                let userToken = user?.token ? user.token : 'tokenIsInvallid'
                 let userEmail = user?.email.split('.')[0];
                 console.log('data storrage - user', user);
                 const welComeTodo = {
@@ -68,30 +65,20 @@ export class DataStorageService {
                     inActiveTodos: [],            
                 }
 
-                return this.http.put<Todos>(
-                    `https://todoapp-1b1f3-default-rtdb.europe-west1.firebasedatabase.app/${userEmail}.json`, welComeTodo,
-                    {
-                        params: new HttpParams().set('auth', userToken)
-                    }
-                );
+                return this.http.put<Todos>(`https://todoapp-1b1f3-default-rtdb.europe-west1.firebasedatabase.app/${userEmail}.json`, welComeTodo);
             }),
             catchError(this.handleError)
         );
     }
     
     fetchTodos() {
-        console.log('fetch');
         return this.user.pipe(
             take(1),
             switchMap((user: User | null) => {
-                let userToken = user?.token ? user.token : 'tokenIsInvallid';
                 let userEmail = user?.email.split('.')[0];                    
 
-                console.log('data storage - user', user);
-                return this.http.get<Todos>(`https://todoapp-1b1f3-default-rtdb.europe-west1.firebasedatabase.app/${userEmail}.json`, 
-                {
-                    params: new HttpParams().set('auth', userToken)
-                })
+                console.log('fetch - user', user);
+                return this.http.get<Todos>(`https://todoapp-1b1f3-default-rtdb.europe-west1.firebasedatabase.app/${userEmail}.json`);
             }),
             map(todosFromFireBase => {
                 // Todo maybe rewhrite this with rxjs pluck
@@ -152,15 +139,9 @@ export class DataStorageService {
         return this.user.pipe(
             take(1),
             switchMap((user: User | null) => {
-                let userToken = user?.token ? user.token : 'tokenIsInvallid'
                 let userEmail = user?.email.split('.')[0];
                 console.log('data storrage - user', user);
-                return this.http.post<Todo>(
-                    `https://todoapp-1b1f3-default-rtdb.europe-west1.firebasedatabase.app/${userEmail}/activeTodos/${todoId}/items.json`, todo, 
-                    {
-                        params: new HttpParams().set('auth', userToken)
-                    }
-                );
+                return this.http.post<Todo>(`https://todoapp-1b1f3-default-rtdb.europe-west1.firebasedatabase.app/${userEmail}/activeTodos/${todoId}/items.json`, todo);
             }),
             catchError(this.handleError)
         );
@@ -170,24 +151,13 @@ export class DataStorageService {
         return this.user.pipe(
             take(1),
             switchMap((user: User | null) => {
-                let userToken = user?.token ? user.token : 'tokenIsInvallid'
                 let userEmail = user?.email.split('.')[0];
                 console.log('data storrage - user', user);
                 if (firebaseAPI === 'post') {
-                    return this.http.post<{name: string}>(
-                        `https://todoapp-1b1f3-default-rtdb.europe-west1.firebasedatabase.app/${userEmail}/${mode}.json`, todoMode, 
-                        {
-                            params: new HttpParams().set('auth', userToken)
-                        }
-                    )                                
+                    return this.http.post<{name: string}>(`https://todoapp-1b1f3-default-rtdb.europe-west1.firebasedatabase.app/${userEmail}/${mode}.json`, todoMode);                             
                 }
 
-                return this.http.patch<{string: ActiveTodo}>(
-                    `https://todoapp-1b1f3-default-rtdb.europe-west1.firebasedatabase.app/${userEmail}/${mode}.json`, todoMode,
-                    {
-                        params: new HttpParams().set('auth', userToken)
-                    }
-                )
+                return this.http.patch<{string: ActiveTodo}>(`https://todoapp-1b1f3-default-rtdb.europe-west1.firebasedatabase.app/${userEmail}/${mode}.json`, todoMode);
             }),
             catchError(this.handleError),
         );
@@ -197,15 +167,9 @@ export class DataStorageService {
         return this.user.pipe(
             take(1),
             switchMap((user: User | null) => {
-                let userToken = user?.token ? user.token : 'tokenIsInvallid'
                 let userEmail = user?.email.split('.')[0];
 
-                return this.http.delete<null>(
-                    `https://todoapp-1b1f3-default-rtdb.europe-west1.firebasedatabase.app/${userEmail}/activeTodos/${todoId}.json`,
-                    {
-                        params: new HttpParams().set('auth', userToken)
-                    }
-                )        
+                return this.http.delete<null>(`https://todoapp-1b1f3-default-rtdb.europe-west1.firebasedatabase.app/${userEmail}/activeTodos/${todoId}.json`);      
             }),
             catchError(this.handleError)
         );
@@ -215,15 +179,9 @@ export class DataStorageService {
         return this.user.pipe(
             take(1),
             switchMap((user: User | null) => {
-                let userToken = user?.token ? user.token : 'tokenIsInvallid';
                 let userEmail = user?.email.split('.')[0];
 
-                return this.http.patch<Todo>(
-                    `https://todoapp-1b1f3-default-rtdb.europe-west1.firebasedatabase.app/${userEmail}/activeTodos/${todoId}/items/${itemId}.json`, {'content': content},
-                    {
-                        params: new HttpParams().set('auth', userToken)
-                    }
-                )        
+                return this.http.patch<Todo>(`https://todoapp-1b1f3-default-rtdb.europe-west1.firebasedatabase.app/${userEmail}/activeTodos/${todoId}/items/${itemId}.json`, {'content': content});
             }),
             catchError(this.handleError)
         )  
@@ -233,15 +191,9 @@ export class DataStorageService {
         return this.user.pipe(
             take(1),
             switchMap((user: User | null) => {
-                let userToken = user?.token ? user.token : 'tokenIsInvallid'
                 let userEmail = user?.email.split('.')[0];
                 
-                return this.http.patch<Todo>(
-                    `https://todoapp-1b1f3-default-rtdb.europe-west1.firebasedatabase.app/${userEmail}/activeTodos/${todoId}/items/${itemId}.json`, {'completed': value},
-                    {
-                        params: new HttpParams().set('auth', userToken)
-                    }
-                )
+                return this.http.patch<Todo>(`https://todoapp-1b1f3-default-rtdb.europe-west1.firebasedatabase.app/${userEmail}/activeTodos/${todoId}/items/${itemId}.json`, {'completed': value});
             }),
             catchError(this.handleError)
         );
@@ -251,15 +203,9 @@ export class DataStorageService {
         return this.user.pipe(
             take(1),
             switchMap((user: User | null) => {
-                let userToken = user?.token ? user.token : 'tokenIsInvallid';
                 let userEmail = user?.email.split('.')[0];
 
-                return this.http.delete<null>(
-                    `https://todoapp-1b1f3-default-rtdb.europe-west1.firebasedatabase.app/${userEmail}/activeTodos/${todoId}/items/${itemId}.json`,
-                    {
-                        params: new HttpParams().set('auth', userToken)
-                    }
-                );
+                return this.http.delete<null>(`https://todoapp-1b1f3-default-rtdb.europe-west1.firebasedatabase.app/${userEmail}/activeTodos/${todoId}/items/${itemId}.json`);
             }),
             catchError(this.handleError)
         );
@@ -269,25 +215,42 @@ export class DataStorageService {
         return this.user.pipe(
             take(1),
             switchMap((user: User | null) => {
-                let userToken = user?.token ? user.token : 'tokenIsInvallid';
                 let userEmail = user?.email.split('.')[0];
 
-                return this.http.delete<null>(
-                    `https://todoapp-1b1f3-default-rtdb.europe-west1.firebasedatabase.app/${userEmail}/inActiveTodos/${todoId}.json`,
-                    {
-                        params: new HttpParams().set('auth', userToken)
-                    }
-                );
+                return this.http.delete<null>(`https://todoapp-1b1f3-default-rtdb.europe-west1.firebasedatabase.app/${userEmail}/inActiveTodos/${todoId}.json`);
             }),
             catchError(this.handleError)
         );        
     }
 
+    autoLogin() {
+        const userData = localStorage.getItem('userData');
+        
+        if(!userData) {
+            return;
+        }
+
+        const loadedUser: {
+            email: string,
+            id: string,
+            _token: string,
+            _tokenExpirationDate: number
+        } = JSON.parse(userData);
+
+        const user  = new User(loadedUser.email, loadedUser.id, loadedUser._token, loadedUser._tokenExpirationDate);
+
+        if(user.token) {
+            this.user.next(user);
+        }
+    }
+
     private handleAuthentication(email: string, userId: string, token: string, expiresIn: number) {
-        const expirationDate = new Date(new Date().getTime() + expiresIn * 1000);
+        const expirationDate = new Date().getTime() + expiresIn * 1000;
         const user = new User(email, userId, token, expirationDate);
-        console.log('data storage - user', user );
+        
         this.user.next(user);
+        // add user to localstorage
+        localStorage.setItem('userData', JSON.stringify(user));
     }
 
     private handleError(errorRes: HttpErrorResponse) {
@@ -298,7 +261,7 @@ export class DataStorageService {
             return throwError(errorMessage);    
         }
 
-        switch (errorRes.error.error.message) { //TODO 299
+        switch (errorRes.error.error.message) {
             case 'EMAIL_EXISTS':
                 errorMessage = 'The email address is already in use by another account.';
                 break;
