@@ -243,19 +243,18 @@ export class DataStorageService {
             this.user.next(user);
         }
 
-        //this.autoLogout(5000); // TODO set autoLogout
+        console.log('auto autoLogout', user.tokenExpirationDate - new Date().getTime());
+        this.autoLogout(user.tokenExpirationDate - new Date().getTime());
     }
 
     autoLogout(tokenExpirationDuration: number) {
         console.log('auto logout');
-            of(null).pipe(
+            of(null).pipe( // TODO change with timer
                 delay(tokenExpirationDuration)
             ).subscribe(value => {
                 this.user.next(value); // this code tell the header what to display
                 this.router.navigate(['/account/login']);
                 localStorage.removeItem('userData');
-        
-                console.log('timeout',value)
             })
         
     }
@@ -265,8 +264,7 @@ export class DataStorageService {
         const user = new User(email, userId, token, expirationDate);
         
         this.user.next(user);
-        
-        //this.autoLogout(5000); // TODO set autoLogout
+        this.autoLogout(expiresIn * 1000);
         // add user to localstorage
         localStorage.setItem('userData', JSON.stringify(user));
     }
