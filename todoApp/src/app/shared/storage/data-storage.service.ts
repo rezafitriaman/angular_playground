@@ -1,13 +1,14 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { map, switchMap, take } from 'rxjs/operators';
+import { delay, map, switchMap, take } from 'rxjs/operators';
 import { ActiveTodo, InactiveTodo, Todo, Todos } from 'src/app/models/Todo';
 import { catchError, tap } from 'rxjs/operators';
-import { BehaviorSubject, Subject, throwError } from 'rxjs';
+import { BehaviorSubject, of, Subject, throwError } from 'rxjs';
 import { LoginOrJoinForm } from 'src/app/models/Todo';
 import { HttpErrorResponse } from '@angular/common/http';
 import { User } from 'src/app/models/User';
 import { AuthResponseData } from 'src/app/models/Auth';
+import { Router } from '@angular/router';
 
 @Injectable({
     providedIn: 'root',
@@ -15,7 +16,7 @@ import { AuthResponseData } from 'src/app/models/Auth';
 export class DataStorageService {
     public thereIsError: Subject<string | null> = new Subject<string | null> ();
     public user: BehaviorSubject<User | null> = new BehaviorSubject<User | null>(null);
-    constructor(private http: HttpClient) {};
+    constructor(private http: HttpClient, private router: Router) {};
 
     signInWithPassword(formValue: LoginOrJoinForm) {
         return this.http.post<AuthResponseData>('https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyAmfRwM7wb9RulolvYQraAVEmiwsh-Wi0A',
@@ -75,9 +76,8 @@ export class DataStorageService {
         return this.user.pipe(
             take(1),
             switchMap((user: User | null) => {
-                let userEmail = user?.email.split('.')[0];                    
+                let userEmail = user?.email.split('.')[0];
 
-                console.log('fetch - user', user);
                 return this.http.get<Todos>(`https://todoapp-1b1f3-default-rtdb.europe-west1.firebasedatabase.app/${userEmail}.json`);
             }),
             map(todosFromFireBase => {
@@ -242,6 +242,22 @@ export class DataStorageService {
         if(user.token) {
             this.user.next(user);
         }
+
+        //this.autoLogout(5000); // TODO set autoLogout
+    }
+
+    autoLogout(tokenExpirationDuration: number) {
+        console.log('auto logout');
+            of(null).pipe(
+                delay(tokenExpirationDuration)
+            ).subscribe(value => {
+                this.user.next(value); // this code tell the header what to display
+                this.router.navigate(['/account/login']);
+                localStorage.removeItem('userData');
+        
+                console.log('timeout',value)
+            })
+        
     }
 
     private handleAuthentication(email: string, userId: string, token: string, expiresIn: number) {
@@ -249,12 +265,14 @@ export class DataStorageService {
         const user = new User(email, userId, token, expirationDate);
         
         this.user.next(user);
+        
+        //this.autoLogout(5000); // TODO set autoLogout
         // add user to localstorage
         localStorage.setItem('userData', JSON.stringify(user));
     }
 
     private handleError(errorRes: HttpErrorResponse) {
-        let errorMessage = 'An unknown error occurred!';
+        let errorMessage = 'Please sign in';
         console.log('errorRes', errorRes);
 
         if (!errorRes.error || !errorRes.error.error) {

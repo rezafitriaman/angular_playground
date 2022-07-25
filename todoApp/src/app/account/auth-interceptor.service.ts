@@ -13,7 +13,6 @@ export class AuthInterceptorService implements HttpInterceptor {
         return this.dataStorage.user.pipe(
             take(1),
             exhaustMap((user: User | null) => {
-                console.log('auth-interceptor.service', user);
                 let userToken = user?.token ? user.token : 'tokenIsInvallid';
                 const modifiedReq = req.clone({
                     params: new HttpParams().set('auth', userToken)

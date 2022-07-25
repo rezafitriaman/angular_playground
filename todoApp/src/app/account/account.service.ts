@@ -80,8 +80,6 @@ export class AccountService {
     }
 
     onLogout() {
-        this.dataStorageService.user.next(null); // this code tell the header what to display
-        this.router.navigate(['/account/login']);
-        localStorage.removeItem('userData')
+        this.dataStorageService.autoLogout(0);
     }
 }
