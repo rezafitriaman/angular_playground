@@ -26,11 +26,10 @@ export class AuthGuardService implements CanActivate {
             if (authenticated) {
                 console.log('login granted');
                 return true;
-            } else {
-                console.log('login is deny');
-                this.router.navigate(['/']);
-                return false;
             }
+
+            console.log('login is deny');
+            return this.router.createUrlTree(['/']);
         });
     }
 }

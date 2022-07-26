@@ -1,5 +1,5 @@
-import { Injectable } from '@angular/core';
-import { Subject } from 'rxjs';
+import { Injectable, OnDestroy } from '@angular/core';
+import { Subject, Subscription } from 'rxjs';
 import { Router, UrlTree } from '@angular/router';
 import { LoginOrJoinForm, Todos } from '../models/Todo';
 import { TodoService } from '../todo.service';
@@ -8,23 +8,26 @@ import { DataStorageService } from '../shared/storage/data-storage.service';
 @Injectable({
     providedIn: 'root',
 })
-export class AccountService {
+export class AccountService implements OnDestroy{
     public thereIsError: Subject<string | null> = new Subject<string | null>();
     public isLoadingAccount: Subject<boolean> = new Subject<boolean>();
+    public subscriptionFetch: Subscription | undefined;
+    public subscriptionSignIn: Subscription | undefined;
+    public subscriptionSignUp: Subscription | undefined;
+
     constructor(private todoService: TodoService, private dataStorageService: DataStorageService,private router: Router) {}
 
     isAuthenticated(): Promise<boolean | UrlTree> {
         const promise = new Promise((resolve, reject) => {
-            this.dataStorageService.fetchTodos().subscribe(
+            this.subscriptionFetch = this.dataStorageService.fetchTodos().subscribe(
                 (todos: Todos) => {
                     this.todoService.setTodos(todos);
-                    resolve(true);
+                    resolve(todos);
                 },
                 error => {
                     console.log('error isAuthenticated---', error);
                     reject(error);
                     this.thereIsError.next(error);
-                    this.router.navigate(['/']);
                 }
             );
         });
@@ -41,7 +44,7 @@ export class AccountService {
     onLogin(formValue: LoginOrJoinForm) {
         console.log('submit', formValue);
         
-        this.dataStorageService.signInWithPassword(formValue).subscribe(
+        this.subscriptionSignIn = this.dataStorageService.signInWithPassword(formValue).subscribe(
             restData => {
                 // u dont use rest data - becouse it is a pure resdata 
                 console.log('account.service-restData', restData);
@@ -56,7 +59,7 @@ export class AccountService {
     };
 
     onSignUp(formValue: LoginOrJoinForm) {
-        this.dataStorageService.signUpWithPassword(formValue).subscribe(
+        this.subscriptionSignUp = this.dataStorageService.signUpWithPassword(formValue).subscribe(
             restData => {
                 // u dont use rest data - becouse it is a pure resdata 
                 console.log('account.service-restData 1', restData);
@@ -81,5 +84,11 @@ export class AccountService {
 
     onLogout() {
         this.dataStorageService.autoLogout(0);
+    }
+
+    ngOnDestroy(): void {
+        this.subscriptionFetch?.unsubscribe();
+        this.subscriptionSignUp?.unsubscribe();
+        this.subscriptionSignIn?.unsubscribe();
     }
 }

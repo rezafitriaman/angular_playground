@@ -1,4 +1,4 @@
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { delay, map, switchMap, take } from 'rxjs/operators';
 import { ActiveTodo, InactiveTodo, Todo, Todos } from 'src/app/models/Todo';
@@ -16,6 +16,7 @@ import { Router } from '@angular/router';
 export class DataStorageService {
     public thereIsError: Subject<string | null> = new Subject<string | null> ();
     public user: BehaviorSubject<User | null> = new BehaviorSubject<User | null>(null);
+
     constructor(private http: HttpClient, private router: Router) {};
 
     signInWithPassword(formValue: LoginOrJoinForm) {
@@ -244,12 +245,13 @@ export class DataStorageService {
         }
 
         console.log('auto autoLogout', user.tokenExpirationDate - new Date().getTime());
+        //auto logout
         this.autoLogout(user.tokenExpirationDate - new Date().getTime());
     }
 
     autoLogout(tokenExpirationDuration: number) {
-        console.log('auto logout');
-            of(null).pipe( // TODO change with timer
+            of(null).pipe(
+                take(1),
                 delay(tokenExpirationDuration)
             ).subscribe(value => {
                 this.user.next(value); // this code tell the header what to display
@@ -264,8 +266,9 @@ export class DataStorageService {
         const user = new User(email, userId, token, expirationDate);
         
         this.user.next(user);
+        //auto logout
         this.autoLogout(expiresIn * 1000);
-        // add user to localstorage
+        //add user to localstorage
         localStorage.setItem('userData', JSON.stringify(user));
     }
 
@@ -297,7 +300,7 @@ export class DataStorageService {
                 errorMessage = 'The user account has been disabled by an administrator.';
                 break;
             default:
-                errorMessage = 'An unknown error occurred!';
+                errorMessage
                 break;
         }
 

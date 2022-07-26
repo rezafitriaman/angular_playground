@@ -4,7 +4,7 @@ import {
     OnInit,
 } from '@angular/core';
 import { of, Subscription } from 'rxjs';
-import { delay } from 'rxjs/operators';
+import { delay, map, take } from 'rxjs/operators';
 import { AccountService } from './account/account.service';
 import { DataStorageService } from './shared/storage/data-storage.service';
 
@@ -28,8 +28,9 @@ export class AppComponent implements OnInit, OnDestroy {
         this.subscription = this.accountService.thereIsError.subscribe((error: string | null) => {
             this.error = error;
 
-            of(null).pipe(
-                delay(6000)
+        of(null).pipe(
+                take(1),
+                delay(7000)
             ).subscribe(value => {
                 this.error = value;
             })

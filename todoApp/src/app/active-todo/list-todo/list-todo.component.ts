@@ -2,8 +2,9 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActiveTodo } from '../../models/Todo';
 import { TodoService } from '../../todo.service';
 import { of, Subscription } from 'rxjs';
-import { delay } from 'rxjs/operators';
+import { delay, take } from 'rxjs/operators';
 
+// This is the header - list of todo header
 @Component({
     selector: 'app-list-todo',
     templateUrl: './list-todo.component.html',
@@ -11,7 +12,7 @@ import { delay } from 'rxjs/operators';
 })
 export class ListTodoComponent implements OnInit, OnDestroy {
     public todos: Array<ActiveTodo> = [];
-    public newItem: boolean = false;
+    public isNewTodo: boolean = false;
     public subscription: Subscription | undefined;
     public subscriptionDelete: Subscription | undefined;
 
@@ -21,13 +22,14 @@ export class ListTodoComponent implements OnInit, OnDestroy {
         this.todos = this.todoService.getActiveTodos();
         this.subscription = this.todoService.activeTodosAdd.subscribe((activeTodos: Array<ActiveTodo>) => {
             this.todos = activeTodos;
-            this.newItem = true;
+            this.isNewTodo = true;
 
             of(null).pipe(
+                take(1),
                 delay(4000)
             ).subscribe(value => {
                 if(!value){
-                    this.newItem = false;
+                    this.isNewTodo = false;
                 }
             })
         });

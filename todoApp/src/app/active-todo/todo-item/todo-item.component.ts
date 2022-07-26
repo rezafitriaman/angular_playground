@@ -18,7 +18,7 @@ import { of, Observable, Subscription } from 'rxjs';
 import { DOCUMENT } from '@angular/common';
 import { DataStorageService } from 'src/app/shared/storage/data-storage.service';
 import { AccountService } from 'src/app/account/account.service';
-import { delay } from 'rxjs/operators';
+import { delay, take } from 'rxjs/operators';
 
 @Component({
     selector: 'app-todo-item',
@@ -167,6 +167,7 @@ export class TodoItemComponent implements OnInit, AfterViewInit, CanComponentDea
                 const editable: boolean = this.todoService.onSetToEditable(this.id, itemId, payrol.content);
                 
                 of(editable).pipe(
+                    take(1),
                     delay(100)
                 ).subscribe(value => {
                     if(value) {
