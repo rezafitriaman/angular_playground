@@ -13,6 +13,7 @@ import { AccountComponent } from './account/account.component';
 
 import { SignInComponent } from './account/sign-in/sign-in.component';
 import { SignUpComponent } from './account/sign-up/sign-up.component';
+import { TodosResolverService } from './todos-resolver.component';
 
 const routes: Routes = [
     { path: '', redirectTo: 'account/login', pathMatch: 'full' }, // set this if u need to login
@@ -29,6 +30,7 @@ const routes: Routes = [
         path: 'activeTodo',
         canActivate: [AuthGuardService],
         component: ActiveTodoComponent,
+        resolve: {todos : TodosResolverService},
         children: [
             {
                 path: 'new',
@@ -48,6 +50,7 @@ const routes: Routes = [
         path: 'deletedTodo',
         canActivate: [AuthGuardService],
         component: InactiveTodoComponent,
+        resolve: { todos: TodosResolverService }
     },
     {
         path: 'not-found',

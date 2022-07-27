@@ -7,29 +7,32 @@ import {
     UrlTree,
 } from '@angular/router';
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { AccountService } from './account/account.service';
+import { User } from './models/User';
+import { DataStorageService } from './shared/storage/data-storage.service';
 
 @Injectable({
     providedIn: 'root',
 })
 export class AuthGuardService implements CanActivate {
     constructor(
-        private accountService: AccountService,
         private router: Router,
+        private dataStorage: DataStorageService
     ) {}
 
     canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
         console.log('authGuard - route', route);
         console.log('authGuard - state', state);
 
-        return this.accountService.isAuthenticated().then((authenticated: boolean | UrlTree) => {
-            if (authenticated) {
-                console.log('login granted');
-                return true;
-            }
+        return this.dataStorage.user.pipe(
+            map((user: User | null) => {
+                if(user) {
+                    return true;
+                }
 
-            console.log('login is deny');
-            return this.router.createUrlTree(['/']);
-        });
+                return this.router.createUrlTree(['/']);
+            })
+        )
     }
 }

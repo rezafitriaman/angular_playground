@@ -17,23 +17,23 @@ export class AccountService implements OnDestroy{
 
     constructor(private todoService: TodoService, private dataStorageService: DataStorageService,private router: Router) {}
 
-    isAuthenticated(): Promise<boolean | UrlTree> {
-        const promise = new Promise((resolve, reject) => {
-            this.subscriptionFetch = this.dataStorageService.fetchTodos().subscribe(
-                (todos: Todos) => {
-                    this.todoService.setTodos(todos);
-                    resolve(todos);
-                },
-                error => {
-                    console.log('error isAuthenticated---', error);
-                    reject(error);
-                    this.thereIsError.next(error);
-                }
-            );
-        });
+    // isAuthenticated(): Promise<boolean | UrlTree> {
+    //     const promise = new Promise((resolve, reject) => {
+    //         this.subscriptionFetch = this.dataStorageService.fetchTodos().subscribe(
+    //             (todos: Todos) => {
+    //                 this.todoService.setTodos(todos);
+    //                 resolve(todos);
+    //             },
+    //             error => {
+    //                 console.log('error isAuthenticated---', error);
+    //                 reject(error);
+    //                 this.thereIsError.next(error);
+    //             }
+    //         );
+    //     });
 
-        return promise as Promise<boolean | UrlTree>;
-    }
+    //     return promise as Promise<boolean | UrlTree>;
+    // }
 
     initUrl() {
         //console.log('account service', this.todoService.todos);

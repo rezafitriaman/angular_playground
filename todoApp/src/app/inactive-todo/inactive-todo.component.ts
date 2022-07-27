@@ -4,6 +4,7 @@ import { ActiveTodo, InactiveTodo, Todo, Todos } from '../models/Todo';
 import { DataStorageService } from '../shared/storage/data-storage.service';
 import { Subscription } from 'rxjs';
 import { AccountService } from '../account/account.service';
+import { ActivatedRoute, Data } from '@angular/router';
 
 @Component({
     selector: 'app-in-active-todo',
@@ -23,10 +24,15 @@ export class InactiveTodoComponent implements OnInit, OnDestroy {
     constructor(
         private todoService: TodoService,
         private dataStorage: DataStorageService,
-        private accountService: AccountService
+        private accountService: AccountService,
+        private route: ActivatedRoute
     ) {}
 
     ngOnInit(): void {
+        // it load via a resolver : example - 152
+        this.route.data.subscribe((data: Data) => {
+            this.todoService.setTodos(data['todos']);
+        });
         this.todos = this.todoService.getInActiveTodos();
         this.todoService.updateInActiveTodo.subscribe((inActiveTodos) => {
             this.todos = inActiveTodos;

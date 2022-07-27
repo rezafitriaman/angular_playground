@@ -1,10 +1,9 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, Resolve, RouterStateSnapshot } from '@angular/router';
-import { ActiveTodo, Todo, Todos } from '../../models/Todo';
+import { ActiveTodo, Todos } from '../../models/Todo';
 import { Observable } from 'rxjs';
 import { TodoService } from '../../todo.service';
 import { DataStorageService } from 'src/app/shared/storage/data-storage.service';
-import { map, take, tap } from 'rxjs/operators';
 import { AccountService } from 'src/app/account/account.service';
 
 @Injectable({
