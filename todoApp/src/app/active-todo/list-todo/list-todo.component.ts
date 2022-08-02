@@ -39,6 +39,11 @@ export class ListTodoComponent implements OnInit, OnDestroy {
         });
     }
 
+    onClick(direction: string, event: Event) {
+        console.log(direction);
+        console.log(event);
+    }
+
     ngOnDestroy() {
         this.subscription?.unsubscribe();
         this.subscriptionDelete?.unsubscribe();
