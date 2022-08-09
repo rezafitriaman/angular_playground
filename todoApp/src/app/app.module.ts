@@ -21,6 +21,7 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from "@angular/common/http";
 import { ClickOutsideDirective } from './shared/click-outside.directive';
 import { LoadingSpinnerComponent } from './shared/loading-spinner/loading-spinner.component';
 import { AuthInterceptorService } from './account/auth-interceptor.service';
+import { TouchSliderDirective } from './shared/touchSlider/touch-slider.directive';
 
 @NgModule({
   declarations: [
@@ -38,7 +39,8 @@ import { AuthInterceptorService } from './account/auth-interceptor.service';
     SignInComponent,
     SignUpComponent,
     ClickOutsideDirective,
-    LoadingSpinnerComponent
+    LoadingSpinnerComponent,
+    TouchSliderDirective
   ],
   imports: [
     BrowserModule,
