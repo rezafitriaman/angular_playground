@@ -19,17 +19,16 @@ export class ListTodoComponent implements OnInit, OnDestroy, AfterViewInit {
     @ViewChild('btnRight') btnRight!: ElementRef;
     public todos: Array<ActiveTodo> = [];
     public isNewTodo: boolean = false;
-    public subscription!: Subscription;
-    public subscriptionDelete!: Subscription;
-    public translateNumber: number = 0;
-    public translateGap: number = 200;
-    public containerWidth: number = 0;
-    public sliderWidth: number = 0;
-    public resizeObservable$: Observable<Event> | undefined;
-    public resizeSubscription$: Subscription | undefined;
-    public documentScrollSubscription: Subscription | undefined;
-    public isHorizontalScrolled: number = 0
-    public md: number = 768;
+    private subscription!: Subscription;
+    private subscriptionDelete!: Subscription;
+    private translateNumber: number = 0;
+    private translateGap: number = 200;
+    private containerWidth: number = 0;
+    private sliderWidth: number = 0;
+    private isHorizontalScrolled: number = 0
+    private md: number = 768;
+    private resizeObservable$: Observable<Event> | undefined;
+    private resizeSubscription$: Subscription | undefined;
 
     constructor(private todoService: TodoService, private renderer: Renderer2) {}
     
@@ -64,11 +63,12 @@ export class ListTodoComponent implements OnInit, OnDestroy, AfterViewInit {
         if(this.sliderWidth > this.containerWidth) this.renderer.removeClass(this.btnRight.nativeElement, 'hidden');
 
         this.resizeSubscription$ = this.resizeObservable$.pipe(debounceTime(500)).subscribe( evt => {
-            this.containerWidth = parseInt(getComputedStyle(this.sliderContainer.nativeElement).width); 
-            this.sliderWidth = parseInt(getComputedStyle(this.parentContainer.nativeElement).width);
             const target = evt.target as Window; 
             let mobile = target.innerWidth < this.md;
             this.translateNumber = 0;
+            this.containerWidth = parseInt(getComputedStyle(this.sliderContainer.nativeElement).width); 
+            this.sliderWidth = parseInt(getComputedStyle(this.parentContainer.nativeElement).width);
+            
             this.renderer.setStyle(this.parentContainer.nativeElement, 'transform', `transLateX(${this.translateNumber}px)`);
             //hide left button on resize
             this.renderer.addClass(this.btnLeft.nativeElement, 'hidden');
@@ -110,7 +110,7 @@ export class ListTodoComponent implements OnInit, OnDestroy, AfterViewInit {
                 this.translateNumber -= this.translateGap;
                 this.renderer.setStyle(this.parentContainer.nativeElement, 'transform', `transLateX(${this.translateNumber}px)`);
                 let isOnRightBorder = this.containerWidth - this.translateNumber > this.sliderWidth;
-                
+
                 if(isOnRightBorder) {
                     this.translateNumber = -(this.sliderWidth - this.containerWidth);
                     this.renderer.setStyle(this.parentContainer.nativeElement, 'transform', `transLateX(${this.translateNumber}px)`);
