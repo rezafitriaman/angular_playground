@@ -29,7 +29,6 @@ export class DataStorageService {
         ).pipe(
             catchError(this.handleError),
             tap(resData => {
-                console.log('object resData', resData);
                 this.handleAuthentication(resData.email, resData.localId, resData.idToken, +resData.expiresIn);
             })    
         );
@@ -45,7 +44,6 @@ export class DataStorageService {
         ).pipe(
             catchError(this.handleError),
             tap(resData => {
-                console.log('object resData', resData);
                 this.handleAuthentication(resData.email, resData.localId, resData.idToken, +resData.expiresIn);
             })
         );
