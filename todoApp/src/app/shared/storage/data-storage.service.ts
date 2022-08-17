@@ -1,9 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, OnDestroy } from '@angular/core';
-import { delay, map, switchMap, take } from 'rxjs/operators';
+import { map, switchMap, take } from 'rxjs/operators';
 import { ActiveTodo, InactiveTodo, Todo, Todos } from 'src/app/models/Todo';
 import { catchError, tap } from 'rxjs/operators';
-import { BehaviorSubject, of, Subject, Subscription, throwError, timer } from 'rxjs';
+import { BehaviorSubject, Subject, Subscription, throwError, timer } from 'rxjs';
 import { LoginOrJoinForm } from 'src/app/models/Todo';
 import { HttpErrorResponse } from '@angular/common/http';
 import { User } from 'src/app/models/User';
@@ -13,7 +13,7 @@ import { Router } from '@angular/router';
 @Injectable({
     providedIn: 'root',
 })
-export class DataStorageService implements OnDestroy{
+export class DataStorageService implements OnDestroy {
     public thereIsError: Subject<string | null> = new Subject<string | null> ();
     public user: BehaviorSubject<User | null> = new BehaviorSubject<User | null>(null);
     public timerSubscription: Subscription | undefined;
@@ -253,7 +253,7 @@ export class DataStorageService implements OnDestroy{
             this.user.next(null); // this code tell the header what to display
             this.router.navigate(['/account/login']);
             localStorage.removeItem('userData');
-        });        
+        });
     }
 
     private handleAuthentication(email: string, userId: string, token: string, expiresIn: number) {
