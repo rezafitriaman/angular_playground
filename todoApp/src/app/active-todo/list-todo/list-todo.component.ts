@@ -26,7 +26,7 @@ export class ListTodoComponent implements OnInit, OnDestroy, AfterViewInit {
     private translateGap: number = 200;
     private containerWidth: number = 0;
     private sliderWidth: number = 0;
-    private isHorizontalScrolled: number = 0
+    private isHorizontalScrolled: number = 0;
     private md: number = 768;
     private sm: number = 640;
     private resizeObservable$: Observable<Event> | undefined;
@@ -53,7 +53,7 @@ export class ListTodoComponent implements OnInit, OnDestroy, AfterViewInit {
         this.containerWidth = this.getContainerWidth();
         this.sliderWidth = this.getSliderWidth();
         this.resizeObservable$ = fromEvent(window, 'resize');
-        
+
         if(this.sliderWidth > this.containerWidth) this.renderer.removeClass(this.btnRight.nativeElement, 'hidden');
 
         this.resizeSubscription$ = this.resizeObservable$.pipe(debounceTime(500)).subscribe( evt => {
@@ -117,11 +117,11 @@ export class ListTodoComponent implements OnInit, OnDestroy, AfterViewInit {
         }
     }
 
-    private getContainerWidth() {
+    private getContainerWidth(): number {
         return parseInt(getComputedStyle(this.sliderContainer.nativeElement).width) - (parseInt(getComputedStyle(this.sliderContainer.nativeElement).paddingLeft) * 2);
     }
 
-    private getSliderWidth() {
+    private getSliderWidth(): number {
         return parseInt(getComputedStyle(this.parentContainer.nativeElement).width);
     }
 
