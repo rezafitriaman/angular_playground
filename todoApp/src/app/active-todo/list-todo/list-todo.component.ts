@@ -50,19 +50,18 @@ export class ListTodoComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     ngAfterViewInit(): void {
-        this.containerWidth = parseInt(getComputedStyle(this.sliderContainer.nativeElement).width); 
-        this.sliderWidth = parseInt(getComputedStyle(this.parentContainer.nativeElement).width);
+        this.containerWidth = this.getContainerWidth();
+        this.sliderWidth = this.getSliderWidth();
         this.resizeObservable$ = fromEvent(window, 'resize');
-
+        
         if(this.sliderWidth > this.containerWidth) this.renderer.removeClass(this.btnRight.nativeElement, 'hidden');
 
         this.resizeSubscription$ = this.resizeObservable$.pipe(debounceTime(500)).subscribe( evt => {
             const target = evt.target as Window; 
             let mobile = target.innerWidth < this.sm;
             this.translateNumber = 0;
-            this.containerWidth = parseInt(getComputedStyle(this.sliderContainer.nativeElement).width); 
-            this.sliderWidth = parseInt(getComputedStyle(this.parentContainer.nativeElement).width);
-            
+            this.containerWidth = this.getContainerWidth();
+            this.sliderWidth = this.getSliderWidth();
             this.renderer.setStyle(this.parentContainer.nativeElement, 'transform', `transLateX(${this.translateNumber}px)`);
             //hide left button on resize
             this.renderer.addClass(this.btnLeft.nativeElement, 'hidden');
@@ -103,7 +102,7 @@ export class ListTodoComponent implements OnInit, OnDestroy, AfterViewInit {
             case Direction.Right:
                 this.translateNumber -= this.translateGap;
                 this.renderer.setStyle(this.parentContainer.nativeElement, 'transform', `transLateX(${this.translateNumber}px)`);
-                let isOnRightBorder = this.containerWidth - this.translateNumber > this.sliderWidth;
+                let isOnRightBorder = (this.containerWidth - this.translateNumber) > this.sliderWidth;
 
                 if(isOnRightBorder) {
                     this.translateNumber = -(this.sliderWidth - this.containerWidth);
@@ -116,6 +115,14 @@ export class ListTodoComponent implements OnInit, OnDestroy, AfterViewInit {
             default:
                 break;
         }
+    }
+
+    private getContainerWidth() {
+        return parseInt(getComputedStyle(this.sliderContainer.nativeElement).width) - (parseInt(getComputedStyle(this.sliderContainer.nativeElement).paddingLeft) * 2);
+    }
+
+    private getSliderWidth() {
+        return parseInt(getComputedStyle(this.parentContainer.nativeElement).width);
     }
 
     ngOnDestroy(): void {
