@@ -14,11 +14,10 @@ import { ActivatedRoute, Data, Router, UrlTree } from '@angular/router';
 import { InactiveTodo, Todo } from '../../models/Todo';
 import { TodoService } from '../../todo.service';
 import { CanComponentDeactivate } from '../can-deactivate-guard.service';
-import { of, Observable, Subscription } from 'rxjs';
+import { Observable, Subscription, timer } from 'rxjs';
 import { DOCUMENT } from '@angular/common';
 import { DataStorageService } from 'src/app/shared/storage/data-storage.service';
 import { AccountService } from 'src/app/account/account.service';
-import { delay, take } from 'rxjs/operators';
 
 @Component({
     selector: 'app-todo-item',
@@ -39,6 +38,7 @@ export class TodoItemComponent implements OnInit, AfterViewInit, CanComponentDea
     public subscriptionCompleted: Subscription | undefined;
     public subscriptionSetToInactive: Subscription | undefined;
     public subscriptionDeleteTodoList: Subscription | undefined;
+    public timerSubscription: Subscription | undefined;
     public window: Window | null = this.document.defaultView;
     @ViewChildren('contentTodo') contentTodoRef: QueryList<ElementRef> | undefined;
     // reference https://stackoverflow.com/questions/4215737/convert-array-to-object
@@ -166,14 +166,9 @@ export class TodoItemComponent implements OnInit, AfterViewInit, CanComponentDea
             (payrol: { content: string }) => {
                 const editable: boolean = this.todoService.onSetToEditable(this.id, itemId, payrol.content);
                 
-                of(editable).pipe(
-                    take(1),
-                    delay(100)
-                ).subscribe(value => {
-                    if(value) {
-                        this.setCaret(indexItem);
-                    }                    
-                });
+                this.timerSubscription = timer(100).subscribe( _ => {
+                    if(editable) this.setCaret(indexItem);                    
+                });  
             },
             errorMessage => {
                 this.accountService.thereIsError.next(errorMessage);
@@ -236,5 +231,6 @@ export class TodoItemComponent implements OnInit, AfterViewInit, CanComponentDea
         this.subscriptionCompleted?.unsubscribe();
         this.subscriptionSetToInactive?.unsubscribe();
         this.subscriptionDeleteTodoList?.unsubscribe();
+        this.timerSubscription?.unsubscribe();
     }
 }

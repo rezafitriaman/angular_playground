@@ -3,8 +3,7 @@ import {
     OnDestroy,
     OnInit,
 } from '@angular/core';
-import { of, Subscription } from 'rxjs';
-import { delay, map, take } from 'rxjs/operators';
+import { Subscription, timer } from 'rxjs';
 import { AccountService } from './account/account.service';
 import { DataStorageService } from './shared/storage/data-storage.service';
 
@@ -17,6 +16,7 @@ export class AppComponent implements OnInit, OnDestroy {
     public title = 'Easy-List';
     public error: string | null = null;
     public subscription: Subscription | undefined;
+    public timerSubscription: Subscription | undefined;
     
     constructor(
         private accountService: AccountService,
@@ -27,13 +27,7 @@ export class AppComponent implements OnInit, OnDestroy {
         this.dataStorage.autoLogin();
         this.subscription = this.accountService.thereIsError.subscribe((error: string | null) => {
             this.error = error;
-
-        of(null).pipe(
-                take(1),
-                delay(7000)
-            ).subscribe(value => {
-                this.error = value;
-            })
+            this.timerSubscription = timer(7000).subscribe( _ => this.error = null );
         });
     }
     
@@ -43,5 +37,6 @@ export class AppComponent implements OnInit, OnDestroy {
 
     ngOnDestroy(): void {
         this.subscription?.unsubscribe();
+        this.timerSubscription?.unsubscribe();
     }
 }

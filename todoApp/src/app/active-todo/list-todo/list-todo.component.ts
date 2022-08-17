@@ -1,8 +1,8 @@
 import { AfterViewInit, Component, ElementRef, Inject, OnDestroy, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { ActiveTodo } from '../../models/Todo';
 import { TodoService } from '../../todo.service';
-import { fromEvent, Observable, of, Subscription } from 'rxjs';
-import { debounceTime, delay, map, take } from 'rxjs/operators';
+import { fromEvent, Observable, Subscription, timer } from 'rxjs';
+import { debounceTime } from 'rxjs/operators';
 import { Direction } from 'src/app/models/Types';
 
 // This is the header - list of todo header
@@ -19,6 +19,7 @@ export class ListTodoComponent implements OnInit, OnDestroy, AfterViewInit {
     @ViewChild('btnRight') btnRight!: ElementRef;
     public todos: Array<ActiveTodo> = [];
     public isNewTodo: boolean = false;
+    public timerSubscription: Subscription | undefined;
     private subscription!: Subscription;
     private subscriptionDelete!: Subscription;
     private translateNumber: number = 0;
@@ -38,15 +39,7 @@ export class ListTodoComponent implements OnInit, OnDestroy, AfterViewInit {
         this.subscription = this.todoService.activeTodosAdd.subscribe((activeTodos: Array<ActiveTodo>) => {
             this.todos = activeTodos;
             this.isNewTodo = true;
-
-            of(null).pipe(
-                take(1),
-                delay(4000)
-            ).subscribe(value => {
-                if(!value){
-                    this.isNewTodo = false;
-                }
-            })
+            this.timerSubscription = timer(4000).subscribe( _ => this.isNewTodo = false);
         });
 
         this.subscriptionDelete = this.todoService.activeTodoDelete.subscribe((activeTodos: Array<ActiveTodo>) => {
@@ -125,9 +118,10 @@ export class ListTodoComponent implements OnInit, OnDestroy, AfterViewInit {
         }
     }
 
-    ngOnDestroy() {
+    ngOnDestroy(): void {
         this.subscription?.unsubscribe();
         this.subscriptionDelete?.unsubscribe(); 
         this.resizeSubscription$?.unsubscribe();
+        this.timerSubscription?.unsubscribe();
     }
 }

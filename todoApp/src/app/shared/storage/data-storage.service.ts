@@ -1,9 +1,9 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, OnDestroy } from '@angular/core';
 import { delay, map, switchMap, take } from 'rxjs/operators';
 import { ActiveTodo, InactiveTodo, Todo, Todos } from 'src/app/models/Todo';
 import { catchError, tap } from 'rxjs/operators';
-import { BehaviorSubject, of, Subject, throwError } from 'rxjs';
+import { BehaviorSubject, of, Subject, Subscription, throwError, timer } from 'rxjs';
 import { LoginOrJoinForm } from 'src/app/models/Todo';
 import { HttpErrorResponse } from '@angular/common/http';
 import { User } from 'src/app/models/User';
@@ -13,9 +13,10 @@ import { Router } from '@angular/router';
 @Injectable({
     providedIn: 'root',
 })
-export class DataStorageService {
+export class DataStorageService implements OnDestroy{
     public thereIsError: Subject<string | null> = new Subject<string | null> ();
     public user: BehaviorSubject<User | null> = new BehaviorSubject<User | null>(null);
+    public timerSubscription: Subscription | undefined;
 
     constructor(private http: HttpClient, private router: Router) {};
 
@@ -248,15 +249,11 @@ export class DataStorageService {
     }
 
     autoLogout(tokenExpirationDuration: number) {
-            of(null).pipe(
-                take(1),
-                delay(tokenExpirationDuration)
-            ).subscribe(value => {
-                this.user.next(value); // this code tell the header what to display
-                this.router.navigate(['/account/login']);
-                localStorage.removeItem('userData');
-            })
-        
+        this.timerSubscription = timer(tokenExpirationDuration).subscribe( _ => {
+            this.user.next(null); // this code tell the header what to display
+            this.router.navigate(['/account/login']);
+            localStorage.removeItem('userData');
+        });        
     }
 
     private handleAuthentication(email: string, userId: string, token: string, expiresIn: number) {
@@ -303,6 +300,10 @@ export class DataStorageService {
         }
 
         return throwError(errorMessage);
+    }
+
+    ngOnDestroy(): void {
+        this.timerSubscription?.unsubscribe();
     }
 }
 
