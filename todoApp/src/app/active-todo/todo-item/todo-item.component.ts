@@ -168,7 +168,7 @@ export class TodoItemComponent implements OnInit, AfterViewInit, CanComponentDea
                 
                 this.timerSubscription = timer(100).subscribe( _ => {
                     if(editable) this.setCaret(indexItem);                    
-                });  
+                });
             },
             errorMessage => {
                 this.accountService.thereIsError.next(errorMessage);
