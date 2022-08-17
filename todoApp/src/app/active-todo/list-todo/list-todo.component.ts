@@ -27,6 +27,7 @@ export class ListTodoComponent implements OnInit, OnDestroy, AfterViewInit {
     private sliderWidth: number = 0;
     private isHorizontalScrolled: number = 0
     private md: number = 768;
+    private sm: number = 640;
     private resizeObservable$: Observable<Event> | undefined;
     private resizeSubscription$: Subscription | undefined;
 
@@ -64,7 +65,7 @@ export class ListTodoComponent implements OnInit, OnDestroy, AfterViewInit {
 
         this.resizeSubscription$ = this.resizeObservable$.pipe(debounceTime(500)).subscribe( evt => {
             const target = evt.target as Window; 
-            let mobile = target.innerWidth < this.md;
+            let mobile = target.innerWidth < this.sm;
             this.translateNumber = 0;
             this.containerWidth = parseInt(getComputedStyle(this.sliderContainer.nativeElement).width); 
             this.sliderWidth = parseInt(getComputedStyle(this.parentContainer.nativeElement).width);

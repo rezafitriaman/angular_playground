@@ -75,7 +75,7 @@ export class TodoService {
         let editable = this.todos.inActiveTodos[inActiveTodoIndex].todo.editable;
         let id = this.todos.inActiveTodos[inActiveTodoIndex].todo.id;
 
-        //if the active todo item does not exest, create it first and and the todo
+        //if the active todo item does not exist, create it first and push the todo
         if (activeTodoIndex === -1) {
             this.todos.activeTodos.push(new ActiveTodo(label, [new Todo(content, completed, editable, id)], inActiveName ));        
         } else {
