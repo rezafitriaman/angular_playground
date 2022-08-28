@@ -18,6 +18,7 @@ import { Observable, Subscription, timer } from 'rxjs';
 import { DOCUMENT } from '@angular/common';
 import { DataStorageService } from 'src/app/shared/storage/data-storage.service';
 import { AccountService } from 'src/app/account/account.service';
+import { ActiveTodoService } from '../active-todo.service';
 
 @Component({
     selector: 'app-todo-item',
@@ -55,6 +56,7 @@ export class TodoItemComponent implements OnInit, AfterViewInit, CanComponentDea
         private ref: ElementRef,
         private accountService: AccountService,
         private router: Router,
+        private activeTodoService: ActiveTodoService,
         @Inject(DOCUMENT) private document: Document
     ) {}
 
@@ -217,6 +219,7 @@ export class TodoItemComponent implements OnInit, AfterViewInit, CanComponentDea
                 if(!payrol) {
                     this.todoService.deleteActiveTodo(this.id);
                     this.router.navigate(['/activeTodo']);
+                    this.activeTodoService.resetSlider.next(true);
                 }
             },
             errorMessage => {

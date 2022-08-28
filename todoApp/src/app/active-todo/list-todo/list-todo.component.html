@@ -1,6 +1,6 @@
-<div #sliderContainer class="container mx-auto px-4 mt-4">
+<div #listTodoContainer class="container mx-auto px-4 mt-4">
     <div #overflowParentContainer class="flex relative overflow-x-auto scrollbar-hide sm:overflow-hidden" (scroll)="onScroll($event)">
-        <div #parentContainer class="flex leading-none divide-x divide-slate-300 transition ease-in-out duration-300">
+        <div #sliderContainer class="flex leading-none divide-x divide-slate-300 transition ease-in-out duration-300">
             <span class="px-4 first:pl-0 last:pr-0 flex items-center whitespace-nowrap" *ngFor="let todo of todos; let i = index">
                 <a class="cursor-pointer capitalize h-6 flex items-center border-b-2 border-white" [routerLink]="['/activeTodo', todo.name]" routerLinkActive="border-gray-300">
                     <span class="flex relative">

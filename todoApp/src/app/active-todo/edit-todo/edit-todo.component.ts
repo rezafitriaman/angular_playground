@@ -50,7 +50,7 @@ export class EditTodoComponent implements OnInit, CanComponentDeactivate, OnDest
 
                 this.form?.reset();
                 this.changesSaved = true;
-                this.activeTodoService.resetSlider.next(true);
+                this.activeTodoService.resetSlider.next(false);
             },
             errorMessage => {
                 this.accountService.thereIsError.next(errorMessage);

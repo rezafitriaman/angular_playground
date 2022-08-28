@@ -13,8 +13,8 @@ import { ActiveTodoService } from '../active-todo.service';
     styleUrls: ['./list-todo.component.css'],
 })
 export class ListTodoComponent implements OnInit, OnDestroy, AfterViewInit {
+    @ViewChild('listTodoContainer') listTodoContainer!: ElementRef;
     @ViewChild('sliderContainer') sliderContainer!: ElementRef;
-    @ViewChild('parentContainer') parentContainer!: ElementRef;
     @ViewChild('overflowParentContainer') overflowParentContainer!: ElementRef;
     @ViewChild('btnLeft') btnLeft!: ElementRef;
     @ViewChild('btnRight') btnRight!: ElementRef;
@@ -26,17 +26,30 @@ export class ListTodoComponent implements OnInit, OnDestroy, AfterViewInit {
     private subscriptionResetSlider!: Subscription;
     private resizeObservable$: Observable<Event> | undefined;
     private resizeSubscription$: Subscription | undefined;
-    private translateNumber: number = 0;
-    private translateGap: number = 200;
     private containerWidth: number = 0;
     private sliderWidth: number = 0;
+    private translateNumber: number = 0;
     private isHorizontalScrolled: number = 0;
+    private translateGap: number = 200;
 
-    constructor(
+    constructor (
         private todoService: TodoService, 
         private renderer: Renderer2, 
         private activeTodoService: ActiveTodoService
     ) {}
+
+    private calculateSlider() {
+        this.containerWidth = this.activeTodoService.getElmWidth(this.listTodoContainer);
+        this.sliderWidth = this.activeTodoService.getElmWidth(this.sliderContainer);
+    }
+
+    private setStyleTranslate(translateNumber: number) {
+        this.renderer.setStyle(this.sliderContainer.nativeElement, 'transform', `transLateX(${translateNumber}px)`);
+    }
+
+    private showRightButton() {
+        if(this.sliderWidth > this.containerWidth) this.activeTodoService.showBtn(this.btnRight);
+    }
     
     ngOnInit(): void {
         this.todos = this.todoService.getActiveTodos();
@@ -51,41 +64,36 @@ export class ListTodoComponent implements OnInit, OnDestroy, AfterViewInit {
             this.todos = activeTodos;
         });
 
-        this.subscriptionResetSlider = this.activeTodoService.resetSlider
-        .pipe(delay(50))
-        .subscribe(reset => {
-            if(!reset) return;
-            this.containerWidth = this.activeTodoService.getElmWidth(this.sliderContainer);
-            this.sliderWidth = this.activeTodoService.getElmWidth(this.parentContainer);
+        this.subscriptionResetSlider = this.activeTodoService.resetSlider.pipe(delay(50)).subscribe(deleteItem => {
+            this.calculateSlider();
+            //hide left button on resize and reset
+            this.activeTodoService.hideBtn(this.btnLeft);
+            // show right button if slider width wider then container widht
+            this.showRightButton();
+            // if ondeleteItem click stop the code
+            if(deleteItem) return;
             let isMobile = this.containerWidth < this.activeTodoService.getBreakpoints('sm');
             //reset to 0
             this.translateNumber = 0;
-            this.renderer.setStyle(this.parentContainer.nativeElement, 'transform', `transLateX(${this.translateNumber}px)`);
-            //hide left button on resize and reset
-            this.activeTodoService.hideBtn(this.btnLeft);
-            // show right button
-            if(this.sliderWidth > this.containerWidth) this.activeTodoService.showBtn(this.btnRight);
+            this.setStyleTranslate(this.translateNumber);
             // on miblie reset to left
             if(isMobile) (this.overflowParentContainer.nativeElement as HTMLInputElement).scrollLeft = 0;
         })
     }
 
     ngAfterViewInit(): void {
-        this.containerWidth = this.activeTodoService.getElmWidth(this.sliderContainer);
-        this.sliderWidth = this.activeTodoService.getElmWidth(this.parentContainer);
+        this.calculateSlider();
         this.resizeObservable$ = fromEvent(window, 'resize');
+        // show right button if slider width wider then container widht
+        this.showRightButton();
 
-        if(this.sliderWidth > this.containerWidth) this.activeTodoService.showBtn(this.btnRight);
-
-        this.resizeSubscription$ = this.resizeObservable$.pipe(debounceTime(500)).subscribe( evt => {
-            const target = evt.target as Window; 
-            let isMobile = target.innerWidth < this.activeTodoService.getBreakpoints('sm');
-            this.containerWidth = this.activeTodoService.getElmWidth(this.sliderContainer);
-            this.sliderWidth = this.activeTodoService.getElmWidth(this.parentContainer);
-            this.activeTodoService.resetSlider.next(true);
+        this.resizeSubscription$ = this.resizeObservable$.pipe(debounceTime(500)).subscribe(evt => {
+            this.calculateSlider();
+            let isMobile = (evt.target as Window).innerWidth < this.activeTodoService.getBreakpoints('sm');
+            this.activeTodoService.resetSlider.next(false);
 
             //show btn if sliderWidth is bigger then his container 
-            if(this.sliderWidth > this.containerWidth) this.activeTodoService.showBtn(this.btnRight);
+            this.showRightButton();
             //hidden btn if sliderWidth is smaller then his container 
             if(this.sliderWidth < this.containerWidth) this.activeTodoService.hideBtn(this.btnRight);
             //if has scrolled then reset 
@@ -103,29 +111,27 @@ export class ListTodoComponent implements OnInit, OnDestroy, AfterViewInit {
         switch (direction) {
             case Direction.Left:
                 this.translateNumber += this.translateGap;
-                this.renderer.setStyle(this.parentContainer.nativeElement, 'transform', `transLateX(${this.translateNumber}px)`);
+                this.setStyleTranslate(this.translateNumber);
+                this.activeTodoService.showBtn(this.btnRight);
                 let isOnStartPosition = this.translateNumber >= 0;
 
                 if(isOnStartPosition) {
                     this.translateNumber = 0;
-                    this.renderer.setStyle(this.parentContainer.nativeElement, 'transform', `transLateX(${this.translateNumber}px)`);
+                    this.setStyleTranslate(this.translateNumber);
                     this.activeTodoService.hideBtn(this.btnLeft);
                 }
-
-                this.activeTodoService.showBtn(this.btnRight);
                 break;
             case Direction.Right:
                 this.translateNumber -= this.translateGap;
-                this.renderer.setStyle(this.parentContainer.nativeElement, 'transform', `transLateX(${this.translateNumber}px)`);
+                this.setStyleTranslate(this.translateNumber);
+                this.activeTodoService.showBtn(this.btnLeft);
                 let isOnRightBorder = (this.containerWidth - this.translateNumber) > this.sliderWidth;
 
                 if(isOnRightBorder) {
                     this.translateNumber = -(this.sliderWidth - this.containerWidth);
-                    this.renderer.setStyle(this.parentContainer.nativeElement, 'transform', `transLateX(${this.translateNumber}px)`);
+                    this.setStyleTranslate(this.translateNumber);
                     this.activeTodoService.hideBtn(this.btnRight);
                 }
-                
-                this.activeTodoService.showBtn(this.btnLeft);
                 break;
         }
     }
