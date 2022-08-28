@@ -7,6 +7,7 @@ import { Observable, Subscription } from 'rxjs';
 import { NgForm } from '@angular/forms';
 import { DataStorageService } from 'src/app/shared/storage/data-storage.service';
 import { AccountService } from 'src/app/account/account.service';
+import { ActiveTodoService } from '../active-todo.service';
 
 @Component({
     selector: 'app-edit-todo',
@@ -25,7 +26,8 @@ export class EditTodoComponent implements OnInit, CanComponentDeactivate, OnDest
         private route: ActivatedRoute,
         private router: Router,
         private dataStorage: DataStorageService,
-        private accountService: AccountService
+        private accountService: AccountService,
+        private activeTodoService: ActiveTodoService
     ) {}
 
     ngOnInit(): void {
@@ -40,19 +42,20 @@ export class EditTodoComponent implements OnInit, CanComponentDeactivate, OnDest
         const newTodo = this.form?.value.newTodo;
         if (newTodo === '') return;
         this.todoService.isLoadingTodo.next(true);
-        console.log('on add new label todo,');
         this.subscriptionSetTodoListOnFireBase = this.dataStorage.setTodoListOnFireBase(new ActiveTodo(newTodo, []), 'activeTodos', 'post').subscribe(
             id => {
                 this.todoService.addTodo(new ActiveTodo(newTodo, [], (id as {name: string}).name));
                 this.router.navigate(['../', (id as {name: string}).name], {relativeTo: this.route});
                 this.todoService.isLoadingTodo.next(false);
+
+                this.form?.reset();
+                this.changesSaved = true;
+                this.activeTodoService.resetSlider.next(true);
             },
             errorMessage => {
                 this.accountService.thereIsError.next(errorMessage);
             }
         );
-        this.form?.reset();
-        this.changesSaved = true;
     }
 
     canDeactivate(): | Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {

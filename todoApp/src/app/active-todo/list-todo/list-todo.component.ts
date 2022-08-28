@@ -2,8 +2,9 @@ import { AfterViewInit, Component, ElementRef, Inject, OnDestroy, OnInit, Render
 import { ActiveTodo } from '../../models/Todo';
 import { TodoService } from '../../todo.service';
 import { fromEvent, Observable, Subscription, timer } from 'rxjs';
-import { debounceTime } from 'rxjs/operators';
+import { debounceTime, delay } from 'rxjs/operators';
 import { Direction } from 'src/app/models/Types';
+import { ActiveTodoService } from '../active-todo.service';
 
 // This is the header - list of todo header
 @Component({
@@ -19,23 +20,27 @@ export class ListTodoComponent implements OnInit, OnDestroy, AfterViewInit {
     @ViewChild('btnRight') btnRight!: ElementRef;
     public todos: Array<ActiveTodo> = [];
     public isNewTodo: boolean = false;
-    public timerSubscription: Subscription | undefined;
+    private timerSubscription: Subscription | undefined;
     private subscription!: Subscription;
     private subscriptionDelete!: Subscription;
+    private subscriptionResetSlider!: Subscription;
+    private resizeObservable$: Observable<Event> | undefined;
+    private resizeSubscription$: Subscription | undefined;
     private translateNumber: number = 0;
     private translateGap: number = 200;
     private containerWidth: number = 0;
     private sliderWidth: number = 0;
     private isHorizontalScrolled: number = 0;
-    private md: number = 768;
-    private sm: number = 640;
-    private resizeObservable$: Observable<Event> | undefined;
-    private resizeSubscription$: Subscription | undefined;
 
-    constructor(private todoService: TodoService, private renderer: Renderer2) {}
+    constructor(
+        private todoService: TodoService, 
+        private renderer: Renderer2, 
+        private activeTodoService: ActiveTodoService
+    ) {}
     
     ngOnInit(): void {
         this.todos = this.todoService.getActiveTodos();
+
         this.subscription = this.todoService.activeTodosAdd.subscribe((activeTodos: Array<ActiveTodo>) => {
             this.todos = activeTodos;
             this.isNewTodo = true;
@@ -46,37 +51,47 @@ export class ListTodoComponent implements OnInit, OnDestroy, AfterViewInit {
             this.todos = activeTodos;
         });
 
-        if(this.sliderWidth < this.containerWidth) this.renderer.removeClass(this.btnRight.nativeElement, 'hidden');
+        this.subscriptionResetSlider = this.activeTodoService.resetSlider
+        .pipe(delay(50))
+        .subscribe(reset => {
+            if(!reset) return;
+            this.containerWidth = this.activeTodoService.getElmWidth(this.sliderContainer);
+            this.sliderWidth = this.activeTodoService.getElmWidth(this.parentContainer);
+            let isMobile = this.containerWidth < this.activeTodoService.getBreakpoints('sm');
+            //reset to 0
+            this.translateNumber = 0;
+            this.renderer.setStyle(this.parentContainer.nativeElement, 'transform', `transLateX(${this.translateNumber}px)`);
+            //hide left button on resize and reset
+            this.activeTodoService.hideBtn(this.btnLeft);
+            // show right button
+            if(this.sliderWidth > this.containerWidth) this.activeTodoService.showBtn(this.btnRight);
+            // on miblie reset to left
+            if(isMobile) (this.overflowParentContainer.nativeElement as HTMLInputElement).scrollLeft = 0;
+        })
     }
 
     ngAfterViewInit(): void {
-        this.containerWidth = this.getContainerWidth();
-        this.sliderWidth = this.getSliderWidth();
+        this.containerWidth = this.activeTodoService.getElmWidth(this.sliderContainer);
+        this.sliderWidth = this.activeTodoService.getElmWidth(this.parentContainer);
         this.resizeObservable$ = fromEvent(window, 'resize');
 
-        if(this.sliderWidth > this.containerWidth) this.renderer.removeClass(this.btnRight.nativeElement, 'hidden');
+        if(this.sliderWidth > this.containerWidth) this.activeTodoService.showBtn(this.btnRight);
 
         this.resizeSubscription$ = this.resizeObservable$.pipe(debounceTime(500)).subscribe( evt => {
             const target = evt.target as Window; 
-            let mobile = target.innerWidth < this.sm;
-            this.translateNumber = 0;
-            this.containerWidth = this.getContainerWidth();
-            this.sliderWidth = this.getSliderWidth();
-            this.renderer.setStyle(this.parentContainer.nativeElement, 'transform', `transLateX(${this.translateNumber}px)`);
-            //hide left button on resize
-            this.renderer.addClass(this.btnLeft.nativeElement, 'hidden');
-            
-            if(mobile) {
-                //hide btn on mobile
-                this.renderer.addClass(this.btnRight.nativeElement, 'hidden');
-            }else {
-                //show btn if sliderWidth is bigger then his container 
-                if(this.sliderWidth > this.containerWidth) this.renderer.removeClass(this.btnRight.nativeElement, 'hidden');
-                //hidden btn if sliderWidth is smaller then his container 
-                if(this.sliderWidth < this.containerWidth) this.renderer.addClass(this.btnRight.nativeElement, 'hidden');
-                //if has scrolled then reset 
-                if(this.isHorizontalScrolled > 0) (this.overflowParentContainer.nativeElement as HTMLInputElement).scrollLeft = 0;
-            }
+            let isMobile = target.innerWidth < this.activeTodoService.getBreakpoints('sm');
+            this.containerWidth = this.activeTodoService.getElmWidth(this.sliderContainer);
+            this.sliderWidth = this.activeTodoService.getElmWidth(this.parentContainer);
+            this.activeTodoService.resetSlider.next(true);
+
+            //show btn if sliderWidth is bigger then his container 
+            if(this.sliderWidth > this.containerWidth) this.activeTodoService.showBtn(this.btnRight);
+            //hidden btn if sliderWidth is smaller then his container 
+            if(this.sliderWidth < this.containerWidth) this.activeTodoService.hideBtn(this.btnRight);
+            //if has scrolled then reset 
+            if(this.isHorizontalScrolled > 0) (this.overflowParentContainer.nativeElement as HTMLInputElement).scrollLeft = 0;
+            //hide btn on isMobile            
+            if(isMobile) this.activeTodoService.hideBtn(this.btnRight);
         })
     }
 
@@ -94,10 +109,10 @@ export class ListTodoComponent implements OnInit, OnDestroy, AfterViewInit {
                 if(isOnStartPosition) {
                     this.translateNumber = 0;
                     this.renderer.setStyle(this.parentContainer.nativeElement, 'transform', `transLateX(${this.translateNumber}px)`);
-                    this.renderer.addClass(this.btnLeft.nativeElement, 'hidden');
+                    this.activeTodoService.hideBtn(this.btnLeft);
                 }
 
-                this.renderer.removeClass(this.btnRight.nativeElement, 'hidden');
+                this.activeTodoService.showBtn(this.btnRight);
                 break;
             case Direction.Right:
                 this.translateNumber -= this.translateGap;
@@ -107,22 +122,12 @@ export class ListTodoComponent implements OnInit, OnDestroy, AfterViewInit {
                 if(isOnRightBorder) {
                     this.translateNumber = -(this.sliderWidth - this.containerWidth);
                     this.renderer.setStyle(this.parentContainer.nativeElement, 'transform', `transLateX(${this.translateNumber}px)`);
-                    this.renderer.addClass(this.btnRight.nativeElement, 'hidden');
+                    this.activeTodoService.hideBtn(this.btnRight);
                 }
                 
-                this.renderer.removeClass(this.btnLeft.nativeElement, 'hidden');
-                break;
-            default:
+                this.activeTodoService.showBtn(this.btnLeft);
                 break;
         }
-    }
-
-    private getContainerWidth(): number {
-        return parseInt(getComputedStyle(this.sliderContainer.nativeElement).width) - (parseInt(getComputedStyle(this.sliderContainer.nativeElement).paddingLeft) * 2);
-    }
-
-    private getSliderWidth(): number {
-        return parseInt(getComputedStyle(this.parentContainer.nativeElement).width);
     }
 
     ngOnDestroy(): void {
@@ -130,5 +135,6 @@ export class ListTodoComponent implements OnInit, OnDestroy, AfterViewInit {
         this.subscriptionDelete?.unsubscribe(); 
         this.resizeSubscription$?.unsubscribe();
         this.timerSubscription?.unsubscribe();
+        this.subscriptionResetSlider?.unsubscribe();
     }
 }

@@ -4,7 +4,7 @@
             <span class="px-4 first:pl-0 last:pr-0 flex items-center whitespace-nowrap" *ngFor="let todo of todos; let i = index">
                 <a class="cursor-pointer capitalize h-6 flex items-center border-b-2 border-white" [routerLink]="['/activeTodo', todo.name]" routerLinkActive="border-gray-300">
                     <span class="flex relative">
-                        <span class="text-emerald-500 flex items-center mr-0.5" *ngIf="isNewTodo && todos.length === i + 1">
+                        <span class="text-emerald-500 flex items-center absolute -top-1 -right-3" *ngIf="isNewTodo && i === 0" >
                             <svg xmlns="http://www.w3.org/2000/svg"
                                 aria-hidden="true"
                                 focusable="false"

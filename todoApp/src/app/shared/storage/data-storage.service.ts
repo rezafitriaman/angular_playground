@@ -122,7 +122,7 @@ export class DataStorageService implements OnDestroy {
                         }
                     }
     
-                    todos.activeTodos.push(new ActiveTodo(activeTodo.label, activeTodo.items, activeTodo.name));
+                    todos.activeTodos.unshift(new ActiveTodo(activeTodo.label, activeTodo.items, activeTodo.name));
                 })
                 
                 Object.entries(inActiveTodosList).forEach((val: [string, InactiveTodo]) => {

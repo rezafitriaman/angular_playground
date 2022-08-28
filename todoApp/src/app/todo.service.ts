@@ -113,7 +113,7 @@ export class TodoService {
             return item.id === itemId;
         })
 
-        this.todos.activeTodos[todoIndex].items[itemIndex].completed = isCompleted
+        this.todos.activeTodos[todoIndex].items[itemIndex].completed = isCompleted;
         this.activeTodosItemUpdate.next(this.todos.activeTodos[todoIndex].items.slice());
     }
 
@@ -125,7 +125,7 @@ export class TodoService {
         if (!todo) return false;
         
         let targetItemId = todo.items.findIndex(item => {
-            return item.id === itemId
+            return item.id === itemId;
         })
         
         if (todo.items[targetItemId].editable) {
@@ -135,16 +135,16 @@ export class TodoService {
         todo.items[targetItemId].editable = !todo?.items[targetItemId].editable        
         this.activeTodosItemUpdate.next(todo.items.slice());
 
-        return todo.items[targetItemId].editable
+        return todo.items[targetItemId].editable;
     }
 
     addTodo(newTodo: ActiveTodo) {
-        this.todos.activeTodos.push(newTodo);
+        this.todos.activeTodos.unshift(newTodo);
         this.activeTodosAdd.next(this.todos.activeTodos.slice());
     }
 
     addTodoItem(todoItem: Todo, todoId: string) {
-        const activeTodoIndex = this.todos.activeTodos.findIndex(value=> {
+        const activeTodoIndex = this.todos.activeTodos.findIndex(value => {
            return value.name === todoId; 
         })
 

@@ -61,7 +61,7 @@ export class InactiveTodoComponent implements OnInit, OnDestroy {
                         }
                     }
 
-                    // if deleted set de todo obj to active todo-section
+                    // if deleted set the todo obj to active todo-section
                     this.subriptionSetTodoListOnFireBase = this.dataStorage.setTodoListOnFireBase(activeTodoObj, 'activeTodos', 'patch').subscribe(
                         payload => {
                             let activeTodos: Array<ActiveTodo> = [];                            
